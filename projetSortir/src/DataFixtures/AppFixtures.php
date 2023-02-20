@@ -21,141 +21,168 @@ class AppFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        // $product = new Product();
-        // $manager->persist($product);
-
-         // ETAT
-        $etat1 = new Etat();
-        $etat1 ->setLibelle('Créée');
-        $manager->persist($etat1);
-        $manager->flush();
-        $etat2 = new Etat();
-        $etat2 ->setLibelle('Ouverte');
-        $manager->persist($etat2);
-        $manager->flush();
-        $etat3 = new Etat();
-        $etat3 ->setLibelle('Activité en cours');
-        $manager->persist($etat3);
-        $manager->flush();
-        $etat4 = new Etat();
-        $etat4 ->setLibelle('Clôturée');
-        $manager->persist($etat4);
-        $manager->flush();
-        $etat5 = new Etat();
-        $etat5 ->setLibelle('passée');
-        $manager->persist($etat5);
-        $manager->flush();
-        $etat6 = new Etat();
-        $etat6 ->setLibelle('Annulée');
-        $manager->persist($etat6);
-        $manager->flush();
 
         //CAMPUS
         $campus1 = new Campus();
         $campus1->setNom('Brest');
         $manager->persist($campus1);
-        $manager->flush();
 
         $campus2 = new Campus();
         $campus2->setNom("Nantes");
         $manager->persist($campus2);
-        $manager->flush();
 
         $campus3 = new Campus();
-        $campus3 ->setNom('Rennes');
+        $campus3->setNom('Rennes');
         $manager->persist($campus3);
-        $manager->flush();
 
-        //SORTIE
-        $sortie = new Sortie();
-        $sortie ->setNom('Bowling');
-        $sortie->setDateHeureDebut( new \DateTime('d m Y h:i:s'));
-        $sortie ->setDuree(120);
-        $sortie -> setDateLimiteInscription($sortie->getDateHeureDebut());
-        $sortie -> setNbInscriptionsMax(10);
-        $sortie -> setInfosSortie('Deux parties de Bowling');
-        $sortie -> setEtat($etat1);
-        $manager->persist($sortie);
-        $manager->flush();
 
         //Participants
         $participant1 = new Participant();
-        $participant1->setNom("Pierre");
-        $participant1->setPrenom("Dupont");
-        $participant1->setTelephone(0606060606);
-        $participant1->setMail("pierre.dupont@eni.fr");
-        $participant1->setPassword("p.pond");
-        $participant1->setAdministrateur(false);
-        $participant1->setActif(true);
+        $participant1
+            ->setPseudo("PieDup")
+            ->setNom("Pierre")
+            ->setPrenom("Dupont")
+            ->setTelephone(0606060606)
+            ->setMail("pierre.dupont@eni.fr")
+            ->setPassword("p.pond")
+            ->setAdministrateur(false)
+            ->setActif(true)
+            ->setRoles(["Nourriture"])
+            ->setCampus($campus2);
         $manager->persist($participant1);
+
         $participant2 = new Participant();
-        $participant2->setNom('Yves');
-        $participant2->setPrenom('Cousteau');
-        $participant2->setTelephone(0606060675);
-        $participant2->setMail("yves.cousteau@eni.fr");
-        $participant2->setPassword('y.cous75');
-        $participant2->setAdministrateur(true);
-        $participant2->setActif(false);
+        $participant2
+            ->setPseudo("Cousyves")
+            ->setNom('Yves')
+            ->setPrenom('Cousteau')
+            ->setTelephone(0606060675)
+            ->setMail("yves.cousteau@eni.fr")
+            ->setPassword('y.cous75')
+            ->setAdministrateur(true)
+            ->setActif(false)
+            ->setRoles(["Nourriture"])
+            ->setCampus($campus1);
         $manager->persist($participant2);
+
         $participant3 = new Participant();
-        $participant3->setNom('Jean');
-        $participant3->setPrenom('Pierre');
-        $participant3->setTelephone('0606060665');
-        $participant3->setMail('j.pierre@eni.fr');
-        $participant3->setPassword('pierre.j');
-        $participant3->setAdministrateur(false);
-        $participant3->setActif(false);
+        $participant3
+            ->setPseudo("Le codeur fou")
+            ->setNom('Jean')
+            ->setPrenom('Pierre')
+            ->setTelephone('0606060665')
+            ->setMail('j.pierre@eni.fr')
+            ->setPassword('pierre.j')
+            ->setAdministrateur(false)
+            ->setActif(false)
+            ->setRoles(["Billets", "Guide"])
+            ->setCampus($campus2);
         $manager->persist($participant3);
+
         $participant4 = new Participant();
-        $participant4->setNom('Michel');
-        $participant4->setPrenom('Polnaref');
-        $participant4->setTelephone('0606060636');
-        $participant4->setMail('mich.polna@eni.fr');
-        $participant4->setPassword('mimi.pol');
-        $participant4->setAdministrateur(true);
-        $participant4->setActif(true);
+        $participant4
+            ->setPseudo("Le chanteur")
+            ->setNom('Michel')
+            ->setPrenom('Polnaref')
+            ->setTelephone('0606060636')
+            ->setMail('mich.polna@eni.fr')
+            ->setPassword('mimi.pol')
+            ->setAdministrateur(true)
+            ->setActif(true)
+            ->setRoles(["Billets"])
+            ->setCampus($campus3);
         $manager->persist($participant4);
+
         $participant5 = new Participant();
-        $participant5->setNom('Nordine');
-        $participant5->setPrenom('Dinenor');
-        $participant5->setTelephone(0606060610);
-        $participant5->setMail('nordine.dine@eni.fr');
-        $participant5->setPassword('nord10');
-        $participant5->setAdministrateur(false);
-        $participant5->setActif(false);
+        $participant5
+            ->setPseudo("Le blagueur")
+            ->setNom('Nordine')
+            ->setPrenom('Dinenor')
+            ->setTelephone(0606060610)
+            ->setMail('nordine.dine@eni.fr')
+            ->setPassword('nord10')
+            ->setAdministrateur(false)
+            ->setActif(false)
+            ->setRoles(["Nourriture"])
+            ->setCampus($campus3);
         $manager->persist($participant5);
+
+        // ETAT
+        $etat1 = new Etat();
+        $etat1->setLibelle('Créée');
+        $manager->persist($etat1);
+
+        $etat2 = new Etat();
+        $etat2->setLibelle('Ouverte');
+        $manager->persist($etat2);
+
+        $etat3 = new Etat();
+        $etat3->setLibelle('Activité en cours');
+        $manager->persist($etat3);
+
+        $etat4 = new Etat();
+        $etat4->setLibelle('Clôturée');
+        $manager->persist($etat4);
+
+        $etat5 = new Etat();
+        $etat5->setLibelle('Passée');
+        $manager->persist($etat5);
+
+        $etat6 = new Etat();
+        $etat6->setLibelle('Annulée');
+        $manager->persist($etat6);
 
 
         //Ville
         $ville1 = new Ville();
-        $ville1->setNom("Rennes");
-        $ville1->setCodePostal(35131);
+        $ville1
+            ->setNom("Rennes")
+            ->setCodePostal(35131);
         $manager->persist($ville1);
 
-        $ville3 = new Ville();
-        $ville3->setNom("Nantes");
-        $ville3->setCodePostal(44800);
-        $manager->persist($ville3);
+        $ville2 = new Ville();
+        $ville2
+            ->setNom("Nantes")
+            ->setCodePostal(44800);
+        $manager->persist($ville2);
 
-       $manager->flush();
 
-       // LIEUX
+        // LIEUX
         $lieu = new Lieu();
-        $lieu = $this->setNom('Bastille');
-        $lieu = $this->setRue('Pl. de la Bastille');
-        $lieu = $this->setLongitude(2.3695);
-        $lieu = $this->setLatitude(48.8533);
+        $lieu
+            ->setNom('Bastille')
+            ->setRue('Pl. de la Bastille')
+            ->setLongitude(2.3695)
+            ->setLatitude(48.8533)
+            ->setVille($ville1);
         $manager->persist($lieu);
-        $manager->flush();
 
         $lieu2 = new Lieu();
-        $lieu2 = $this->setNom('Ile de Nantes');
-        $lieu2 = $this->setRue('Ile de Nantes');
-        $lieu2 = $this->setLongitude(-1.553621);
-        $lieu2 = $this->setLatitude(47.218371);
+        $lieu2
+            ->setNom('Ile de Nantes')
+            ->setRue('Ile de Nantes')
+            ->setLongitude(-1.553621)
+            ->setLatitude(47.218371)
+            ->setVille($ville2);
         $manager->persist($lieu2);
+
+        //SORTIE
+        $dateLimite = new \DateTime();
+        $sortie = new Sortie();
+        $sortie
+            ->setNom('Bowling')
+            ->setDateHeureDebut(new \DateTime())
+            ->setDuree(120)
+            ->setDateLimiteInscription($dateLimite->setDate(2023,05,23))
+            ->setNbInscriptionsMax(10)
+            ->setInfosSortie('Deux parties de Bowling')
+            ->setEtat($etat1)
+            ->setSiteOrganisateur($campus2)
+            ->setOrganisateur($participant4)
+            ->setLieu($lieu2);
+        $manager->persist($sortie);
+
+
         $manager->flush();
     }
-
-
 }
