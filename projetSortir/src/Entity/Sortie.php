@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\SortieRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -47,10 +49,40 @@ class Sortie
      */
     private $infosSortie;
 
+
+
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\ManyToMany(targetEntity=Participant::class, mappedBy="inscrit")
+     */
+    private $participantInscrit;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Participant::class, inversedBy="organisateur")
+     */
+    private $organisateur;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Campus::class, inversedBy="siteOrganisateur")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $siteOrganisateur;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Etat::class, inversedBy="sortie")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $etat;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Lieu::class, inversedBy="sortie")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $lieu;
+
+    public function __construct()
+    {
+        $this->participantInscrit = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -129,14 +161,79 @@ class Sortie
         return $this;
     }
 
-    public function getEtat(): ?string
+
+
+    /**
+     * @return Collection<int, Participant>
+     */
+    public function getParticipantInscrit(): Collection
+    {
+        return $this->participantInscrit;
+    }
+
+    public function addParticipantInscrit(Participant $participantInscrit): self
+    {
+        if (!$this->participantInscrit->contains($participantInscrit)) {
+            $this->participantInscrit[] = $participantInscrit;
+            $participantInscrit->addInscrit($this);
+        }
+
+        return $this;
+    }
+
+    public function removeParticipantInscrit(Participant $participantInscrit): self
+    {
+        if ($this->participantInscrit->removeElement($participantInscrit)) {
+            $participantInscrit->removeInscrit($this);
+        }
+
+        return $this;
+    }
+
+    public function getOrganisateur(): ?Participant
+    {
+        return $this->organisateur;
+    }
+
+    public function setOrganisateur(?Participant $organisateur): self
+    {
+        $this->organisateur = $organisateur;
+
+        return $this;
+    }
+
+    public function getSiteOrganisateur(): ?Campus
+    {
+        return $this->siteOrganisateur;
+    }
+
+    public function setSiteOrganisateur(?Campus $siteOrganisateur): self
+    {
+        $this->siteOrganisateur = $siteOrganisateur;
+
+        return $this;
+    }
+
+    public function getEtat(): ?Etat
     {
         return $this->etat;
     }
 
-    public function setEtat(string $etat): self
+    public function setEtat(?Etat $etat): self
     {
         $this->etat = $etat;
+
+        return $this;
+    }
+
+    public function getLieu(): ?Lieu
+    {
+        return $this->lieu;
+    }
+
+    public function setLieu(?Lieu $lieu): self
+    {
+        $this->lieu = $lieu;
 
         return $this;
     }
