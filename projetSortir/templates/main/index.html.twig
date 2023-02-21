@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello MainController!{% endblock %}
+
+{% block body %}
+    <div class="container-fluid pt-3">
+        <div class="row justify-content-center">
+            <div class="col">
+                <h1>Bienvenue  !</h1>
+
+                <section id="recherche-form"><div class="row">
+                    <div class="col">
+                        <label>Campus</label> <select id="campus_nom"></select> <br>
+                        <label>Le nom de la sortie contient : </label><input type="search"> <br>
+                        <label>Entre </label><input type="date"><label> et </label><input type="date"> <br> </div>
+                        <div class="col">
+                        <label><input type="checkbox">Sorties dont je suis l'organisateur< /label></label><br>
+                        <label> <input type="checkbox"> Sorties auquelles je suis inscrit </label><br>
+                        <label><input type="checkbox">Sorties auquelles je ne suis pas inscrit </label><br>
+                        <label> <input type="checkbox"> Sorties passées </label><br>
+                        <div class="btn-container"><button>Rechercher</button>
+                        </div>
+                        </div></div>
+                </section>
+
+
+
+            </div>
+
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,63 @@
+:root{
+    --couleur-clair : #74b7e3;
+    --couleur-fonce : #17577a;
+}
+html{
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    color: #EEE;
+    font-family: 'Comforta', serif;
+    flex-flow:row wrap;
+    justify-content: space-between;
+}
+
+header{
+    background: linear-gradient(var(--couleur-fonce), var(--couleur-clair));
+    position: relative;
+    color: white;
+    font-size: large;
+    font-family: 'Comforta', serif;
+    width: 100%;
+   padding: 20px;
+}
+
+header img {
+    height: 90px;
+}
+
+
+
+main{
+    margin: 20px;
+    padding-bottom:100px;
+}
+
+h1{
+    font-variant-caps: small-caps;
+    text-align: center;
+}
+
+
+
+p, section{
+    color: black; }
+
+
+footer{
+    background: linear-gradient(var(--couleur-clair), var(--couleur-fonce));    font-size: medium;
+    text-align: center;
+    position:absolute;
+    bottom:0;  /* on le colle en bas */
+    width:100%;
+    padding: 30px;
+    height:100px;   /* Hauteur du pied de page */
+}
+
+footer p{
+    color: white;
+
+}
+
