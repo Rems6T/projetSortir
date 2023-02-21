@@ -1,0 +1,30 @@
+{% block body %}
+    <h3>Afficher une sortie</h3>
+    <h5>Nom de la sortie: {{ sortie.nom }}</h5>
+    <h5>Date et heure de la sortie : {{ sortie.dateHeureDebut  |date('Y-m-d H:i:s')}}</h5>
+    <h5>Date limite d'inscription : {{ sortie.dateLimiteInscription |date('Y-m-d H:i:s')}}</h5>
+    <h5>Nombre de places : {{ sortie.nbInscriptionsMax }}</h5>
+    <h5>Durée : {{ sortie.duree }} minutes</h5>
+    <h5>Description et infos : {{ sortie.infosSortie }}</h5>
+    <h5>Campus : {{ campus.nom }}</h5>
+    <h5>Lieu : {{ lieu.nom }}</h5>
+    <h5>Rue : {{ lieu.rue }}</h5>
+    <h5>Code postal : {{ ville.codePostal }}</h5>
+    <h5>Latitude : {{ lieu.latitude }}</h5>
+    <h5>Longitude : {{ lieu.longitude }}</h5>
+    <h4>Liste des participants inscrits</h4>
+    <table>
+        <tr>
+            <th>Pseudo</th>
+            <th>Nom</th>
+        </tr>
+        {% for participant in participants %}
+        <tr>
+            <td>{{ participant.pseudo }}</td>
+            <td>{{ participant.nom }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+
+{% endblock %}
