@@ -55,7 +55,7 @@ class Sortie
     /**
      * @ORM\ManyToMany(targetEntity=Participant::class, mappedBy="inscrit")
      */
-    private $participantInscrit;
+    private $participantsInscrits;
 
     /**
      * @ORM\ManyToOne(targetEntity=Participant::class, inversedBy="organisateur")

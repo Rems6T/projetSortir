@@ -10,6 +10,8 @@ use App\Entity\Sortie;
 use App\Entity\Ville;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
  * @method setNom(string $string)
@@ -19,6 +21,15 @@ use Doctrine\Persistence\ObjectManager;
  */
 class AppFixtures extends Fixture
 {
+
+    private UserPasswordEncoderInterface $encoder;
+
+    public function __construct(UserPasswordEncoderInterface $encoder){
+
+        $this->encoder = $encoder;
+    }
+
+
     public function load(ObjectManager $manager): void
     {
 
@@ -37,73 +48,77 @@ class AppFixtures extends Fixture
 
 
         //Participants
+
         $participant1 = new Participant();
+        $hash = $this->encoder->encodePassword($participant1, 'mdp');
         $participant1
             ->setPseudo("PieDup")
             ->setNom("Pierre")
             ->setPrenom("Dupont")
-            ->setTelephone(0606060606)
+            ->setTelephone('0606060606')
             ->setMail("pierre.dupont@eni.fr")
-            ->setPassword("p.pond")
-            ->setAdministrateur(false)
+            ->setPassword($hash)
             ->setActif(true)
-            ->setRoles(["Nourriture"])
+            ->setRoles(['ROLE_USER'])
             ->setCampus($campus2);
         $manager->persist($participant1);
 
         $participant2 = new Participant();
+        $hash = $this->encoder->encodePassword($participant2, 'admin');
+
         $participant2
-            ->setPseudo("Cousyves")
+            ->setPseudo("Admin")
             ->setNom('Yves')
             ->setPrenom('Cousteau')
-            ->setTelephone(0606060675)
+            ->setTelephone('0606060675')
             ->setMail("yves.cousteau@eni.fr")
-            ->setPassword('y.cous75')
-            ->setAdministrateur(true)
+            ->setPassword($hash)
             ->setActif(false)
-            ->setRoles(["Nourriture"])
+            ->setRoles(['ROLE_ADMIN','ROLE_USER'])
             ->setCampus($campus1);
         $manager->persist($participant2);
 
         $participant3 = new Participant();
+        $hash = $this->encoder->encodePassword($participant3, 'pierre.j');
+
         $participant3
             ->setPseudo("Le codeur fou")
             ->setNom('Jean')
             ->setPrenom('Pierre')
             ->setTelephone('0606060665')
             ->setMail('j.pierre@eni.fr')
-            ->setPassword('pierre.j')
-            ->setAdministrateur(false)
+            ->setPassword($hash)
             ->setActif(false)
-            ->setRoles(["Billets", "Guide"])
+            ->setRoles(['ROLE_USER'])
             ->setCampus($campus2);
         $manager->persist($participant3);
 
         $participant4 = new Participant();
+        $hash = $this->encoder->encodePassword($participant4, 'mimi.pol');
+
         $participant4
             ->setPseudo("Le chanteur")
             ->setNom('Michel')
             ->setPrenom('Polnaref')
             ->setTelephone('0606060636')
             ->setMail('mich.polna@eni.fr')
-            ->setPassword('mimi.pol')
-            ->setAdministrateur(true)
+            ->setPassword($hash)
             ->setActif(true)
-            ->setRoles(["Billets"])
+            ->setRoles(['ROLE_ADMIN','ROLE_USER'])
             ->setCampus($campus3);
         $manager->persist($participant4);
 
         $participant5 = new Participant();
+        $hash = $this->encoder->encodePassword($participant5, 'nord10');
         $participant5
             ->setPseudo("Le blagueur")
             ->setNom('Nordine')
             ->setPrenom('Dinenor')
-            ->setTelephone(0606060610)
+            ->setTelephone('0606060610')
             ->setMail('nordine.dine@eni.fr')
-            ->setPassword('nord10')
-            ->setAdministrateur(false)
+            ->setPassword($hash)
             ->setActif(false)
-            ->setRoles(["Nourriture"])
+            ->setRoles(['ROLE_USER'])
             ->setCampus($campus3);
         $manager->persist($participant5);
 
@@ -137,13 +152,13 @@ class AppFixtures extends Fixture
         $ville1 = new Ville();
         $ville1
             ->setNom("Rennes")
-            ->setCodePostal(35131);
+            ->setCodePostal('35131');
         $manager->persist($ville1);
 
         $ville2 = new Ville();
         $ville2
             ->setNom("Nantes")
-            ->setCodePostal(44800);
+            ->setCodePostal('44800');
         $manager->persist($ville2);
 
 
@@ -155,6 +170,7 @@ class AppFixtures extends Fixture
             ->setLongitude(2.3695)
             ->setLatitude(48.8533)
             ->setVille($ville1);
+
         $manager->persist($lieu);
 
         $lieu2 = new Lieu();
@@ -185,4 +201,5 @@ class AppFixtures extends Fixture
 
         $manager->flush();
     }
+
 }

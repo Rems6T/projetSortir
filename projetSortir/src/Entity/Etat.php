@@ -27,7 +27,7 @@ class Etat
     /**
      * @ORM\OneToMany(targetEntity=Sortie::class, mappedBy="etat")
      */
-    private $sortie;
+    private $sorties;
 
     public function __construct()
     {

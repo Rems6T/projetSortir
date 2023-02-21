@@ -50,7 +50,7 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     private $prenom;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="string")
      */
     private $telephone;
 
@@ -59,10 +59,7 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $mail;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private $administrateur;
+
 
     /**
      * @ORM\Column(type="boolean")
@@ -78,7 +75,7 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\ManyToMany(targetEntity=Sortie::class, inversedBy="participantInscrit")
      */
-    private $inscrit;
+    private $inscrits;
 
     /**
      * @ORM\OneToMany(targetEntity=Sortie::class, mappedBy="organisateur")
@@ -204,12 +201,12 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getTelephone(): ?int
+    public function getTelephone(): ?string
     {
         return $this->telephone;
     }
 
-    public function setTelephone(int $telephone): self
+    public function setTelephone(string $telephone): self
     {
         $this->telephone = $telephone;
 
@@ -228,17 +225,7 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function isAdministrateur(): ?bool
-    {
-        return $this->administrateur;
-    }
 
-    public function setAdministrateur(bool $administrateur): self
-    {
-        $this->administrateur = $administrateur;
-
-        return $this;
-    }
 
     public function isActif(): ?bool
     {
