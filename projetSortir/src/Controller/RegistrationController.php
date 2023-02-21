@@ -30,7 +30,10 @@ class RegistrationController extends AbstractController
         $user = new Participant();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
-
+        //On rajoute les données manquante
+        //actif
+        $user ->setActif(true);
+        //todo: Voir si ya besoin de rajouter le role ou pas
         if ($form->isSubmitted() && $form->isValid()) {
             // encode the plain password
             $user->setPassword(
@@ -43,11 +46,15 @@ class RegistrationController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
             // do anything else you need here, like send an email
-        }
+
         return $userAuthenticator->authenticateUser(
             $user,
             $authenticator,
             $request
         );
     }
+return $this->render('registration/register.html.twig', [
+'registrationForm' => $form->createView(),
+]);
+}
 }
