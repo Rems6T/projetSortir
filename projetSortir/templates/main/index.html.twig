@@ -6,7 +6,7 @@
     <div class="container-fluid pt-3">
         <div class="row justify-content-center">
             <div class="col">
-                <h1>Bienvenue  !</h1>
+                <h2>Bienvenue  !</h2>
 
                 <section id="recherche-form"><div class="row">
                     <div class="col">
@@ -14,7 +14,7 @@
                         <label>Le nom de la sortie contient : </label><input type="search"> <br>
                         <label>Entre </label><input type="date"><label> et </label><input type="date"> <br> </div>
                         <div class="col">
-                        <label><input type="checkbox">Sorties dont je suis l'organisateur< /label></label><br>
+                        <label><input type="checkbox">Sorties dont je suis l'organisateur</label><br>
                         <label> <input type="checkbox"> Sorties auquelles je suis inscrit </label><br>
                         <label><input type="checkbox">Sorties auquelles je ne suis pas inscrit </label><br>
                         <label> <input type="checkbox"> Sorties passées </label><br>
@@ -22,11 +22,41 @@
                         </div>
                         </div></div>
                 </section>
+                <section id="tableau_sorties">
+                    <table class="table">
+                        <tbody>
+                        <tr>
+                            <th>Nom de la sortie</th>
+                            <th>Date de la sortie</th>
+                            <th>Clotûre</th>
+                            <th>Nb d'inscrits</th>
+                            <th>Etat</th>
+                            <th>Inscrit</th>
+                            <th>Organisateur</th>
+                            <th>Actions</th>
+                        </tr>
 
-
-
+                        {% for sortie in sorties %}
+                        <tr>
+                            <td> {{ sortie.nom }}</td>
+                            <td>{{ sortie.dateHeureDebut  |date('Y-m-d H:i:s')}}</td>
+                            <td>{{ sortie.dateLimiteInscription |date('Y-m-d H:i:s')}}</td>
+                            <td> {{ sortie.participantInscrit|length }} / {{ sortie.nbInscriptionsMax }}</td>
+                            <td> {{ sortie.etat.libelle }}</td>
+                            <td>  {% if sortie.participantInscrit == true%}
+                                    <i class="fas fa-check-circle"></i>
+                                    {% endif %}</td>
+                            <td> {{ sortie.organisateur.pseudo }}</td>
+                            <td><a href="{{ path('app_sortie',{id: sortie.id}) }}"  title="Détail sortie">Afficher</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+            </section>
             </div>
-
         </div>
+        <a class="btn btn-warning " href="" role="button">Nouvelle sortie</a>
+
     </div>
 {% endblock %}
