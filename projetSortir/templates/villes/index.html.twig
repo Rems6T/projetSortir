@@ -1,27 +1,27 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello CampusController!{% endblock %}
+{% block title %}Hello VillesController!{% endblock %}
 
 {% block body %}
 <div class="container-fluid pt-3">
     <div class="row justify-content-center">
         <div class="col">
-            <h2>Les CAMPUS</h2>
+            <h2>Les VILLES</h2>
             <p>Filtrer les sites</p>
-            <label>Le nom du campus contient : <input type="search"> </label><br>
+            <label>Le nom contient : <input type="search"></label> <br>
             <div class="btn-container"><button>Rechercher</button>
             </div></div>
-        <section id="tableau_campus">
-            <table class="table">
+        <section id="tableau_villes">
+            <table class="table ">
                 <tbody>
                 <tr class="table-warning">
-                    <th class="table-warning">Campus</th>
-                    <th class="table-warning">Actions</th>
+                    <th>Villes</th>
+                    <th>Actions</th>
                 </tr>
 
-                {% for campus in campusS %}
+                {% for ville in villes %}
                     <tr>
-                        <td> {{ campus.nom }}</td>
+                        <td> {{ ville.nom }}</td>
                         <td>Pour admin
                         </td>
                     </tr>
@@ -29,6 +29,6 @@
                 </tbody>
             </table>
         </section>
-
     </div></div>
-            {% endblock %}
+
+        {% endblock %}
