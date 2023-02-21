@@ -28,7 +28,9 @@ header img {
     height: 90px;
 }
 
-
+nav ul li {
+    padding: 5px;
+}
 
 main{
     margin: 20px;
@@ -46,7 +48,7 @@ h2{
     text-align: center;
 }
 
-p, section{
+p, section, label{
     color: black; }
 
 

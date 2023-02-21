@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello CampusController!{% endblock %}
+
+{% block body %}
+<div class="container-fluid pt-3">
+    <div class="row justify-content-center">
+        <div class="col">
+            <h2>Les CAMPUS</h2>
+            <p>Filtrer les sites</p>
+            <label>Le nom du campus contient : </label><input type="search"> <br>
+            <div class="btn-container"><button>Rechercher</button>
+            </div></div>
+        <section id="tableau_campus">
+            <table class="table">
+                <tbody>
+                <tr>
+                    <th>Campus</th>
+                    <th>Actions</th>
+                </tr>
+
+                {% for campus in campusS %}
+                    <tr>
+                        <td> {{ campus.nom }}</td>
+                        <td>Pour admin</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </section>
+
+
+            {% endblock %}
