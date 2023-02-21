@@ -75,7 +75,7 @@ class SortieController extends AbstractController
         //la ville associé au lieu
         $ville = $lieu->getVille();
         //la liste des participants associé a la sortie
-        $participants = $sortie->getParticipantInscrit();
+        $participants = $sortie->getParticipantsInscrits();
         return $this->render('sortie/afficher.html.twig', [
             'controller_name' => 'SortieController',
             'sortie'=>$sortie,
