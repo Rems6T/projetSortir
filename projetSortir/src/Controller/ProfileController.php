@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Participant;
-use App\Form\ParticipantType;
+use App\Form\ProfileType;
 use App\Repository\ParticipantRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -31,7 +31,7 @@ class ProfileController extends AbstractController
     public function new(Request $request, ParticipantRepository $participantRepository): Response
     {
         $participant = new Participant();
-        $form = $this->createForm(ParticipantType::class, $participant);
+        $form = $this->createForm(ProfileType::class, $participant);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -61,7 +61,7 @@ class ProfileController extends AbstractController
      */
     public function edit(Request $request, Participant $participant, ParticipantRepository $participantRepository): Response
     {
-        $form = $this->createForm(ParticipantType::class, $participant);
+        $form = $this->createForm(ProfileType::class, $participant);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
