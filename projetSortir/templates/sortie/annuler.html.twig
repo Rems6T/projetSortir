@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Annuler Sortie{% endblock %}
+
+{% block body %}
+    <h2>Annuler une sortie</h2>
+    <h5>Nom de la sortie: {{ sortie.nom }}</h5>
+    <h5>Date et heure de la sortie : {{ sortie.dateHeureDebut  |date('Y-m-d H:i:s')}}</h5>
+    <h5>Campus : {{ sortie.siteOrganisateur.nom}}</h5>
+
+    <h5>Lieu: {{ sortie.lieu.nom }} {{ sortie.lieu.rue }} {{ sortie.lieu.ville.codePostal }} {{ sortie.lieu.ville.nom }}</h5>
+    <form action="" method="post">
+        <label for="motif">Motif :</label>
+        <input type="textArea" name="motif" id="motif">
+        <button>Enregistrer</button>
+    </form>
+    <a href="{{ app.request.headers.get('referer')}}"><button>Retour</button></a>
+
+
+{% endblock %}

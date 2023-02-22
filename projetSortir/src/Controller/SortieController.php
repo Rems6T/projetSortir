@@ -25,43 +25,100 @@ class SortieController extends AbstractController
         $sortieForm = $this -> createForm(SortieType::class, $sortie);
         //recupere les donnée et les injecte dans sortieForm
         $sortieForm ->handleRequest($request);
-
-        //Si bouton enregistrer
-        if (($sortieForm->getClickedButton() === $sortieForm->get('enregistrer')) && $sortieForm ->isValid()){
+        if ($sortieForm->isSubmitted()&&$sortieForm->isValid()){
             //on injecte les données manquantes
             //l'organisateur
             $sortie ->setOrganisateur($this->getUser());
-            //l'etat en "crée"
-            $sortie -> setEtat($etatRepository->find(1));
-            //On save en bdd
-            $entityManager->persist($sortie);
-            $entityManager->flush();
-            //todo: Alerte message="sortie crée"
-            //On redirige vers la page de la nouvelle sortie
-            return $this-> redirectToRoute('app_sortie',['id'=>$sortie->getId()]);
-        }
-        //Si bouton publier
-        if (($sortieForm->getClickedButton() === $sortieForm->get('publier')) && $sortieForm ->isValid()){
-            //on injecte les données manquantes
-            //l'organisateur
-            $sortie ->setOrganisateur($this->getUser());
-            //l'etat en "ouvert"
-            $sortie -> setEtat($etatRepository->find(2));
-            //On save en bdd
-            $entityManager->persist($sortie);
-            $entityManager->flush();
-            //todo: Alerte message="sortie ouverte"
-            //On redirige vers la page de la nouvelle sortie
-            return $this-> redirectToRoute('app_sortie',['id'=>$sortie->getId()]);
-        }
-        
+            //Si bouton enregistrer
+            if ($sortieForm->getClickedButton() === $sortieForm->get('enregistrer')){
 
+                //l'etat en "crée"
+                $sortie -> setEtat($etatRepository->findOneBy(['libelle'=>'Créée']));
+
+                //todo: Alerte message="sortie crée"
+
+            }
+            //Si bouton publier
+            if (($sortieForm->getClickedButton() === $sortieForm->get('publier')) && $sortieForm ->isValid()){
+
+                //l'etat en "ouvert"
+                $sortie -> setEtat($etatRepository->findOneBy(['libelle'=>'Ouverte']));
+                //todo: Alerte message="sortie ouverte"
+            }
+            //On save en bdd
+            $entityManager->persist($sortie);
+            $entityManager->flush();
+
+            //On redirige vers la page de la nouvelle sortie
+            return $this-> redirectToRoute('app_sortie',['id'=>$sortie->getId()]);
+        }
 
 
         return $this->render('sortie/creer.html.twig',[
             'sortieForm' =>$sortieForm->createView()
         ]);
     }
+    /**
+     * @Route("/sortie/modifier/{id}", name="app_sortie_modifier")
+     */
+    public function modifier(Sortie $sortie, Request $request, EtatRepository $etatRepository,EntityManagerInterface $entityManager): Response
+    {
+
+        $sortieForm = $this -> createForm(SortieType::class, $sortie);
+        //recupere les donnée et les injecte dans sortieForm
+        $sortieForm ->handleRequest($request);
+        if ($sortieForm->isSubmitted()&&$sortieForm->isValid()){
+
+            //Si bouton enregistrer
+            if ($sortieForm->getClickedButton() === $sortieForm->get('enregistrer')){
+
+                //l'etat en "crée"
+                $sortie -> setEtat($etatRepository->findOneBy(['libelle'=>'Créée']));
+                //todo: Alerte message="sortie crée"
+            }
+            //Si bouton publier
+            if ($sortieForm->getClickedButton() === $sortieForm->get('publier')){
+                //l'etat en "ouvert"
+                $sortie -> setEtat($etatRepository->findOneBy(['libelle'=>'Ouverte']));
+                //todo: Alerte message="sortie ouverte"
+            }
+            $entityManager->persist($sortie);
+            $entityManager->flush();
+
+            //On redirige vers la page de la  sortie
+            return $this-> redirectToRoute('app_sortie',['id'=>$sortie->getId()]);
+        }
+
+
+        return $this->render('sortie/modifier.html.twig',[
+            'sortieForm' =>$sortieForm->createView(),
+
+        ]);
+    }
+    /**
+     * @Route("/sortie/annuler/{id}", name="app_sortie_annuler")
+     */
+    public function annuler(Sortie $sortie,Request $request,EtatRepository $etatRepository,EntityManagerInterface $entityManager): Response
+    {
+        //on check si le formulaire est rempli
+        if ($request->get('motif')){
+            //on change l'etat en Annulée
+            $sortie -> setEtat($etatRepository->findOneBy(['libelle'=>'Annulée']));
+            //on change la description par le motif
+            $sortie -> setInfosSortie($request->get('motif'));
+            //on save en bdd
+            $entityManager->persist($sortie);
+            $entityManager->flush();
+
+            //On redirige vers la page de la  sortie
+            return $this-> redirectToRoute('app_sortie',['id'=>$sortie->getId()]);
+        }
+        return $this->render('sortie/annuler.html.twig',[
+            'sortie' =>$sortie
+        ]);
+    }
+
+
     /**
      * @Route("/sortie/{id}", name="app_sortie")
      */

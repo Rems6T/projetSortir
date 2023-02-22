@@ -195,7 +195,9 @@ class AppFixtures extends Fixture
             ->setEtat($etat1)
             ->setSiteOrganisateur($campus2)
             ->setOrganisateur($participant4)
-            ->setLieu($lieu2);
+            ->setLieu($lieu2)
+            ->addParticipantsInscrits($participant1)
+            ->addParticipantsInscrits($participant3);
         $manager->persist($sortie);
 
 

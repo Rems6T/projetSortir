@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modif Sortie{% endblock %}
+
+{% block body %}
+    <h2>Modifier une sortie</h2>
+    {{ form_start(sortieForm) }}
+    {{ form_widget(sortieForm) }}
+
+
+    {{ form_end(sortieForm) }}
+    <a href="{{ path('app_main_index') }}"><button>Supprimer la sortie</button></a>
+    <a href="{{ path('app_main_index') }}"><button>Annuler</button></a>
+
+{% endblock %}

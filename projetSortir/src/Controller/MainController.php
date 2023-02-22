@@ -17,6 +17,7 @@ class MainController extends AbstractController
     {
     $sorties = $SortieRepository->findAll();
 
+
         return $this->render('main/index.html.twig',
         [ // les passe à Twig "
             "sorties" => $sorties, ]); }}
