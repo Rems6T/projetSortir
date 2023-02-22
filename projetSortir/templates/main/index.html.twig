@@ -10,17 +10,24 @@
 
                 <section id="recherche-form"><div class="row">
                     <div class="col">
+                        <form action="{{ path('app_main_index') }}" method="post">
+                            <label>Campus</label> <select name="campus_nom">
+                            {% for campus in campusS %}
+                                <option value="{{campus.nom  }}">{{ campus.nom }}</option>
+                                {% endfor %}
+                            </select> <br>
+                            <label>Le nom de la sortie contient : </label>
+                            <input type="search" name="search"> <br>
+                            <label>Entre </label><input type="date" name="dateMin"><label> et </label><input type="date" name="dateMax"> <br> </div>
+                            <div class="col">
+                            <label><input type="checkbox" name="est_organisateur">Sorties dont je suis l'organisateur</label><br>
+                            <label> <input type="checkbox" name="est_inscrit"> Sorties auquelles je suis inscrit </label><br>
+                            <label><input type="checkbox" name="pas_inscrit">Sorties auquelles je ne suis pas inscrit </label><br>
+                            <label> <input type="checkbox" name="sortie_terminé"> Sorties passées </label><br>
+                            <div class="btn-container"><button>Rechercher</button>
+                            </div>
+                        </form>
 
-                        <label>Campus</label> <select id="campus_nom"></select> <br>
-                        <label>Le nom de la sortie contient : </label><input type="search"> <br>
-                        <label>Entre </label><input type="date"><label> et </label><input type="date"> <br> </div>
-                        <div class="col">
-                        <label><input type="checkbox">Sorties dont je suis l'organisateur</label><br>
-                        <label> <input type="checkbox"> Sorties auquelles je suis inscrit </label><br>
-                        <label><input type="checkbox">Sorties auquelles je ne suis pas inscrit </label><br>
-                        <label> <input type="checkbox"> Sorties passées </label><br>
-                        <div class="btn-container"><button>Rechercher</button>
-                        </div>
                         </div></div>
                 </section>
                 <section id="tableau_sorties">
