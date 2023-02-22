@@ -30,7 +30,7 @@ class SortieController extends AbstractController
         if (($sortieForm->getClickedButton() === $sortieForm->get('enregistrer')) && $sortieForm ->isValid()){
             //on injecte les données manquantes
             //l'organisateur
-            $sortie ->setOrganisateur($this->getUser()->getId());
+            $sortie ->setOrganisateur($this->getUser());
             //l'etat en "crée"
             $sortie -> setEtat($etatRepository->find(1));
             //On save en bdd
@@ -44,7 +44,7 @@ class SortieController extends AbstractController
         if (($sortieForm->getClickedButton() === $sortieForm->get('publier')) && $sortieForm ->isValid()){
             //on injecte les données manquantes
             //l'organisateur
-            $sortie ->setOrganisateur($this->getUser()->getId());
+            $sortie ->setOrganisateur($this->getUser());
             //l'etat en "ouvert"
             $sortie -> setEtat($etatRepository->find(2));
             //On save en bdd
