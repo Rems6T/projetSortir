@@ -2,8 +2,11 @@
 
 namespace App\Form;
 
+use App\Entity\Campus;
 use App\Entity\Participant;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -13,15 +16,18 @@ class ProfileType extends AbstractType
     {
         $builder
             ->add('pseudo')
-            ->add('roles')
-            ->add('password')
             ->add('nom')
             ->add('prenom')
             ->add('telephone')
-            ->add('mail')
-            ->add('actif')
-            ->add('campus')
-            ->add('inscrits')
+            ->add('mail',
+            EmailType::class,
+            ['label' => 'Email'])
+            ->add('campus',
+                EntityType::class,
+                ['class'=>Campus::class,
+                    'label'=>'Campus',
+                    'choice_label' => 'nom'
+                ])
         ;
     }
 
