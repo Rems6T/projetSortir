@@ -74,7 +74,7 @@ class VillesController extends AbstractController
      */
     public function supprimer(Ville $ville): Response
     {
-        
+
 
 
         return $this->render('villes/supprimer.html.twig',
