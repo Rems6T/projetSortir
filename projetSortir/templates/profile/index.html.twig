@@ -11,7 +11,7 @@
                 <th>Id</th>
                 <th>Pseudo</th>
                 <th>Roles</th>
-                <th>Password</th>
+{#                <th>Password</th>#}
                 <th>Nom</th>
                 <th>Prenom</th>
                 <th>Telephone</th>
@@ -26,7 +26,6 @@
                 <td>{{ participant.id }}</td>
                 <td>{{ participant.pseudo }}</td>
                 <td>{{ participant.roles ? participant.roles|json_encode : '' }}</td>
-                <td>{{ participant.password }}</td>
                 <td>{{ participant.nom }}</td>
                 <td>{{ participant.prenom }}</td>
                 <td>{{ participant.telephone }}</td>
@@ -34,7 +33,7 @@
                 <td>{{ participant.actif ? 'Yes' : 'No' }}</td>
                 <td>
                     <a href="{{ path('app_profile_show', {'id': participant.id}) }}">show</a>
-                    <a href="{{ path('app_profile_edit', {'id': participant.id}) }}">edit</a>
+                    <a href="{{ path('app_profile_edit', {id : participant.id}) }}">edit</a>
                 </td>
             </tr>
         {% else %}

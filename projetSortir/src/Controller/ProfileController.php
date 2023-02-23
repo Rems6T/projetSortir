@@ -5,10 +5,15 @@ namespace App\Controller;
 use App\Entity\Participant;
 use App\Form\ProfileType;
 use App\Repository\ParticipantRepository;
+use App\Service\FileUploader;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 /**
  * @Route("/profile")
@@ -28,15 +33,21 @@ class ProfileController extends AbstractController
     /**
      * @Route("/new", name="app_profile_new", methods={"GET", "POST"})
      */
-    public function new(Request $request, ParticipantRepository $participantRepository): Response
+    public function new(Request $request, ParticipantRepository $participantRepository, FileUploader $fileUploader): Response
     {
         $participant = new Participant();
         $form = $this->createForm(ProfileType::class, $participant);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $participantRepository->add($participant, true);
 
+            $brochureFile = $form->get('brochure')->getData();
+            if ($brochureFile) {
+                $brochureFileName = $fileUploader->upload($brochureFile);
+                $participant->setBrochureFilename($brochureFileName);
+            }
+
+            $participantRepository->add($participant, true);
             return $this->redirectToRoute('app_profile_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -57,14 +68,49 @@ class ProfileController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="app_profile_edit", methods={"GET", "POST"})
+     * @Route("/edit/{id}", name="app_profile_edit", methods={"GET", "POST"})
      */
-    public function edit(Request $request, Participant $participant, ParticipantRepository $participantRepository): Response
+    public function edit(Request               $request,
+                         Participant           $participant,
+                         ParticipantRepository $participantRepository,
+                         SluggerInterface      $slugger
+        , UserPasswordHasherInterface          $userPasswordHarsher): Response
     {
         $form = $this->createForm(ProfileType::class, $participant);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            /**
+             * @var UploadedFile $brochureFile
+             */
+            $brochureFile = $form->get('brochure')->getData();
+
+            // this condition is needed because the 'brochure' field is not required
+            // so the PDF file must be processed only when a file is uploaded
+            if ($brochureFile) {
+                $originalFilename = pathinfo($brochureFile->getClientOriginalName(), PATHINFO_FILENAME);
+                // this is needed to safely include the file name as part of the URL
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename . '-' . uniqid() . '.' . $brochureFile->guessExtension();
+
+                // Move the file to the directory where brochures are stored
+                $brochureFile->move(
+                    $this->getParameter('brochures_directory'),
+                    $newFilename
+                );
+
+                // updates the 'brochureFilename' property to store the PDF file name
+                // instead of its contents
+                $participant->setBrochureFilename($newFilename);
+            }
+
+            $participant->setPassword(
+                $userPasswordHarsher->hashPassword(
+                    $participant,
+                    $form->get('password')->getData()
+                )
+            );
             $participantRepository->add($participant, true);
 
             return $this->redirectToRoute('app_profile_index', [], Response::HTTP_SEE_OTHER);
@@ -77,11 +123,11 @@ class ProfileController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="app_profile_delete", methods={"POST"})
+     * @Route("/management/{id}", name="app_profile_delete")
      */
     public function delete(Request $request, Participant $participant, ParticipantRepository $participantRepository): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$participant->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $participant->getId(), $request->request->get('_token'))) {
             $participantRepository->remove($participant, true);
         }
 
