@@ -8,6 +8,8 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class CampusType extends AbstractType
 {
@@ -16,9 +18,21 @@ class CampusType extends AbstractType
         $builder
             ->add('nom',
                 TextType::class,
-                ['label'=>'Nom du campus'])
-            ->add('enregistrer', SubmitType::class, ['label' => 'Enregistrer'])
-        ;
+                ['label' => 'Nom du campus',
+                    'constraints' => [
+                        new NotBlank([
+                            'message' => 'Entrez un nom de campus',
+                        ]),
+                        new Length([
+                            'min' => 6,
+                            'minMessage' => 'Le campus doit faire au moins {{ limit }} lettres',
+
+                            'max' => 50,
+                        ])
+                    ]
+                    ]
+            )
+            ->add('enregistrer', SubmitType::class, ['label' => 'Enregistrer']);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

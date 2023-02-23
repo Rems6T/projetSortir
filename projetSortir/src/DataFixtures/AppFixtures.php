@@ -35,7 +35,7 @@ class AppFixtures extends Fixture
 
         //CAMPUS
         $campus1 = new Campus();
-        $campus1->setNom('Brest');
+        $campus1->setNom('Lorient');
         $manager->persist($campus1);
 
         $campus2 = new Campus();
@@ -46,7 +46,9 @@ class AppFixtures extends Fixture
         $campus3->setNom('Rennes');
         $manager->persist($campus3);
 
-
+        $campus4 = new Campus();
+        $campus4->setNom('Brest');
+        $manager->persist($campus4);
         //Participants
 
         $participant1 = new Participant();
