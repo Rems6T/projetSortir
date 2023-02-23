@@ -73,8 +73,9 @@ class CampusController extends AbstractController
     /**
      * @Route("/campus/supprimer/{id}", name="app_campus_supprimer")
      */
-    public function supprimer(Campus $campus, EntityManagerInterface $entityManager): Response
+    public function supprimer(Campus $campus): Response
     {
+
         return $this->render('campus/supprimer.html.twig',
             [ // les passe à Twig "
                 "campus" => $campus,]);
@@ -84,27 +85,9 @@ class CampusController extends AbstractController
      */
     public function suppression(Campus $campus, EntityManagerInterface $entityManager,CampusRepository $campusRepository): Response
     {
-//        //on deplace les participant vers campus "En Attente"
-//        $participants = $campus->getParticipants();
-//
-//        foreach ($participants as $participant){
-//
-//            $participant->setCampus($campusRepository->findOneBy(['nom' => 'En Attente']));
-//
-//            //on save en bdd
-//            $entityManager->persist($participant);
-//            $entityManager->flush();
-//        }
-//        //on deplace les sortie vers campus "En Attente"
-//        $sorties = $campus->getSiteOrganisateur();
-//        foreach ($sorties as $sortie){
-//            $sortie ->setSiteOrganisateur($campusRepository->findOneBy(['nom' => 'En Attente']));
-//            //on save en bdd
-//            $entityManager->persist($sortie);
-//            $entityManager->flush();
-//        }
-        //on verifie si le campus n'a bien plus aucun participant
-        if(empty($campus->getParticipants())){
+
+        //on verifie si le campus n'a bien plus aucun participant et de sortie
+        if(empty($campus->getParticipants()) && empty($campus->getSiteOrganisateur())){
             //on supprime en bdd
             $entityManager->remove($campus);
             $entityManager->flush();
