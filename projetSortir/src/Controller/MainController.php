@@ -104,12 +104,15 @@ class MainController extends AbstractController
      */
     public function inscriptionSortie(SortieRepository $repo, EntityManagerInterface $em, $idParticipant, $idSortie): Response
     {
-
+        $today = new \DateTime('now');
         $sortie = $repo->find($idSortie);
         $repoParticipant = $this->getDoctrine()->getRepository(Participant::class);
         $Participant = $repoParticipant->find($idParticipant);
 
-        if ( $sortie->getNbInscriptionsMax() > count($sortie->getParticipantsInscrits())) {
+        if($today >= $sortie->getDateLimiteInscription()) {
+            $this->addFlash('error', "Impossible de s'inscrire, la date d'inscription est dépassée");
+            return $this->redirectToRoute("app_main_index");
+        } elseif ( $sortie->getNbInscriptionsMax() > count($sortie->getParticipantsInscrits())) {
             $sortie->addParticipantsInscrits($Participant);
             $em->flush();
             $this->addFlash('success', 'Vous avez était inscrit à la sortie !');
@@ -119,6 +122,7 @@ class MainController extends AbstractController
 
 
         return $this->redirectToRoute("app_main_index");
+
     }
 
     /**
