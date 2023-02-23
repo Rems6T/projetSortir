@@ -26,6 +26,10 @@
         </tr>
         {% endfor %}
     </table>
-
+    {% if sortie.organisateur.id == app.user.id %}
+        <a href="{{ path('app_sortie_modifier',{'id':sortie.id}) }}">Modifier
+        </a>
+    {% else %}
+    {% endif %}
 
 {% endblock %}

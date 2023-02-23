@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Supprimer Ville{% endblock %}
+
+{% block body %}
+<h2>Supprimer Ville</h2>
+{% if ville.lieu is empty  %}
+<p>Voulez-vous vraiment supprimer la ville: {{ ville.nom }}</p>
+    <a href="{{ path('app_villes_suppression',{id:ville.id}) }}"><button>Supprimer</button></a>
+{% else %}
+<p>Vous ne pouvez pas supprimer la ville: {{ ville.nom }}</p>
+    <p>Vous devez d'abord modifier les lieux</p>
+    <table class="table">
+        <tr>
+            <th class="table-warning">Nom du Lieu</th>
+            <th class="table-warning">Rue</th>
+            <th class="table-warning">Action</th>
+        </tr>
+        {% for lieu in ville.lieu %}
+        <tr>
+            <td>{{ lieu.nom }}</td>
+            <td>{{ lieu.rue }}</td>
+            <td><a href="{{ path('app_lieu_modifier',{id: lieu.id}) }}">Modifier</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+
+
+{% endif %}
+    <a href="{{ path('app_villes') }}">
+        <button>Retour</button>
+    </a>
+{% endblock %}

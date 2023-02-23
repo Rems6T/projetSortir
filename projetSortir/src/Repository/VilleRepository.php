@@ -39,7 +39,17 @@ class VilleRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
+    /**
+     * @return Ville[] Returns an array of ville objects qui contient le mot
+     */
+    public function findByWord($keyword){
+        $query = $this->createQueryBuilder('a')
+            ->where('a.nom LIKE :key')
+            ->setParameter('key' , $keyword)
+            ->getQuery();
 
+        return $query->getResult();
+    }
 //    /**
 //     * @return Ville[] Returns an array of Ville objects
 //     */

@@ -8,9 +8,13 @@
         <div class="col">
             <h2>Les CAMPUS</h2>
             <p>Filtrer les sites</p>
-            <label>Le nom du campus contient : <input type="search"> </label><br>
-            <div class="btn-container"><button>Rechercher</button>
-            </div></div>
+            <form action="{{ path('app_campus') }}" method="post">
+                <label>Le nom du campus contient : <input type="search" name="search"> </label><br>
+                <div class="btn-container">
+                    <button>Rechercher</button>
+                </div>
+            </form>
+            ></div>
         <section id="tableau_campus">
             <table class="table">
                 <tbody>
@@ -22,10 +26,18 @@
                 {% for campus in campusS %}
                     <tr>
                         <td> {{ campus.nom }}</td>
-                        <td>Pour admin
-                        </td>
+                        <td><a href="{{ path('app_campus_modifier',{id:campus.id}) }}">Modifier</a> <a href="{{ path('app_campus_supprimer',{id:campus.id}) }}">Supprimer</a></td>
                     </tr>
                 {% endfor %}
+                {{ form_start(campusForm) }}
+                <tr>
+                        <td>{{ form_row(campusForm.nom) }}</td>
+                        <td>{{ form_row(campusForm.enregistrer) }}</td>
+                </tr>
+                <tr>
+                    <td>{{ form_errors(campusForm.nom) }}</td>
+                </tr>
+                {{ form_end(campusForm) }}
                 </tbody>
             </table>
         </section>

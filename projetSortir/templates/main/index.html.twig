@@ -5,24 +5,56 @@
 {% block body %}
     <div class="container-fluid pt-3">
         <div class="row justify-content-center">
-            <div class="col">
+
                 <h2>Bienvenue  !</h2>
+            {% if app.user %}
 
-                <section id="recherche-form"><div class="row">
-                    <div class="col">
 
-                        <label>Campus</label> <select id="campus_nom"></select> <br>
-                        <label>Le nom de la sortie contient : </label><input type="search"> <br>
-                        <label>Entre </label><input type="date"><label> et </label><input type="date"> <br> </div>
+                  *
+
+                        {% if app.user %}
+                        <form action="{{ path('app_search', {'id': app.user.id}) }}" method="post">
+                            {% else %}
+                            <form action="{{ path('app_search', {'id': 0}) }}" method="post">
+                                {% endif %}
+                                <div class="row">
+                                    <div class="col">
+                                        <label>Campus : </label><select class="btn btn-warning" name="campus">
+                                                <option value=""></option>
+                                                {% for campus in campusS %}
+                                                    <option id="ville"  name="campus"
+                                                            value="{{ campus.id }}">
+                                                        {{ campus.nom | upper }}
+                                                    </option>
+                                                {% endfor %}
+                                        </select>
+<br>
+
+                            <label>Le nom de la sortie contient : </label>
+                            <input type="search" name="search">
+<br>
+                            <label>Entre </label><input type="date" name="dateMin"><label> et
+                            </label><input type="date" name="dateMax"> <br>
+                                    </div>
+
                         <div class="col">
-                        <label><input type="checkbox">Sorties dont je suis l'organisateur</label><br>
-                        <label> <input type="checkbox"> Sorties auquelles je suis inscrit </label><br>
-                        <label><input type="checkbox">Sorties auquelles je ne suis pas inscrit </label><br>
-                        <label> <input type="checkbox"> Sorties passées </label><br>
-                        <div class="btn-container"><button>Rechercher</button>
-                        </div>
-                        </div></div>
-                </section>
+                            <label><input type="checkbox" name="est_organisateur">Sorties dont je suis l'organisateur</label><br>
+                            <label> <input type="checkbox" name="est_inscrit"> Sorties auquelles je suis inscrit </label><br>
+                            <label><input type="checkbox" name="pas_inscrit">Sorties auquelles je ne suis pas inscrit </label><br>
+                            <label> <input type="checkbox" name="sortie_terminé"> Sorties passées </label><br>
+                            <div class="btn-container"><button>Rechercher</button>
+                            </div></div>
+
+                                </div></form></form>
+                    </div></div>
+
+
+
+                {% if sorties | length == 0 %}
+                <h3 class="text-center mt-5">
+                    Aucun résultat trouvé !</h3>
+                {% else %}
+
                 <section id="tableau_sorties">
                     <table class="table">
                         <tbody>
@@ -47,11 +79,33 @@
                             <td>  {% if sortie.participantsInscrits == true%}
                                     <i class="fas fa-check-circle"></i>
                                     {% endif %}</td>
-                            <td> {{ sortie.organisateur.pseudo }}</td>
+                            <td>
+                            <a href="{{ path('app_profile_show', {'id': sortie.organisateur.id} ) }}">{{ sortie.organisateur.pseudo }}</a>
+
+                            </td>
                             <td><a href="{{ path('app_sortie',{id: sortie.id}) }}"  title="Détail sortie">Afficher</a>
+
+                                {% if (app.user in sortie.participantsInscrits and (sortie.etat.libelle == 'Ouverte')) %}
+                                    <a href="{{ path('app_sortie_desinscription', {'idParticipant': app.user.id,'idSortie': sortie.id}) }}">Désinscription</a>
+
+                                {% endif %}
+
+                                {% if sortie.nbInscriptionsMax > sortie.participantsInscrits|length %}
+                                    {% if (app.user not in sortie.participantsInscrits and sortie.etat.libelle == 'Ouverte')%}
+                                        <a href="{{ path('app_sortie_inscription', {'idParticipant': app.user.id,'idSortie': sortie.id}) }}">Inscription</a>
+                                    {% endif %}
+                                {% endif %}
+
+                                {% if sortie.organisateur.id == app.user.id %}
+                                    <a href="{{ path('app_sortie_modifier',{'id':sortie.id}) }}">Modifier
+                                    </a>
+                                {% else %}
+                                {% endif %}
+
+
                             </td>
                         </tr>
-                        {% endfor %}
+                            {% endfor %}  {% endif %}
                         </tbody>
                     </table>
             </section>
@@ -60,4 +114,7 @@
         <a class="btn btn-warning " href="{{ path('app_sortie_creer') }}" role="button">Nouvelle sortie</a>
 
     </div>
+{% else %}
+                <p>Veuillez vous connecter pour voir la liste des sorties !</p>
+{% endif %}
 {% endblock %}

@@ -35,7 +35,7 @@ class AppFixtures extends Fixture
 
         //CAMPUS
         $campus1 = new Campus();
-        $campus1->setNom('Brest');
+        $campus1->setNom('Lorient');
         $manager->persist($campus1);
 
         $campus2 = new Campus();
@@ -46,7 +46,9 @@ class AppFixtures extends Fixture
         $campus3->setNom('Rennes');
         $manager->persist($campus3);
 
-
+        $campus4 = new Campus();
+        $campus4->setNom('Brest');
+        $manager->persist($campus4);
         //Participants
 
         $participant1 = new Participant();
@@ -60,6 +62,7 @@ class AppFixtures extends Fixture
             ->setPassword($hash)
             ->setActif(true)
             ->setRoles(['ROLE_USER'])
+            ->setBrochureFilename("php_plain_logo_icon_146397.png")
             ->setCampus($campus2);
         $manager->persist($participant1);
 
@@ -75,6 +78,7 @@ class AppFixtures extends Fixture
             ->setPassword($hash)
             ->setActif(false)
             ->setRoles(['ROLE_ADMIN','ROLE_USER'])
+            ->setBrochureFilename("php_plain_logo_icon_146397.png")
             ->setCampus($campus1);
         $manager->persist($participant2);
 
@@ -90,6 +94,7 @@ class AppFixtures extends Fixture
             ->setPassword($hash)
             ->setActif(false)
             ->setRoles(['ROLE_USER'])
+            ->setBrochureFilename("php_plain_logo_icon_146397.png")
             ->setCampus($campus2);
         $manager->persist($participant3);
 
@@ -105,6 +110,7 @@ class AppFixtures extends Fixture
             ->setPassword($hash)
             ->setActif(true)
             ->setRoles(['ROLE_ADMIN','ROLE_USER'])
+            ->setBrochureFilename("php_plain_logo_icon_146397.png")
             ->setCampus($campus3);
         $manager->persist($participant4);
 
@@ -119,6 +125,7 @@ class AppFixtures extends Fixture
             ->setPassword($hash)
             ->setActif(false)
             ->setRoles(['ROLE_USER'])
+            ->setBrochureFilename("php_plain_logo_icon_146397.png")
             ->setCampus($campus3);
         $manager->persist($participant5);
 

@@ -7,8 +7,6 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Sortie>
- *
  * @method Sortie|null find($id, $lockMode = null, $lockVersion = null)
  * @method Sortie|null findOneBy(array $criteria, array $orderBy = null)
  * @method Sortie[]    findAll()
@@ -39,6 +37,108 @@ class SortieRepository extends ServiceEntityRepository
         }
     }
 
+    public function findAllWithSitesAndEtats() {
+        return $this->createQueryBuilder('s')
+            ->leftJoin('s.etat', 'e')
+            ->leftJoin('s.siteOrganisateur', 'si')
+            ->addSelect('si')
+            ->addSelect('e')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    public function findBySearch($search)
+    {
+        $query = $this->createQueryBuilder('a')
+            ->where('a.nom LIKE :mot')
+            ->setParameter('mot' , $search)
+            ->getQuery();
+        return $query->getResult();
+    }
+
+
+    public function findByCampus($idCampus)
+    {
+        return $this->createQueryBuilder('s')
+            ->innerJoin('s.siteOrganisateur', 'si')
+            ->andWhere('si.nom =  :campus')
+            ->setParameter('campus', $idCampus)
+            ->getQuery()
+            ->getResult();
+    }
+    public function findByDates($dateMin, $dateMax, $idCampus, $search)
+    {
+        return $this->createQueryBuilder('s')
+            ->innerJoin('s.siteOrganisateur', 'si')
+            ->andWhere('s.dateHeureDebut >= :dateDebut')
+            ->andWhere('s.dateLimiteInscription <= :dateFin')
+            ->andWhere('si.id =  :site')
+            ->andWhere('s.nom LIKE :search')
+            ->setParameter('search', '%' . $search . '%')
+            ->setParameter('site', $idCampus)
+            ->setParameter('dateDebut', $dateMin)
+            ->setParameter('dateFin', $dateMax)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findByIdOrganisateur($idParticipant, $idCampus, $search)
+    {
+        return $this->createQueryBuilder('s')
+            ->innerJoin('s.siteOrganisateur', 'si')
+            ->andWhere('s.organisateur  =  :id')
+            ->andWhere('si.id =  :campus')
+            ->andWhere('s.nom LIKE :search')
+            ->setParameter('search', '%' . $search . '%')
+            ->setParameter('campus', $idCampus)
+            ->setParameter('id', $idParticipant)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findByIdParticipantInscrit($idParticipant, $idCampus, $search)
+    {
+        return $this->createQueryBuilder('s')
+            ->leftJoin('s.participantsInscrits', 'p')
+            ->innerJoin('s.siteOrganisateur', 'si')
+            ->andWhere('p.id =  :id')
+            ->andWhere('si.id =  :site')
+            ->andWhere('s.nom LIKE :search')
+            ->setParameter('search', '%' . $search . '%')
+            ->setParameter('site', $idCampus)
+            ->setParameter('id', $idParticipant)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findByIdParticipantNonInscrit($sorties, $idParticipant, $idCampus)
+    {
+
+        foreach ($sorties as $sortie) {
+            foreach ($sortie->getParticipantsInscrits() as $participant) {
+                if ($participant->getId() == $idParticipant || $idCampus != $sortie->getSiteOrganisateur()->getId()) {
+                    $id = array_search($sortie, $sorties);
+                    unset($sorties[$id]);
+                }
+            }
+        }
+        return $sorties;
+    }
+
+    public function findByEtatPassees($idCampus, $search)
+    {
+        return $this->createQueryBuilder('s')
+            ->leftJoin('s.etat', 'e')
+            ->innerJoin('s.siteOrganisateur', 'si')
+            ->andWhere('e.id =  5')
+            ->andWhere('si.id =  :campus')
+            ->andWhere('s.nom LIKE :search')
+            ->setParameter('search', '%' . $search . '%')
+            ->setParameter('campus', $idCampus)
+            ->getQuery()
+            ->getResult();
+    }
 //    /**
 //     * @return Sortie[] Returns an array of Sortie objects
 //     */

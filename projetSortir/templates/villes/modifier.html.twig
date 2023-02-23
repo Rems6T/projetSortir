@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modif Ville{% endblock %}
+
+{% block body %}
+    <h2>Modifier Ville</h2>
+    {{ form_start(villeForm) }}
+    {{ form_widget(villeForm) }}
+
+
+    {{ form_end(villeForm) }}
+    <a href="{{ path('app_villes')}}"><button>Retour</button></a>
+{% endblock %}

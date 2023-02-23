@@ -185,7 +185,7 @@ class Sortie
     public function removeParticipantsInscrits(Participant $participantsInscrits): self
     {
         if ($this->participantsInscrits->removeElement($participantsInscrits)) {
-            $participantsInscrits->removeInscrit($this);
+            $participantsInscrits->removeInscrits($this);
         }
 
         return $this;
