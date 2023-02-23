@@ -2,8 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Participant;
+use App\Entity\Sortie;
 use App\Repository\CampusRepository;
 use App\Repository\SortieRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -85,4 +88,46 @@ class MainController extends AbstractController
             'sorties' => $sorties,
            'campusS' => $campusS,
         ]);
-        } }
+        }
+
+    /**
+     * @Route("/sortie/inscription/{idParticipant}/{idSortie}",name="app_sortie_inscription")
+     */
+    public function inscriptionSortie(SortieRepository $repo, EntityManagerInterface $em, $idParticipant, $idSortie): Response
+    {
+
+        $sortie = $repo->find($idSortie);
+        $repoParticipant = $this->getDoctrine()->getRepository(Participant::class);
+        $Participant = $repoParticipant->find($idParticipant);
+
+        if ( $sortie->getNbInscriptionsMax() > count($sortie->getParticipantsInscrits())) {
+            $sortie->addParticipantsInscrits($Participant);
+            $em->flush();
+            $this->addFlash('success', 'Vous avez était inscrit à la sortie !');
+        } else {
+            $this->addFlash('danger', 'La sortie est complète');
+        }
+
+
+        return $this->redirectToRoute("app_main_index");
+    }
+
+    /**
+     * @Route("/sortie/desinscription/{idParticipant}/{idSortie}",name="app_sortie_desinscription")
+     */
+    public function desinscriptionSortie(SortieRepository $repo, EntityManagerInterface $em, $idParticipant, $idSortie): Response
+    {
+
+        $sortie = $repo->find($idSortie);
+        $repoParticipant = $this->getDoctrine()->getRepository(Participant::class);
+        $Participant = $repoParticipant->find($idParticipant);
+        $sortie->removeParticipantsInscrits($Participant);
+        $em->flush();
+        $this->addFlash('success', 'Vous êtes désinscrit de la sortie !');
+        return $this->redirectToRoute("app_main_index");
+    }
+
+
+
+
+}

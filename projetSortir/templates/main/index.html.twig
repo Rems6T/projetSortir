@@ -34,7 +34,7 @@
                             <input type="search" name="search"> <br>
 
                             <label>Entre </label><input type="date" name="dateMin"><label> et
-                            </label><input type="date" name="dateMax"> <br> </div>
+                            </label><input type="date" name="dateMax"> <br>
 
 
                         <div class="col">
@@ -44,9 +44,9 @@
                             <label> <input type="checkbox" name="sortie_terminé"> Sorties passées </label><br>
                             <div class="btn-container"><button>Rechercher</button>
                             </div>
-                        </form>
+                            </form></form>
 
-                        </div></div>
+                    </div></div>
                 </section>
 
                 {% if sorties | length == 0 %}
@@ -83,6 +83,16 @@
 
                             </td>
                             <td><a href="{{ path('app_sortie',{id: sortie.id}) }}"  title="Détail sortie">Afficher</a>
+
+                                {% if (app.user in sortie.participantsInscrits) %}
+                                    <a href="{{ path('app_sortie_desinscription', {'idParticipant': app.user.id,'idSortie': sortie.id}) }}">Désinscription</a>
+                                {% endif %}
+
+                                {% if sortie.nbInscriptionsMax > sortie.participantsInscrits|length %}
+                                    {% if (app.user not in sortie.participantsInscrits )%}
+                                        <a href="{{ path('app_sortie_inscription', {'idParticipant': app.user.id,'idSortie': sortie.id}) }}">Inscription</a>
+                                    {% endif %}
+                                {% endif %}
                             </td>
                         </tr>
                             {% endfor %}  {% endif %}
