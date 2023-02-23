@@ -1,16 +1,16 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Participant{% endblock %}
+{% block title %}{{ participant.pseudo }}{% endblock %}
 
 {% block body %}
-    <h1>Participant</h1>
+    <h1>{{ participant.pseudo }}</h1>
 
     <table class="table">
         <tbody>
-            <tr>
-                <th>Pseudo</th>
-                <td>{{ participant.pseudo }}</td>
-            </tr>
+{#            <tr>#}
+{#                <th>Pseudo</th>#}
+{#                <td>{{ participant.pseudo }}</td>#}
+{#            </tr>#}
             <tr>
                 <th>Nom</th>
                 <td>{{ participant.nom }}</td>
@@ -30,7 +30,7 @@
         <tr>
             <th>Photo de profil</th>
             <td>
-                <img src="{{ asset('uploads/brochures/'~participant.brochureFilename) }}" alt="" width="150">
+                <img src="{{ asset('uploads/brochures/'~participant.brochureFilename) }}" alt="Photo de profil de {{ participant.brochureFilename }}" width="150">
             </td>
         </tr>
         </tbody>

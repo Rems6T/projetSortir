@@ -70,17 +70,16 @@ class ProfileController extends AbstractController
     /**
      * @Route("/edit/{id}", name="app_profile_edit", methods={"GET", "POST"})
      */
-    public function edit(Request               $request,
-                         Participant           $participant,
-                         ParticipantRepository $participantRepository,
-                         SluggerInterface      $slugger
-        , UserPasswordHasherInterface          $userPasswordHarsher): Response
+    public function edit(Request                     $request,
+                         Participant                 $participant,
+                         ParticipantRepository       $participantRepository,
+                         SluggerInterface            $slugger,
+                         UserPasswordHasherInterface $userPasswordHarsher): Response
     {
         $form = $this->createForm(ProfileType::class, $participant);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid())
-        {
+        if ($form->isSubmitted() && $form->isValid()) {
             /**
              * @var UploadedFile $brochureFile
              */
@@ -89,6 +88,7 @@ class ProfileController extends AbstractController
             // this condition is needed because the 'brochure' field is not required
             // so the PDF file must be processed only when a file is uploaded
             if ($brochureFile) {
+
                 $originalFilename = pathinfo($brochureFile->getClientOriginalName(), PATHINFO_FILENAME);
                 // this is needed to safely include the file name as part of the URL
                 $safeFilename = $slugger->slug($originalFilename);
@@ -102,6 +102,9 @@ class ProfileController extends AbstractController
 
                 // updates the 'brochureFilename' property to store the PDF file name
                 // instead of its contents
+                if (file_exists('uploads/brochures/'.$participant->getBrochureFilename()))
+                    unlink('uploads/brochures/'.$participant->getBrochureFilename());
+
                 $participant->setBrochureFilename($newFilename);
             }
 
