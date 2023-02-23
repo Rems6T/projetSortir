@@ -41,7 +41,8 @@
                             <label><input type="checkbox" name="est_organisateur">Sorties dont je suis l'organisateur</label><br>
                             <label> <input type="checkbox" name="est_inscrit"> Sorties auquelles je suis inscrit </label><br>
                             <label><input type="checkbox" name="pas_inscrit">Sorties auquelles je ne suis pas inscrit </label><br>
-                            <label> <input type="checkbox" name="sortie_terminé"> Sorties passées </label><br>
+                            <label> <input type="checkbox" name="sortie_termine"> Sorties passées </label><br>
+                            <input type="hidden" name="user" value="{{ app.user.id }}">
                             <div class="btn-container"><button>Rechercher</button>
                             </div></div>
 
