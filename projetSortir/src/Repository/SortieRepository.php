@@ -48,18 +48,13 @@ class SortieRepository extends ServiceEntityRepository
             ;
     }
 
-    public function findBySearchAndCampus($search, $idCampus)
+    public function findBySearch($search)
     {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.nom LIKE :search')
-            ->innerJoin('s.siteOrganisateur', 'si')
-            ->andWhere('si.id =  :nom')
-            ->andWhere('s.nom LIKE :search')
-            ->setParameter('search', '%' . $search . '%')
-            ->setParameter('campus', $idCampus)
-            ->setParameter('search', '%' . $search . '%')
-            ->getQuery()
-            ->getResult();
+        $query = $this->createQueryBuilder('a')
+            ->where('a.nom LIKE :mot')
+            ->setParameter('mot' , $search)
+            ->getQuery();
+        return $query->getResult();
     }
 
 

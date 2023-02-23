@@ -51,7 +51,7 @@ class MainController extends AbstractController
             $search != "" && $estOrganisateur == null && $estInscrit == null && $pasInscrit == null
             && $SortiesPassees == null && $dateMin == "" && $dateMax == ""
         ) {
-            $sorties = array_merge($sorties, $SortieRepository->findBySearchAndCampus($search, $idCampus));
+            $sorties = array_merge($sorties, $SortieRepository->findBySearch($search));
         }
 
         if (
