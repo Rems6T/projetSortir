@@ -33,6 +33,7 @@ class RegistrationController extends AbstractController
         //On rajoute les données manquante
         //actif
         $user->setActif(true);
+        $user-> setBrochureFilename('1099913-63f7478a254d6.jpg');
         //todo: Voir si ya besoin de rajouter le role ou pas
         if ($form->isSubmitted() && $form->isValid()) {
             // encode the plain password
