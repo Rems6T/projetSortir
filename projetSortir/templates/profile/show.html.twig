@@ -7,22 +7,10 @@
 
     <table class="table">
         <tbody>
-{#            <tr>#}
-{#                <th>Id</th>#}
-{#                <td>{{ participant.id }}</td>#}
-{#            </tr>#}
             <tr>
                 <th>Pseudo</th>
                 <td>{{ participant.pseudo }}</td>
             </tr>
-{#            <tr>#}
-{#                <th>Roles</th>#}
-{#                <td>{{ participant.roles ? participant.roles|json_encode : '' }}</td>#}
-{#            </tr>#}
-{#            <tr>#}
-{#                <th>Password</th>#}
-{#                <td>{{ participant.password }}</td>#}
-{#            </tr>#}
             <tr>
                 <th>Nom</th>
                 <td>{{ participant.nom }}</td>
@@ -39,10 +27,12 @@
                 <th>Mail</th>
                 <td>{{ participant.mail }}</td>
             </tr>
-{#            <tr>#}
-{#                <th>Actif</th>#}
-{#                <td>{{ participant.actif ? 'Yes' : 'No' }}</td>#}
-{#            </tr>#}
+        <tr>
+            <th>Photo de profil</th>
+            <td>
+                <img src="{{ asset('uploads/brochures/'~participant.brochureFilename) }}" alt="" width="150">
+            </td>
+        </tr>
         </tbody>
     </table>
 
@@ -50,5 +40,5 @@
 
     <a href="{{ path('app_profile_edit', {'id': participant.id}) }}">edit</a>
 
-    {{ include('profile/_delete_form.html.twig') }}
+    {{ include('profile/management/_delete_form.html.twig')  }}
 {% endblock %}
