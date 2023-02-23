@@ -19,11 +19,14 @@
                 <li><a href="{{ path('app_main_index') }}" title="Go Home">Accueil</a>
                 <li><a href="{{ path('app_campus') }}" title="campus">Campus</a>
                 <li><a href="{{ path('app_villes') }}" title="villes">Villes</a>
+                    {% if app.user %}
                 <li><a href="{{ path('app_sortie_creer') }}" title="create">Nouvelle sortie</a>
+                <li><a href="{{ path('app_profile_edit', {'id': app.user.id} )}}" title="modifier">Profil</a>
                <li><a href="{{ path('app_logout') }}" title="Logout">Déconnexion </a></li>
+                {% else %}
              <li><a href="{{ path('app_login') }}" title="Login">Connexion</a></li>
               <li><a href="{{ path('app_register') }}" title="Create account">S'inscrire</a></li>
-
+                {% endif %}
 
             </ul>
         </nav>

@@ -8,18 +8,36 @@
             <div class="col">
                 <h2>Bienvenue  !</h2>
 
-                <section id="recherche-form"><div class="row">
+                <section id="recherche-form">
+                    <div class="row">
                     <div class="col">
-                        <form action="{{ path('app_main_index') }}" method="post">
-                            <label>Campus</label> <select name="campus_nom">
-                            {% for campus in campusS %}
-                                <option value="{{campus.nom  }}">{{ campus.nom }}</option>
-                                {% endfor %}
-                            </select> <br>
+
+                        {% if app.user %}
+                        <form action="{{ path('app_search', {'id': app.user.id}) }}" method="post">
+                            {% else %}
+                            <form action="{{ path('app_search', {'id': 0}) }}" method="post">
+                                {% endif %}
+
+                                    <div class="col-md-3">
+                                        <label>Campus : </label><select class="btn btn-warning" name="campusS">
+                                                <option value=""></option>
+                                                {% for campus in campusS %}
+                                                    <option id="ville"  name="campus"
+                                                            value="{{ campus.id }}">
+                                                        {{ campus.nom | upper }}
+                                                    </option>
+                                                {% endfor %}
+                                        </select>
+                                    </div>
+
                             <label>Le nom de la sortie contient : </label>
                             <input type="search" name="search"> <br>
-                            <label>Entre </label><input type="date" name="dateMin"><label> et </label><input type="date" name="dateMax"> <br> </div>
-                            <div class="col">
+
+                            <label>Entre </label><input type="date" name="dateMin"><label> et
+                            </label><input type="date" name="dateMax"> <br> </div>
+
+
+                        <div class="col">
                             <label><input type="checkbox" name="est_organisateur">Sorties dont je suis l'organisateur</label><br>
                             <label> <input type="checkbox" name="est_inscrit"> Sorties auquelles je suis inscrit </label><br>
                             <label><input type="checkbox" name="pas_inscrit">Sorties auquelles je ne suis pas inscrit </label><br>
@@ -30,6 +48,12 @@
 
                         </div></div>
                 </section>
+
+                {% if sorties | length == 0 %}
+                <h3 class="text-center mt-5">
+                    Aucun résultat trouvé !</h3>
+                {% else %}
+
                 <section id="tableau_sorties">
                     <table class="table">
                         <tbody>
@@ -54,11 +78,14 @@
                             <td>  {% if sortie.participantsInscrits == true%}
                                     <i class="fas fa-check-circle"></i>
                                     {% endif %}</td>
-                            <td> {{ sortie.organisateur.pseudo }}</td>
+                            <td>
+                            <a href="{{ path('app_profile_show', {'id': sortie.organisateur.id} ) }}">{{ sortie.organisateur.pseudo }}</a>
+
+                            </td>
                             <td><a href="{{ path('app_sortie',{id: sortie.id}) }}"  title="Détail sortie">Afficher</a>
                             </td>
                         </tr>
-                        {% endfor %}
+                            {% endfor %}  {% endif %}
                         </tbody>
                     </table>
             </section>
