@@ -3,11 +3,11 @@
 {% block title %}Modif Campus{% endblock %}
 
 {% block body %}
-<h2>Modifier Campus</h2>
+    <h2>Modifier Campus</h2>
     {{ form_start(campusForm) }}
     {{ form_widget(campusForm) }}
 
 
     {{ form_end(campusForm) }}
-    <a href="{{ app.request.headers.get('referer') }}"><button>Retour</button></a>
+    <a href="{{ path('app_campus')}}"><button>Retour</button></a>
 {% endblock %}

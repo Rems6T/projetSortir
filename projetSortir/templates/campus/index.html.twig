@@ -26,10 +26,18 @@
                 {% for campus in campusS %}
                     <tr>
                         <td> {{ campus.nom }}</td>
-                        <td>Pour admin
-                        </td>
+                        <td><a href="{{ path('app_campus_modifier',{id:campus.id}) }}">Modifier</a> <a href="{{ path('app_campus_supprimer',{id:campus.id}) }}">Supprimer</a></td>
                     </tr>
                 {% endfor %}
+                {{ form_start(campusForm) }}
+                <tr>
+                        <td>{{ form_row(campusForm.nom) }}</td>
+                        <td>{{ form_row(campusForm.enregistrer) }}</td>
+                </tr>
+                <tr>
+                    <td>{{ form_errors(campusForm.nom) }}</td>
+                </tr>
+                {{ form_end(campusForm) }}
                 </tbody>
             </table>
         </section>
