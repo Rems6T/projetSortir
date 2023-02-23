@@ -5,20 +5,20 @@
 {% block body %}
     <div class="container-fluid pt-3">
         <div class="row justify-content-center">
-            <div class="col">
-                <h2>Bienvenue  !</h2>
 
-                <section id="recherche-form">
-                    <div class="row">
-                    <div class="col">
+                <h2>Bienvenue  !</h2>
+            {% if app.user %}
+
+
+                  *
 
                         {% if app.user %}
                         <form action="{{ path('app_search', {'id': app.user.id}) }}" method="post">
                             {% else %}
                             <form action="{{ path('app_search', {'id': 0}) }}" method="post">
                                 {% endif %}
-
-                                    <div class="col-md-3">
+                                <div class="row">
+                                    <div class="col">
                                         <label>Campus : </label><select class="btn btn-warning" name="campusS">
                                                 <option value=""></option>
                                                 {% for campus in campusS %}
@@ -28,14 +28,14 @@
                                                     </option>
                                                 {% endfor %}
                                         </select>
-                                    </div>
+<br>
 
                             <label>Le nom de la sortie contient : </label>
-                            <input type="search" name="search"> <br>
-
+                            <input type="search" name="search">
+<br>
                             <label>Entre </label><input type="date" name="dateMin"><label> et
                             </label><input type="date" name="dateMax"> <br>
-
+                                    </div>
 
                         <div class="col">
                             <label><input type="checkbox" name="est_organisateur">Sorties dont je suis l'organisateur</label><br>
@@ -43,11 +43,12 @@
                             <label><input type="checkbox" name="pas_inscrit">Sorties auquelles je ne suis pas inscrit </label><br>
                             <label> <input type="checkbox" name="sortie_terminé"> Sorties passées </label><br>
                             <div class="btn-container"><button>Rechercher</button>
-                            </div>
-                            </form></form>
+                            </div></div>
 
+                                </div></form></form>
                     </div></div>
-                </section>
+
+
 
                 {% if sorties | length == 0 %}
                 <h3 class="text-center mt-5">
@@ -84,8 +85,9 @@
                             </td>
                             <td><a href="{{ path('app_sortie',{id: sortie.id}) }}"  title="Détail sortie">Afficher</a>
 
-                                {% if (app.user in sortie.participantsInscrits) %}
+                                {% if (app.user in sortie.participantsInscrits ) %}
                                     <a href="{{ path('app_sortie_desinscription', {'idParticipant': app.user.id,'idSortie': sortie.id}) }}">Désinscription</a>
+
                                 {% endif %}
 
                                 {% if sortie.nbInscriptionsMax > sortie.participantsInscrits|length %}
@@ -93,6 +95,14 @@
                                         <a href="{{ path('app_sortie_inscription', {'idParticipant': app.user.id,'idSortie': sortie.id}) }}">Inscription</a>
                                     {% endif %}
                                 {% endif %}
+
+                                {% if sortie.organisateur.id == app.user.id %}
+                                    <a href="{{ path('app_sortie_modifier',{'id':sortie.id}) }}">Modifier
+                                    </a>
+                                {% else %}
+                                {% endif %}
+
+
                             </td>
                         </tr>
                             {% endfor %}  {% endif %}
@@ -104,4 +114,7 @@
         <a class="btn btn-warning " href="{{ path('app_sortie_creer') }}" role="button">Nouvelle sortie</a>
 
     </div>
+{% else %}
+                <p>Veuillez vous connecter pour voir la liste des sorties !</p>
+{% endif %}
 {% endblock %}

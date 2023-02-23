@@ -17,9 +17,10 @@
         <nav>
             <ul class="nav justify-content-end">
                 <li><a href="{{ path('app_main_index') }}" title="Go Home">Accueil</a>
+                    {% if app.user %}
                 <li><a href="{{ path('app_campus') }}" title="campus">Campus</a>
                 <li><a href="{{ path('app_villes') }}" title="villes">Villes</a>
-                    {% if app.user %}
+
                 <li><a href="{{ path('app_sortie_creer') }}" title="create">Nouvelle sortie</a>
                 <li><a href="{{ path('app_profile_edit', {'id': app.user.id} )}}" title="modifier">Profil</a>
                <li><a href="{{ path('app_logout') }}" title="Logout">Déconnexion </a></li>
