@@ -63,7 +63,7 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\Column(type="boolean")
      */
-    private $actif = false;
+    private $actif;
 
     /**
      * @ORM\ManyToOne(targetEntity=Campus::class, inversedBy="participants")
@@ -240,6 +240,7 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
 
     public function isActif(): ?bool
     {
