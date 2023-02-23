@@ -36,8 +36,8 @@ class MainController extends AbstractController
 
     {
         $search = $request->request->get('search');
-        $dateDebut = $request->request->get('dateMin');
-        $dateLimiteInscription = $request->request->get('dateMax');
+        $dateMin = $request->request->get('dateMin');
+        $dateMax = $request->request->get('dateMax');
         $estOrganisateur = $request->request->get('est_organisateur');
         $estInscrit = $request->request->get('est_inscrit');
         $pasInscrit = $request->request->get('pas_inscrit');
@@ -49,20 +49,20 @@ class MainController extends AbstractController
 
         if (
             $search != "" && $estOrganisateur == null && $estInscrit == null && $pasInscrit == null
-            && $SortiesPassees == null && $dateDebut == "" && $dateLimiteInscription == ""
+            && $SortiesPassees == null && $dateMin == "" && $dateMax == ""
         ) {
             $sorties = array_merge($sorties, $SortieRepository->findBySearchAndCampus($search, $idCampus));
         }
 
         if (
             $search != "" && $estOrganisateur == null && $estInscrit == null && $pasInscrit == null
-            && $SortiesPassees == null && $dateDebut == "" && $dateLimiteInscription == ""
+            && $SortiesPassees == null && $dateMin == "" && $dateMax == ""
          ) {
             $sorties = array_merge($sorties, $SortieRepository->findByCampus($idCampus));
          }
 
-        if ($dateDebut != "" && $dateLimiteInscription != "") {
-        $sorties = array_merge($sorties, $SortieRepository->findByDates($dateDebut, $dateLimiteInscription, $idCampus, $search));
+        if ($dateMin != "" && $dateMax != "") {
+        $sorties = array_merge($sorties, $SortieRepository->findByDates($dateMin, $dateMax, $idCampus, $search));
         }
 
         if ($estOrganisateur != null) {
@@ -115,6 +115,7 @@ class MainController extends AbstractController
     /**
      * @Route("/sortie/desinscription/{idParticipant}/{idSortie}",name="app_sortie_desinscription")
      */
+
     public function desinscriptionSortie(SortieRepository $repo, EntityManagerInterface $em, $idParticipant, $idSortie): Response
     {
 

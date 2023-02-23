@@ -62,6 +62,7 @@ class AppFixtures extends Fixture
             ->setPassword($hash)
             ->setActif(true)
             ->setRoles(['ROLE_USER'])
+            ->setBrochureFilename("php_plain_logo_icon_146397.png")
             ->setCampus($campus2);
         $manager->persist($participant1);
 
@@ -77,6 +78,7 @@ class AppFixtures extends Fixture
             ->setPassword($hash)
             ->setActif(false)
             ->setRoles(['ROLE_ADMIN','ROLE_USER'])
+            ->setBrochureFilename("php_plain_logo_icon_146397.png")
             ->setCampus($campus1);
         $manager->persist($participant2);
 
@@ -92,6 +94,7 @@ class AppFixtures extends Fixture
             ->setPassword($hash)
             ->setActif(false)
             ->setRoles(['ROLE_USER'])
+            ->setBrochureFilename("php_plain_logo_icon_146397.png")
             ->setCampus($campus2);
         $manager->persist($participant3);
 
@@ -107,6 +110,7 @@ class AppFixtures extends Fixture
             ->setPassword($hash)
             ->setActif(true)
             ->setRoles(['ROLE_ADMIN','ROLE_USER'])
+            ->setBrochureFilename("php_plain_logo_icon_146397.png")
             ->setCampus($campus3);
         $manager->persist($participant4);
 
@@ -121,6 +125,7 @@ class AppFixtures extends Fixture
             ->setPassword($hash)
             ->setActif(false)
             ->setRoles(['ROLE_USER'])
+            ->setBrochureFilename("php_plain_logo_icon_146397.png")
             ->setCampus($campus3);
         $manager->persist($participant5);
 

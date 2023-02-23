@@ -19,7 +19,7 @@
                                 {% endif %}
                                 <div class="row">
                                     <div class="col">
-                                        <label>Campus : </label><select class="btn btn-warning" name="campusS">
+                                        <label>Campus : </label><select class="btn btn-warning" name="campus">
                                                 <option value=""></option>
                                                 {% for campus in campusS %}
                                                     <option id="ville"  name="campus"
@@ -85,13 +85,13 @@
                             </td>
                             <td><a href="{{ path('app_sortie',{id: sortie.id}) }}"  title="Détail sortie">Afficher</a>
 
-                                {% if (app.user in sortie.participantsInscrits ) %}
+                                {% if (app.user in sortie.participantsInscrits and (sortie.etat.libelle == 'Ouverte')) %}
                                     <a href="{{ path('app_sortie_desinscription', {'idParticipant': app.user.id,'idSortie': sortie.id}) }}">Désinscription</a>
 
                                 {% endif %}
 
                                 {% if sortie.nbInscriptionsMax > sortie.participantsInscrits|length %}
-                                    {% if (app.user not in sortie.participantsInscrits )%}
+                                    {% if (app.user not in sortie.participantsInscrits and sortie.etat.libelle == 'Ouverte')%}
                                         <a href="{{ path('app_sortie_inscription', {'idParticipant': app.user.id,'idSortie': sortie.id}) }}">Inscription</a>
                                     {% endif %}
                                 {% endif %}

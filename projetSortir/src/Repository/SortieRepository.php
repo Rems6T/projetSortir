@@ -67,8 +67,8 @@ class SortieRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('s')
             ->innerJoin('s.siteOrganisateur', 'si')
-            ->andWhere('si.id =  :site')
-            ->setParameter('site', $idCampus)
+            ->andWhere('si.nom =  :campus')
+            ->setParameter('campus', $idCampus)
             ->getQuery()
             ->getResult();
     }
@@ -93,7 +93,7 @@ class SortieRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('s')
             ->innerJoin('s.siteOrganisateur', 'si')
             ->andWhere('s.organisateur  =  :id')
-            ->andWhere('si.id =  :site')
+            ->andWhere('si.id =  :campus')
             ->andWhere('s.nom LIKE :search')
             ->setParameter('search', '%' . $search . '%')
             ->setParameter('campus', $idCampus)
@@ -122,7 +122,7 @@ class SortieRepository extends ServiceEntityRepository
 
         foreach ($sorties as $sortie) {
             foreach ($sortie->getParticipantsInscrits() as $participant) {
-                if ($participant->getId() == $idParticipant || $idCampus != $sortie->getSite()->getId()) {
+                if ($participant->getId() == $idParticipant || $idCampus != $sortie->getSiteOrganisateur()->getId()) {
                     $id = array_search($sortie, $sorties);
                     unset($sorties[$id]);
                 }
@@ -137,10 +137,10 @@ class SortieRepository extends ServiceEntityRepository
             ->leftJoin('s.etat', 'e')
             ->innerJoin('s.siteOrganisateur', 'si')
             ->andWhere('e.id =  5')
-            ->andWhere('si.id =  :site')
+            ->andWhere('si.id =  :campus')
             ->andWhere('s.nom LIKE :search')
             ->setParameter('search', '%' . $search . '%')
-            ->setParameter('site', $idCampus)
+            ->setParameter('campus', $idCampus)
             ->getQuery()
             ->getResult();
     }
