@@ -1,16 +1,16 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Participant{% endblock %}
+{% block title %}{{ participant.pseudo }}{% endblock %}
 
 {% block body %}
-    <h1>Participant</h1>
+    <h1>{{ participant.pseudo }}</h1>
 
     <table class="table">
         <tbody>
-            <tr>
-                <th>Pseudo</th>
-                <td>{{ participant.pseudo }}</td>
-            </tr>
+{#            <tr>#}
+{#                <th>Pseudo</th>#}
+{#                <td>{{ participant.pseudo }}</td>#}
+{#            </tr>#}
             <tr>
                 <th>Nom</th>
                 <td>{{ participant.nom }}</td>
