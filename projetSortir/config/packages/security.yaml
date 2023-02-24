@@ -35,8 +35,19 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
-         - { path: ^/profile, roles: ROLE_USER }
+         - { path: ^/campus, roles: ROLE_ADMIN }
+         - { path: ^/lieu, roles: ROLE_ADMIN }
+         - { path: ^/profile, roles: ROLE_ADMIN }
+         - { path: ^/villes, roles: ROLE_ADMIN }
+
+         - { path: ^/campus/index.html.twig, roles: ROLE_USER }
+         - { path: ^/main/index.html.twig, roles: ROLE_USER }
+         - { path: ^/sortie/, roles: ROLE_USER }
+         - { path: ^/sortie/inscription, roles: ROLE_USER }
+         - { path: ^/sortie/desinscription, roles: ROLE_USER }
+         - { path: ^/profile/, roles: ROLE_USER }
+         - { path: ^/profile/edit, roles: ROLE_USER }
+         - { path: ^/, roles: ROLE_USER }
 
 when@test:
     security:

@@ -1,0 +1,51 @@
+<section id="tableau_sorties">
+    <table class="table">
+        <tbody>
+        <tr>
+            <th>Nom de la sortie</th>
+            <th>Date de la sortie</th>
+            <th>Clotûre</th>
+            <th>Nb d'inscrits</th>
+            <th>Etat</th>
+            <th>Inscrit</th>
+            <th>Organisateur</th>
+            <th>Actions</th>
+        </tr>
+
+        {% for sortie in sorties %}
+            <tr>
+                <td> {{ sortie.nom }}</td>
+                <td> {{ sortie.dateHeureDebut  |date('Y-m-d H:i:s') }}</td>
+                <td> {{ sortie.dateLimiteInscription |date('Y-m-d H:i:s') }}</td>
+                <td> {{ sortie.participantsInscrits|length }} / {{ sortie.nbInscriptionsMax }}</td>
+                <td> {{ sortie.etat.libelle }}</td>
+                <td>
+                    {% if sortie.participantsInscrits == true %}
+                        <i class="fas fa-check-circle"></i>
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{{ path('app_profile_show', {'id': sortie.organisateur.id} ) }}">{{ sortie.organisateur.pseudo }}</a>
+                </td>
+                <td><a href="{{ path('app_sortie',{id: sortie.id}) }}" title="Détail sortie">Afficher</a>
+
+                    {% if (app.user in sortie.participantsInscrits and (sortie.etat.libelle == 'Ouverte')) %}
+                        <a href="{{ path('app_sortie_desinscription', {'idParticipant': app.user.id,'idSortie': sortie.id}) }}">Désinscription</a>
+                    {% endif %}
+
+                    {% if sortie.nbInscriptionsMax > sortie.participantsInscrits|length %}
+                        {% if (app.user not in sortie.participantsInscrits and sortie.etat.libelle == 'Ouverte') %}
+                            <a href="{{ path('app_sortie_inscription', {'idParticipant': app.user.id,'idSortie': sortie.id}) }}">Inscription</a>
+                        {% endif %}
+                    {% endif %}
+
+                    {% if sortie.organisateur.id == app.user.id %}
+                        <a href="{{ path('app_sortie_modifier',{'id':sortie.id}) }}">Modifier</a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+</section>

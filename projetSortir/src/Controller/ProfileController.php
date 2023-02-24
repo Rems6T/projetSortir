@@ -126,7 +126,7 @@ class ProfileController extends AbstractController
     }
 
     /**
-     * @Route("/management/{id}", name="app_profile_delete")
+     * @Route("/{id}", name="app_profile_delete")
      */
     public function delete(Request $request, Participant $participant, ParticipantRepository $participantRepository): Response
     {

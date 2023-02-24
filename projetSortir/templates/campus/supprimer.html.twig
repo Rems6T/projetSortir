@@ -3,56 +3,56 @@
 {% block title %}Supprimer Campus{% endblock %}
 
 {% block body %}
-<h2>Supprimer Campus</h2>
-{% if campus.participants is empty and campus.siteOrganisateur is empty %}
-    <p>Voulez-vous vraiment supprimer le campus</p>
-    <a href="{{ path('app_campus_suppression',{id: campus.id}) }}">
-        <button>Supprimer</button>
-    </a>
+    <h2>Supprimer Campus</h2>
+    {% if campus.participants is empty and campus.siteOrganisateur is empty %}
+        <p>Voulez-vous vraiment supprimer le campus</p>
+        <a href="{{ path('app_campus_suppression',{id: campus.id}) }}">
+            <button>Supprimer</button>
+        </a>
 
-{% else %}
-    <p>Vous ne pouvez pas supprimer un campus qui contient des utilisateurs ou des sorties</p>
-    {% if campus.participants is not empty %}
-        <p>Modifier d'abord le campus de chaque utilisateur</p>
-        <p>Ainsi que les sortie de chaque campus</p>
-        <table class="table">
+    {% else %}
+        <p>Vous ne pouvez pas supprimer un campus qui contient des utilisateurs ou des sorties</p>
+        {% if campus.participants is not empty %}
+            <p>Modifier d'abord le campus de chaque utilisateur</p>
+            <p>Ainsi que les sortie de chaque campus</p>
+            <table class="table">
 
-            <tbody>
-            <tr class="table-warning">
-                <th class="table-warning">Utilisateur</th>
-                <th class="table-warning">Actions</th>
-            </tr>
-
-            {% for participant in campus.participants %}
-                <tr>
-                    <td>{{ participant.pseudo }}</td>
-                    <td><a href="">Modifier(lien a faire)</a></td>
+                <tbody>
+                <tr class="table-warning">
+                    <th class="table-warning">Utilisateur</th>
+                    <th class="table-warning">Actions</th>
                 </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+
+                {% for participant in campus.participants %}
+                    <tr>
+                        <td>{{ participant.pseudo }}</td>
+                        <td><a href="">Modifier(lien a faire)</a></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+        {% if campus.siteOrganisateur is not empty %}
+
+            <table class="table">
+
+                <tbody>
+                <tr class="table-warning">
+                    <th class="table-warning">Sortie</th>
+                    <th class="table-warning">Actions</th>
+                </tr>
+
+                {% for sortie in campus.siteOrganisateur %}
+                    <tr>
+                        <td>{{ sortie.nom }}</td>
+                        <td><a href="">Modifier(lien a faire)</a></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
     {% endif %}
-    {% if campus.siteOrganisateur is not empty %}
-
-    <table class="table">
-
-        <tbody>
-        <tr class="table-warning">
-            <th class="table-warning">Sortie</th>
-            <th class="table-warning">Actions</th>
-        </tr>
-
-        {% for sortie in campus.siteOrganisateur %}
-            <tr>
-                <td>{{ sortie.nom }}</td>
-                <td><a href="">Modifier(lien a faire)</a></td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-    {% endif %}
-{% endif %}
-<a href="{{ path('app_campus') }}">
-    <button>Retour</button>
-</a>
+    <a href="{{ path('app_campus') }}">
+        <button>Retour</button>
+    </a>
 {% endblock %}

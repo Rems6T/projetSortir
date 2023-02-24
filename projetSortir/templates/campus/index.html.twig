@@ -1,46 +1,47 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello CampusController!{% endblock %}
+{% block title %}Campus{% endblock %}
 
 {% block body %}
-<div class="container-fluid pt-3">
-    <div class="row justify-content-center">
-        <div class="col">
-            <h2>Les CAMPUS</h2>
-            <p>Filtrer les sites</p>
-            <form action="{{ path('app_campus') }}" method="post">
-                <label>Le nom du campus contient : <input type="search" name="search"> </label><br>
-                <div class="btn-container">
-                    <button>Rechercher</button>
-                </div>
-            </form>
-            ></div>
-        <section id="tableau_campus">
-            <table class="table">
-                <tbody>
-                <tr class="table-warning">
-                    <th class="table-warning">Campus</th>
-                    <th class="table-warning">Actions</th>
-                </tr>
-
-                {% for campus in campusS %}
-                    <tr>
-                        <td> {{ campus.nom }}</td>
-                        <td><a href="{{ path('app_campus_modifier',{id:campus.id}) }}">Modifier</a> <a href="{{ path('app_campus_supprimer',{id:campus.id}) }}">Supprimer</a></td>
+    <div class="container-fluid pt-3">
+        <div class="row justify-content-center">
+            <div class="col">
+                <h2>Les CAMPUS</h2>
+                <p>Filtrer les sites</p>
+                <form action="{{ path('app_campus') }}" method="post">
+                    <label>Le nom du campus contient : <input type="search" name="search"> </label><br>
+                    <div class="btn-container">
+                        <button>Rechercher</button>
+                    </div>
+                </form>
+            </div>
+            <section id="tableau_campus">
+                <table class="table">
+                    <tbody>
+                    <tr class="table-warning">
+                        <th class="table-warning">Campus</th>
+                        <th class="table-warning">Actions</th>
                     </tr>
-                {% endfor %}
-                {{ form_start(campusForm) }}
-                <tr>
+
+                    {% for campus in campusS %}
+                        <tr>
+                            <td> {{ campus.nom }}</td>
+                            <td>
+                                <a href="{{ path('app_campus_modifier',{id:campus.id}) }}">Modifier</a>
+                                <a href="{{ path('app_campus_supprimer',{id:campus.id}) }}">Supprimer</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    {{ form_start(campusForm) }}
+                    <tr>
                         <td>{{ form_row(campusForm.nom) }}</td>
                         <td>{{ form_row(campusForm.enregistrer) }}</td>
-                </tr>
-                <tr>
-                    <td>{{ form_errors(campusForm.nom) }}</td>
-                </tr>
-                {{ form_end(campusForm) }}
-                </tbody>
-            </table>
-        </section>
-
-    </div></div>
-            {% endblock %}
+                        <td>{{ form_errors(campusForm.nom) }}</td>
+                    </tr>
+                    {{ form_end(campusForm) }}
+                    </tbody>
+                </table>
+            </section>
+        </div>
+    </div>
+{% endblock %}

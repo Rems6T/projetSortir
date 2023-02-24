@@ -133,14 +133,14 @@ class SortieController extends AbstractController
         $ville = $lieu->getVille();
         //la liste des participants associé a la sortie
         $participants = $sortie->getParticipantsInscrits();
+
         return $this->render('sortie/afficher.html.twig', [
             'controller_name' => 'SortieController',
             'sortie' => $sortie,
             'lieu' => $lieu,
             'campus' => $campus,
             'ville' => $ville,
-            'participants' => $participants
+            'participants' => $participants,
         ]);
     }
-
 }

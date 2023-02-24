@@ -40,7 +40,7 @@ class SortieType extends AbstractType
             ->add('infosSortie',
             TextareaType::class,
                 ['label'=>'Description et infos'])
-            ->add('siteOrganisateur',
+            ->add('campus',
             EntityType::class,
             ['class'=>Campus::class,
 
