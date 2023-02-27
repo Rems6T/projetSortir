@@ -3,7 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Campus;
-use App\Entity\Etat;
+
 use App\Entity\Lieu;
 use App\Entity\Sortie;
 
@@ -40,7 +40,7 @@ class SortieType extends AbstractType
             ->add('infosSortie',
             TextareaType::class,
                 ['label'=>'Description et infos'])
-            ->add('campus',
+            ->add('siteOrganisateur',
             EntityType::class,
             ['class'=>Campus::class,
 

@@ -1,10 +1,66 @@
 {% extends 'base.html.twig' %}
 {% block body %}
     <h2>Ajouter une sortie</h2>
-    {{ form_start(sortieForm) }}
-    {{ form_widget(sortieForm) }}
+    {{ form_start(sortieForm,{'id': 'form'}) }}
+    {{ form_row(sortieForm.nom) }}
+    {{ form_row(sortieForm.dateHeureDebut) }}
+    {{ form_row(sortieForm.dateLimiteInscription) }}
+    {{ form_row(sortieForm.nbInscriptionsMax) }}
+    {{ form_row(sortieForm.duree) }}
+    {{ form_row(sortieForm.infosSortie) }}
+    {{ form_row(sortieForm.siteOrganisateur) }}
+    {{ form_row(sortieForm.lieu, {'id': 'lieu'})}}
+    <div id="lieu_info">
 
 
+    </div>
+    <script>
+        // Récupérer le formulaire
+        var form = document.getElementById("form");
+
+        // Attacher un gestionnaire d'événement à la sélection de ville
+        var lieuSelect = document.getElementById("lieu");
+        lieuSelect.addEventListener("change", function(event) {
+            // Mettre à jour la liste des lieux pour la ville sélectionnée
+            updateLieu();
+        });
+
+        // Attacher un gestionnaire d'événement à la soumission du formulaire
+        form.addEventListener("submit", function(event) {
+            event.preventDefault(); // Empêcher la soumission par défaut du formulaire
+            updateLieu();
+        });
+            // Fonction pour actualiser la liste des lieux pour la ville sélectionnée
+            function updateLieu() {
+                var lieu = document.getElementById("lieu").value; // Récupérer le lieu sélectionnée
+
+                // Effectuer une requête AJAX
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState === 4 && this.status === 200) {
+                    // Traiter les données renvoyées par le serveur
+                    var infoLieu = JSON.parse(this.responseText);
+
+                    var lieuList = document.getElementById("lieu_info");
+                    lieuList.innerHTML = ""; // Effacer la liste précédente des lieux
+                    for (var i = 0; i < infoLieu.length; i++) {
+                        var info = infoLieu[i];
+                        var lieuItem = document.createElement("p");
+                        for (const [key, value] of Object.entries(info)) {
+                            lieuItem.innerHTML =   `${key}: ${value}`;
+                        }
+
+
+                        lieuList.appendChild(lieuItem);
+                    }
+                }
+            };
+            xhttp.open("GET", "{{ path('app_sortie_getLieu') }}"+"/?lieu="+ lieu , true); // URL de l'API pour récupérer les lieux
+            xhttp.send();
+        }
+
+    </script>
+    {{ form_row(sortieForm.publier) }}
     {{ form_end(sortieForm) }}
     <a href="{{ path('app_main_index') }}"><button>Annuler</button></a>
 {% endblock %}

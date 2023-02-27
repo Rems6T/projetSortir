@@ -3,13 +3,16 @@
 namespace App\Controller;
 
 
+use App\Entity\Lieu;
 use App\Entity\Sortie;
 use App\Form\SortieType;
 use App\Repository\EtatRepository;
 
+use App\Repository\LieuRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -142,5 +145,24 @@ class SortieController extends AbstractController
             'ville' => $ville,
             'participants' => $participants,
         ]);
+    }
+    /**
+     * @Route("/sortieLieu", name="app_sortie_getLieu" , methods={"GET"})
+     */
+    public function getLieu(Request $request,LieuRepository $lieuRepository){
+        // Récupérer le lieu sélectionnée depuis la requête
+
+        $lieu = $lieuRepository->find($request->get('lieu'));
+        $data = array(
+            array('Rue' => $lieu->getRue()),
+            array('Ville'=>$lieu->getVille()->getNom()),
+            array('Code Postal'=>$lieu->getVille()->getCodePostal()),
+            array('latitude'=>$lieu->getLatitude()),
+            array('Longitude'=>$lieu->getLongitude()),
+        );
+
+
+        // Retourner les lieux en tant que réponse JSON
+        return new JsonResponse($data);
     }
 }
