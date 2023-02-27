@@ -34,11 +34,7 @@
                 <td>
                     {{ participant.actif ? 'Oui' : 'Non' }}
                     <br>
-                    <form method="post" action="{{ path('app_profile_actif', {'id': participant.id}) }}">
-                        <input type="hidden" name="_token" value="{{ csrf_token('actif' ~ participant.id) }}">
-                        <button class="btn">Changer</button>
-                    </form>
-                    {#                    <a href="{{ path('app_profile_actif', {'id': participant.id}) }}">Changer</a> #}
+                    {#                    Ajouter la modification de l'activité #}
                 </td>
                 <td>
                     <a href="{{ path('app_profile_edit', {'id' : participant.id}) }}">Editer</a>
