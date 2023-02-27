@@ -138,15 +138,4 @@ class ProfileController extends AbstractController
         return $this->redirectToRoute('app_profile_index', [], Response::HTTP_SEE_OTHER);
     }
 
-    /**
-     * @Route("/", name="app_profile_actif")
-     */
-    public function update(Request $request, Participant $participant, ParticipantRepository $participantRepository): Response
-    {
-
-
-        return $this->render('profile/index.html.twig', [
-            'participants' => $participantRepository->findAll(),
-        ]);
-    }
 }
