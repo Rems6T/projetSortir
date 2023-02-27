@@ -35,17 +35,24 @@
         </table>
     </section>
 
-    <table>
-        <tr>
+    <table class="table ">
+        <tr class="table-warning">
             <th>Pseudo</th>
             <th>Nom</th>
         </tr>
+        {% if participants is empty %}
+            <tr>
+                <td>Aucun participant pour l'instant</td>
+
+            </tr>
+        {% else %}
         {% for participant in participants %}
             <tr>
                 <td>{{ participant.pseudo }}</td>
                 <td>{{ participant.nom }}</td>
             </tr>
         {% endfor %}
+        {% endif %}
     </table>
     {% if sortie.organisateur.id == app.user.id %}
         <a href="{{ path('app_sortie_modifier',{'id':sortie.id}) }}">Modifier</a>

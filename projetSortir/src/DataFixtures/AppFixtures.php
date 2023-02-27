@@ -154,6 +154,9 @@ class AppFixtures extends Fixture
         $etat6->setLibelle('Annulée');
         $manager->persist($etat6);
 
+        $etat7 = new Etat();
+        $etat7->setLibelle('Archivée');
+        $manager->persist($etat7);
 
         //Ville
         $ville1 = new Ville();
@@ -207,6 +210,22 @@ class AppFixtures extends Fixture
             ->addParticipantsInscrits($participant3);
         $manager->persist($sortie);
 
+        $dateDebut =new \DateTime();
+        $sortie2 = new Sortie();
+        $sortie2
+            ->setNom('Resto')
+            ->setDateHeureDebut($dateDebut->setDate(2023,02,23))
+            ->setDuree(120)
+            ->setDateLimiteInscription($dateLimite->setDate(2023,02,15))
+            ->setNbInscriptionsMax(10)
+            ->setInfosSortie('Deux parties de Bowling')
+            ->setEtat($etat1)
+            ->setSiteOrganisateur($campus3)
+            ->setOrganisateur($participant2)
+            ->setLieu($lieu)
+            ->addParticipantsInscrits($participant2)
+            ->addParticipantsInscrits($participant5);
+        $manager->persist($sortie2);
 
         $manager->flush();
     }

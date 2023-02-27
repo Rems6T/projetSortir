@@ -21,10 +21,10 @@
                 <li><a href="{{ path('app_main_index') }}" title="Go Home">Accueil</a>
                     {% if app.user %}
 
-                    
+                    {% if is_granted ('ROLE_ADMIN') %}
                 <li><a href="{{ path('app_campus') }}" title="Campus">Campus</a>
                 <li><a href="{{ path('app_villes') }}" title="Villes">Villes</a>
-
+                {% endif %}
 
                 <li><a href="{{ path('app_sortie_creer') }}" title="create">Nouvelle sortie</a>
                 <li><a href="{{ path('app_profile_edit', {'id': app.user.id} ) }}" title="Modifier">Profil</a>

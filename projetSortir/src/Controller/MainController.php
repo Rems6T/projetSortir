@@ -8,6 +8,7 @@ use App\Repository\CampusRepository;
 use App\Repository\EtatRepository;
 use App\Repository\ParticipantRepository;
 use App\Repository\SortieRepository;
+use DateInterval;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,7 +23,7 @@ class MainController extends AbstractController
         */
     public function index(SortieRepository $sortieRepo, CampusRepository $CampusRepository, EtatRepository $etatRepository): Response
     {
-        $sorties = $sortieRepo->findAllWithSitesAndEtats();
+        $sorties = $sortieRepo->findAll();
         $campusS = $CampusRepository->findAll();
 
         $aujourdhui = new \DateTime('now');
@@ -40,9 +41,12 @@ class MainController extends AbstractController
 
             $interval = new \DateInterval('PT' . $duree . 'M');
             $finInscription = $sortie->getDateLimiteInscription();
+            $one_month = new DateInterval('P1M');
 
+            $dateArchive = $date->add($one_month);
 
             if ($finInscription < $aujourdhui) { //Inscription finie
+
                 if ($date < $aujourdhui) {
                     $dateFin = $date2->add($interval);
                     if ($dateFin > $aujourdhui) {
@@ -51,6 +55,9 @@ class MainController extends AbstractController
                     } else {
                         $sortie->setEtat($etatRepository->findOneBy(['libelle' => "Passée"])); //PASSEE
                         $date2->sub($interval);
+                    }
+                    if ($dateArchive<$aujourdhui){
+                        $sortie->setEtat($etatRepository->findOneBy(['libelle' => "Archivée"])); //ARCHIVEE
                     }
                 } else {
                     $sortie->setEtat($etatRepository->findOneBy(['libelle' => "Clôturée"])); //CLOTUREE
