@@ -1,8 +1,9 @@
-:root{
-    --couleur-clair : #74b7e3;
-    --couleur-fonce : #17577a;
+:root {
+    --couleur-clair: #74b7e3;
+    --couleur-fonce: #17577a;
 }
-html{
+
+html {
     margin: 0;
     padding: 0;
 }
@@ -10,18 +11,18 @@ html{
 body {
     color: #EEE;
     font-family: 'Comforta', serif;
-    flex-flow:row wrap;
+    flex-flow: row wrap;
     justify-content: space-between;
 }
 
-header{
+header {
     background: linear-gradient(var(--couleur-fonce), var(--couleur-clair));
     position: relative;
     color: white;
     font-size: large;
     font-family: 'Comforta', serif;
     width: 100%;
-   padding: 20px;
+    padding: 20px;
 }
 
 header img {
@@ -32,37 +33,39 @@ nav ul li {
     padding: 5px;
 }
 
-main{
+main {
     margin: 20px;
-    padding-bottom:100px;
+    padding-bottom: 100px;
 }
 
-h1{
+h1 {
     font-variant-caps: small-caps;
     text-align: center;
 
 }
 
-h2{
+h2 {
     color: var(--couleur-fonce);
     text-align: center;
 }
 
-p, section, label{
-    color: black; }
+/*p, section, label {*/
+/*    color: black;*/
+/*}*/
 
 
-footer{
-    background: linear-gradient(var(--couleur-clair), var(--couleur-fonce));    font-size: medium;
+footer {
+    background: linear-gradient(var(--couleur-clair), var(--couleur-fonce));
+    font-size: medium;
     text-align: center;
-    position:absolute;
-    bottom:0;  /* on le colle en bas */
-    width:100%;
+    position: absolute;
+    bottom: 0; /* on le colle en bas */
+    width: 100%;
     padding: 30px;
-    height:100px;   /* Hauteur du pied de page */
+    height: 100px; /* Hauteur du pied de page */
 }
 
-footer p{
+footer p {
     color: white;
     padding: 10px;
 

@@ -16,7 +16,7 @@ class CampusController extends AbstractController
     /**
      * @Route("/campus", name="app_campus")
      */
-    public function index(CampusRepository $campusRepository,EntityManagerInterface $entityManager, Request $request): Response
+    public function index(CampusRepository $campusRepository, EntityManagerInterface $entityManager, Request $request): Response
     {
         $campusS = $campusRepository->findAll();
 
@@ -45,7 +45,7 @@ class CampusController extends AbstractController
         return $this->render('campus/index.html.twig',
             [ // les passe à Twig "
                 "campusS" => $campusS,
-                'campusForm'=>$campusForm->createView()]);
+                'campusForm' => $campusForm->createView()]);
     }
 
     /**
@@ -80,14 +80,15 @@ class CampusController extends AbstractController
             [ // les passe à Twig "
                 "campus" => $campus,]);
     }
+
     /**
      * @Route("/campus/suppression/{id}", name="app_campus_suppression")
      */
-    public function suppression(Campus $campus, EntityManagerInterface $entityManager,CampusRepository $campusRepository): Response
+    public function suppression(Campus $campus, EntityManagerInterface $entityManager, CampusRepository $campusRepository): Response
     {
 
         //on verifie si le campus n'a bien plus aucun participant et de sortie
-        if(empty($campus->getParticipants()) && empty($campus->getSiteOrganisateur())){
+        if (empty($campus->getParticipants()) && empty($campus->getSiteOrganisateur())) {
             //on supprime en bdd
             $entityManager->remove($campus);
             $entityManager->flush();

@@ -7,26 +7,26 @@
 
     <table class="table">
         <tbody>
-{#            <tr>#}
-{#                <th>Pseudo</th>#}
-{#                <td>{{ participant.pseudo }}</td>#}
-{#            </tr>#}
-            <tr>
-                <th>Nom</th>
-                <td>{{ participant.nom }}</td>
-            </tr>
-            <tr>
-                <th>Prenom</th>
-                <td>{{ participant.prenom }}</td>
-            </tr>
-            <tr>
-                <th>Telephone</th>
-                <td>{{ participant.telephone }}</td>
-            </tr>
-            <tr>
-                <th>Mail</th>
-                <td>{{ participant.mail }}</td>
-            </tr>
+        {#            <tr> #}
+        {#                <th>Pseudo</th> #}
+        {#                <td>{{ participant.pseudo }}</td> #}
+        {#            </tr> #}
+        <tr>
+            <th>Nom</th>
+            <td>{{ participant.nom }}</td>
+        </tr>
+        <tr>
+            <th>Prenom</th>
+            <td>{{ participant.prenom }}</td>
+        </tr>
+        <tr>
+            <th>Telephone</th>
+            <td>{{ participant.telephone }}</td>
+        </tr>
+        <tr>
+            <th>Mail</th>
+            <td>{{ participant.mail }}</td>
+        </tr>
         <tr>
             <th>Photo de profil</th>
             <td>
@@ -40,5 +40,4 @@
 
     <a href="{{ path('app_profile_edit', {'id': participant.id}) }}">edit</a>
 
-    {{ include('profile/management/_delete_form.html.twig')  }}
 {% endblock %}

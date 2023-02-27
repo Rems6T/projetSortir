@@ -18,7 +18,7 @@ class VillesController extends AbstractController
     /**
      * @Route("/villes", name="app_villes")
      */
-    public function index(VilleRepository $villeRepository,EntityManagerInterface $entityManager, Request $request): Response
+    public function index(VilleRepository $villeRepository, EntityManagerInterface $entityManager, Request $request): Response
     {
         $villes = $villeRepository->findAll();
 
@@ -46,9 +46,10 @@ class VillesController extends AbstractController
 
         return $this->render('villes/index.html.twig', [
             "villes" => $villes,
-            'villeForm'=>$villeForm->createView()
+            'villeForm' => $villeForm->createView()
         ]);
     }
+
     /**
      * @Route("/villes/modifier/{id}", name="app_villes_modifier")
      */
@@ -69,6 +70,7 @@ class VillesController extends AbstractController
             [ // les passe à Twig "
                 'villeForm' => $villeForm->createView()]);
     }
+
     /**
      * @Route("/villes/supprimer/{id}", name="app_villes_supprimer")
      */
@@ -76,21 +78,21 @@ class VillesController extends AbstractController
     {
 
 
-
         return $this->render('villes/supprimer.html.twig',
             [ // les passe à Twig "
                 "ville" => $ville,]);
     }
+
     /**
      * @Route("/villes/suppression/{id}", name="app_villes_suppression")
      */
-    public function suppression(Ville $ville, EntityManagerInterface $entityManager,LieuRepository $lieuRepository): Response
+    public function suppression(Ville $ville, EntityManagerInterface $entityManager, LieuRepository $lieuRepository): Response
     {
-        $lieu =$lieuRepository->findBy(["ville"=>$ville]);
+        $lieu = $lieuRepository->findBy(["ville" => $ville]);
 
 
         //on verifie si la ville n'a bien plus aucun lieu
-        if(empty($lieu)){
+        if (empty($lieu)) {
             //on supprime en bdd
             $entityManager->remove($ville);
             $entityManager->flush();

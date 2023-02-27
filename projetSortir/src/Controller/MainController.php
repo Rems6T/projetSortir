@@ -15,9 +15,9 @@ use Symfony\Component\Routing\Annotation\Route;
 class MainController extends AbstractController
 {
 
-       /**
-        * @Route("/", name="app_main_index")
-        */
+    /**
+     * @Route("/", name="app_main_index")
+     */
     public function index(SortieRepository $sortieRepo, CampusRepository $CampusRepository): Response
     {
         $sorties = $sortieRepo->findAllWithSitesAndEtats();
@@ -30,7 +30,7 @@ class MainController extends AbstractController
 
 
     /**
-     *@Route("/search/{id}",name="app_search")
+     * @Route("/search/{id}",name="app_search")
      */
     public function search(Request $request, SortieRepository $SortieRepository, CampusRepository $CampusRepository, $id): Response
 
@@ -41,7 +41,7 @@ class MainController extends AbstractController
         $estOrganisateur = $request->request->get('est_organisateur');
         $estInscrit = $request->request->get('est_inscrit');
         $pasInscrit = $request->request->get('pas_inscrit');
-        $SortiesPassees =  $request->request->get('sortie_terminé');
+        $SortiesPassees = $request->request->get('sortie_terminé');
         $idCurrentUser = $id;
         $idCampus = $request->request->get('campus');
 
@@ -57,28 +57,28 @@ class MainController extends AbstractController
         if (
             $search != "" && $estOrganisateur == null && $estInscrit == null && $pasInscrit == null
             && $SortiesPassees == null && $dateMin == "" && $dateMax == ""
-         ) {
+        ) {
             $sorties = array_merge($sorties, $SortieRepository->findByCampus($idCampus));
-         }
+        }
 
         if ($dateMin != "" && $dateMax != "") {
-        $sorties = array_merge($sorties, $SortieRepository->findByDates($dateMin, $dateMax, $idCampus, $search));
+            $sorties = array_merge($sorties, $SortieRepository->findByDates($dateMin, $dateMax, $idCampus, $search));
         }
 
         if ($estOrganisateur != null) {
-        $sorties = array_merge($sorties, $SortieRepository->findByIdOrganisateur($idCurrentUser, $idCampus, $search));
+            $sorties = array_merge($sorties, $SortieRepository->findByIdOrganisateur($idCurrentUser, $idCampus, $search));
         }
 
         if ($estInscrit != null) {
-         $sorties =  array_merge($sorties, $SortieRepository->findByIdParticipantInscrit($idCurrentUser, $idCampus, $search));
+            $sorties = array_merge($sorties, $SortieRepository->findByIdParticipantInscrit($idCurrentUser, $idCampus, $search));
         }
 
         if ($pasInscrit != null) {
-        $sorties = array_merge($sorties, $SortieRepository->findByIdParticipantNonInscrit($SortieRepository->findAll(), $idCurrentUser, $idCampus));
+            $sorties = array_merge($sorties, $SortieRepository->findByIdParticipantNonInscrit($SortieRepository->findAll(), $idCurrentUser, $idCampus));
         }
 
         if ($SortiesPassees != null) {
-        $sorties = array_merge($sorties, $SortieRepository->findByEtatPassees($idCampus, $search));
+            $sorties = array_merge($sorties, $SortieRepository->findByEtatPassees($idCampus, $search));
         }
 
         $sorties = array_unique($sorties, SORT_REGULAR);
@@ -86,9 +86,9 @@ class MainController extends AbstractController
         $campusS = $CampusRepository->findAll();
         return $this->render('main/index.html.twig', [
             'sorties' => $sorties,
-           'campusS' => $campusS,
+            'campusS' => $campusS,
         ]);
-        }
+    }
 
     /**
      * @Route("/sortie/inscription/{idParticipant}/{idSortie}",name="app_sortie_inscription")
@@ -100,7 +100,7 @@ class MainController extends AbstractController
         $repoParticipant = $this->getDoctrine()->getRepository(Participant::class);
         $Participant = $repoParticipant->find($idParticipant);
 
-        if ( $sortie->getNbInscriptionsMax() > count($sortie->getParticipantsInscrits())) {
+        if ($sortie->getNbInscriptionsMax() > count($sortie->getParticipantsInscrits())) {
             $sortie->addParticipantsInscrits($Participant);
             $em->flush();
             $this->addFlash('success', 'Vous avez était inscrit à la sortie !');
@@ -127,8 +127,6 @@ class MainController extends AbstractController
         $this->addFlash('success', 'Vous êtes désinscrit de la sortie !');
         return $this->redirectToRoute("app_main_index");
     }
-
-
 
 
 }

@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Sortie;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -37,36 +38,91 @@ class SortieRepository extends ServiceEntityRepository
         }
     }
 
-    public function findAllWithSitesAndEtats() {
+    public function findByRecherche(array $data)
+    {
+
+
+        $queryBuilder = $this->createQueryBuilder('s')
+            //jonction avec participant
+            ->join('s.participantsInscrits', 'si')
+            //where pour la recherche
+            ->andWhere('s.nom LIKE :nom')
+            ->setParameter('nom', '%' . $data['search'] . '%');
+        //where pour le campus si non nulle
+        if ($data['campus'] != null) {
+            $queryBuilder->andWhere('s.siteOrganisateur = :campus')
+                ->setParameter('campus', $data['campus']);
+        }
+        //where date Heure debut < date min si remplie
+        if (!empty($data['dateMin'])) {
+            $queryBuilder->andWhere('s.dateHeureDebut < :dateMin')
+                ->setParameter('dateMin', $data['dateMin']);
+        }
+        //where date limite inscription > date max si rempli
+        if (!empty($data['dateMax'])) {
+            $queryBuilder->andWhere('s.dateLimiteInscription > :dateMax')
+                ->setParameter('dateMax', $data['dateMax']);
+        }
+        //where organisateur egale au user si est_organisateur non null
+        if ($data['est_organisateur'] != null) {
+            $queryBuilder->andWhere('s.organisateur = :user')
+                ->setParameter('user', $data['user']);
+        }
+        //where user egale aux participants de la sortie si est_inscrit non null
+        if ($data['est_inscrit'] != null) {
+            $queryBuilder->andWhere('si.pseudo = :user')
+                ->setParameter('user', $data['user']->getPseudo());
+        }
+        //where user diferent des participants de la sortie si pas_inscrit non null
+        if ($data['pas_inscrit'] != null) {
+            $queryBuilder->andWhere('si.pseudo != :user')
+                ->setParameter('user', $data['user']->getPseudo());
+        }
+        //where etat de la sortie = fermée si sortie_termine non null
+        if ($data['sortie_termine'] != null) {
+            $queryBuilder->andWhere('s.etat != :etat')
+                ->setParameter('etat', 'fermée');
+        }
+        //On execute la requete
+        $query = $queryBuilder->getQuery();
+        $query->setMaxResults(50);
+        $paginator = new Paginator($query);
+
+        return $paginator;
+
+    }
+
+    public function findAllWithSitesAndEtats()
+    {
         return $this->createQueryBuilder('s')
             ->leftJoin('s.etat', 'e')
             ->leftJoin('s.siteOrganisateur', 'si')
             ->addSelect('si')
             ->addSelect('e')
             ->getQuery()
-            ->getResult()
-            ;
+            ->getResult();
     }
 
     public function findBySearch($search)
     {
         $query = $this->createQueryBuilder('a')
             ->where('a.nom LIKE :mot')
-            ->setParameter('mot' , $search)
+            ->setParameter('mot', $search)
             ->getQuery();
         return $query->getResult();
     }
 
 
-    public function findByCampus($idCampus)
+    public function findByCampus($Campus)
     {
         return $this->createQueryBuilder('s')
-            ->innerJoin('s.siteOrganisateur', 'si')
-            ->andWhere('si.nom =  :campus')
-            ->setParameter('campus', $idCampus)
+            //  ->innerJoin('s.siteOrganisateur', 'si')
+            ->andWhere('s.siteOrganisateur =  :campus')
+            ->setParameter('campus', $Campus)
             ->getQuery()
             ->getResult();
     }
+
     public function findByDates($dateMin, $dateMax, $idCampus, $search)
     {
         return $this->createQueryBuilder('s')

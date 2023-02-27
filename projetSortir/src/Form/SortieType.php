@@ -23,38 +23,36 @@ class SortieType extends AbstractType
     {
         $builder
             ->add('nom',
-            TextType::class,
-            ['label'=>'Nom de la sortie'])
+                TextType::class,
+                ['label' => 'Nom de la sortie'])
             ->add('dateHeureDebut',
-            DateType::class,
-            ['label'=>'Date et heure de la sortie'])
+                DateType::class,
+                ['label' => 'Date et heure de la sortie'])
             ->add('dateLimiteInscription',
-            DateType::class,
-                ['label'=>'Date Limite d\'inscription'])
+                DateType::class,
+                ['label' => 'Date Limite d\'inscription'])
             ->add('nbInscriptionsMax',
-            NumberType::class,
-                ['label'=>''])
+                NumberType::class,
+                ['label' => ''])
             ->add('duree',
                 NumberType::class,
-                ['label'=>'Durée'])
+                ['label' => 'Durée'])
             ->add('infosSortie',
-            TextareaType::class,
-                ['label'=>'Description et infos'])
+                TextareaType::class,
+                ['label' => 'Description et infos'])
             ->add('siteOrganisateur',
-            EntityType::class,
-            ['class'=>Campus::class,
+                EntityType::class,
+                ['class' => Campus::class,
 
-                'label'=>'Campus',
-                'choice_label'=>'nom'])
+                    'label' => 'Campus',
+                    'choice_label' => 'nom'])
             ->add('lieu',
                 EntityType::class,
-            ['class'=>Lieu::class,
-                'label'=>'Lieu',
-                'choice_label'=>'nom'])
+                ['class' => Lieu::class,
+                    'label' => 'Lieu',
+                    'choice_label' => 'nom'])
             ->add('enregistrer', SubmitType::class, ['label' => 'Enregistrer'])
-            ->add('publier', SubmitType::class, ['label' => 'Publier'])
-
-        ;
+            ->add('publier', SubmitType::class, ['label' => 'Publier']);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

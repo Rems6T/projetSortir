@@ -18,19 +18,13 @@ class CampusType extends AbstractType
         $builder
             ->add('nom',
                 TextType::class,
-                ['label' => 'Nom du campus',
+                ['label' => 'Nom du campus :',
                     'constraints' => [
                         new NotBlank([
-                            'message' => 'Entrez un nom de campus',
-                        ]),
-                        new Length([
-                            'min' => 6,
-                            'minMessage' => 'Le campus doit faire au moins {{ limit }} lettres',
-
-                            'max' => 50,
+                            'message' => 'Entrez un nom de campus ',
                         ])
                     ]
-                    ]
+                ]
             )
             ->add('enregistrer', SubmitType::class, ['label' => 'Enregistrer']);
     }

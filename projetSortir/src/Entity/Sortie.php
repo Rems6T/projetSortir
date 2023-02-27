@@ -51,7 +51,6 @@ class Sortie
     private $infosSortie;
 
 
-
     /**
      * @ORM\ManyToMany(targetEntity=Participant::class, mappedBy="inscrits")
      */
@@ -161,7 +160,6 @@ class Sortie
 
         return $this;
     }
-
 
 
     /**

@@ -43,6 +43,13 @@ class ParticipantRepository extends ServiceEntityRepository implements PasswordU
         }
     }
 
+//    public function update(
+//        Participant $entity,
+//    )
+//    {
+//
+//    }
+
     /**
      * Used to upgrade (rehash) the user's password automatically over time.
      */

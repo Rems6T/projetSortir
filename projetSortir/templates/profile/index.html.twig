@@ -7,18 +7,18 @@
 
     <table class="table">
         <thead>
-            <tr>
-                <th>Id</th>
-                <th>Pseudo</th>
-                <th>Roles</th>
-{#                <th>Password</th>#}
-                <th>Nom</th>
-                <th>Prenom</th>
-                <th>Telephone</th>
-                <th>Mail</th>
-                <th>Actif</th>
-                <th>actions</th>
-            </tr>
+        <tr>
+            <th>Id</th>
+            <th>Pseudo</th>
+            <th>Roles</th>
+            {#                <th>Password</th> #}
+            <th>Nom</th>
+            <th>Prenom</th>
+            <th>Telephone</th>
+            <th>Mail</th>
+            <th>Actif</th>
+            <th>actions</th>
+        </tr>
         </thead>
         <tbody>
         {% for participant in participants %}
@@ -32,8 +32,21 @@
                 <td>{{ participant.mail }}</td>
                 <td>{{ participant.actif ? 'Yes' : 'No' }}</td>
                 <td>
-                    <a href="{{ path('app_profile_show', {'id': participant.id}) }}">show</a>
-                    <a href="{{ path('app_profile_edit', {id : participant.id}) }}">edit</a>
+                    {{ participant.actif ? 'Oui' : 'Non' }}
+                    <br>
+                    <form method="post" action="{{ path('app_profile_actif', {'id': participant.id}) }}">
+                        <input type="hidden" name="_token" value="{{ csrf_token('actif' ~ participant.id) }}">
+                        <button class="btn">Changer</button>
+                    </form>
+                    {#                    <a href="{{ path('app_profile_actif', {'id': participant.id}) }}">Changer</a> #}
+                </td>
+                <td>
+                    <a href="{{ path('app_profile_edit', {'id' : participant.id}) }}">Editer</a>
+                    <br>
+                    <a href="{{ path('app_profile_delete', {'id': participant.id}) }}">Supprimer</a>
+                    <br>
+                    <a href="{{ path('app_profile_show', {'id': participant.id}) }}">Voir</a>
+
                 </td>
             </tr>
         {% else %}

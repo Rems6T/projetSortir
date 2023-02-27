@@ -38,13 +38,15 @@ class CampusRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
+
     /**
      * @return Campus[] Returns an array of Campus objects qui contient le mot
      */
-    public function findByWord($keyword){
+    public function findByWord($keyword)
+    {
         $query = $this->createQueryBuilder('a')
             ->where('a.nom LIKE :key')
-            ->setParameter('key' , $keyword)
+            ->setParameter('key', $keyword)
             ->getQuery();
 
         return $query->getResult();

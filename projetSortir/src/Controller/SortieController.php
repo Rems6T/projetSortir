@@ -53,7 +53,6 @@ class SortieController extends AbstractController
             return $this->redirectToRoute('app_sortie', ['id' => $sortie->getId()]);
         }
 
-
         return $this->render('sortie/creer.html.twig', [
             'sortieForm' => $sortieForm->createView()
         ]);
@@ -64,7 +63,6 @@ class SortieController extends AbstractController
      */
     public function modifier(Sortie $sortie, Request $request, EtatRepository $etatRepository, EntityManagerInterface $entityManager): Response
     {
-
         $sortieForm = $this->createForm(SortieType::class, $sortie);
         //recupere les donnée et les injecte dans sortieForm
         $sortieForm->handleRequest($request);

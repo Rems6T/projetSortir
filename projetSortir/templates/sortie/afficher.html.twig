@@ -2,8 +2,8 @@
 {% block body %}
     <h3>Afficher une sortie</h3>
     <h5>Nom de la sortie: {{ sortie.nom }}</h5>
-    <h5>Date et heure de la sortie : {{ sortie.dateHeureDebut  |date('Y-m-d H:i:s')}}</h5>
-    <h5>Date limite d'inscription : {{ sortie.dateLimiteInscription |date('Y-m-d H:i:s')}}</h5>
+    <h5>Date et heure de la sortie : {{ sortie.dateHeureDebut  |date('Y-m-d H:i:s') }}</h5>
+    <h5>Date limite d'inscription : {{ sortie.dateLimiteInscription |date('Y-m-d H:i:s') }}</h5>
     <h5>Nombre de places : {{ sortie.nbInscriptionsMax }}</h5>
     <h5>Durée : {{ sortie.duree }} minutes</h5>
     <h5>Description et infos : {{ sortie.infosSortie }}</h5>
@@ -20,10 +20,10 @@
             <th>Nom</th>
         </tr>
         {% for participant in participants %}
-        <tr>
-            <td>{{ participant.pseudo }}</td>
-            <td>{{ participant.nom }}</td>
-        </tr>
+            <tr>
+                <td>{{ participant.pseudo }}</td>
+                <td>{{ participant.nom }}</td>
+            </tr>
         {% endfor %}
     </table>
     {% if sortie.organisateur.id == app.user.id %}

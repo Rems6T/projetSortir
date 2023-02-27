@@ -19,12 +19,11 @@ class LieuType extends AbstractType
             ->add('rue')
             ->add('latitude')
             ->add('longitude')
-            ->add('ville',EntityType::class,
-            ['class'=>Ville::class,
-                'label'=>'Ville',
-                'choice_label'=>'nom'])
-            ->add('enregistrer', SubmitType::class, ['label' => 'Enregistrer']);
-        ;
+            ->add('ville', EntityType::class,
+                ['class' => Ville::class,
+                    'label' => 'Ville',
+                    'choice_label' => 'nom'])
+            ->add('enregistrer', SubmitType::class, ['label' => 'Enregistrer']);;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

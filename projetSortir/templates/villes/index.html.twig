@@ -3,47 +3,50 @@
 {% block title %}Hello VillesController!{% endblock %}
 
 {% block body %}
-<div class="container-fluid pt-3">
-    <div class="row justify-content-center">
-        <div class="col">
-            <h2>Les VILLES</h2>
-            <p>Filtrer les sites</p>
-            <form action="{{ path('app_villes') }}" method="post">
-                <label>Le nom contient : <input type="search" name="search"> </label><br>
-                <div class="btn-container">
-                    <button>Rechercher</button>
-                </div>
-            </form></div>
-        <section id="tableau_villes">
-            <table class="table ">
-                <tbody>
-                <tr class="table-warning">
-                    <th>Villes</th>
-                    <th>Code Postal</th>
-                    <th>Actions</th>
-                </tr>
-
-                {% for ville in villes %}
-                    <tr>
-                        <td> {{ ville.nom }}</td>
-                        <td>{{ ville.codePostal }}</td>
-                        <td><a href="{{ path('app_villes_modifier',{id:ville.id}) }}">Modifier</a> <a href="{{ path('app_villes_supprimer',{id:ville.id}) }}">Supprimer</a></td>
+    <div class="container-fluid pt-3">
+        <div class="row justify-content-center">
+            <div class="col">
+                <h2>Les VILLES</h2>
+                <p>Filtrer les sites</p>
+                <form action="{{ path('app_villes') }}" method="post">
+                    <label>Le nom contient : <input type="search" name="search"> </label><br>
+                    <div class="btn-container">
+                        <button>Rechercher</button>
+                    </div>
+                </form>
+            </div>
+            <section id="tableau_villes">
+                <table class="table ">
+                    <tbody>
+                    <tr class="table-warning">
+                        <th>Villes</th>
+                        <th>Code Postal</th>
+                        <th>Actions</th>
                     </tr>
-                {% endfor %}
-                {{ form_start(villeForm) }}
-                <tr>
-                    <td>{{ form_row(villeForm.nom) }}</td>
-                    <td>{{ form_row(villeForm.codePostal) }}</td>
-                    <td>{{ form_row(villeForm.enregistrer) }}</td>
-                </tr>
-                <tr>
-                    <td>{{ form_errors(villeForm.nom) }}</td>
-                    <td>{{ form_errors(villeForm.codePostal) }}</td>
-                </tr>
-                {{ form_end(villeForm) }}
-                </tbody>
-            </table>
-        </section>
-    </div></div>
 
-        {% endblock %}
+                    {% for ville in villes %}
+                        <tr>
+                            <td> {{ ville.nom }}</td>
+                            <td>{{ ville.codePostal }}</td>
+                            <td><a href="{{ path('app_villes_modifier',{id:ville.id}) }}">Modifier</a> <a
+                                        href="{{ path('app_villes_supprimer',{id:ville.id}) }}">Supprimer</a></td>
+                        </tr>
+                    {% endfor %}
+                    {{ form_start(villeForm) }}
+                    <tr>
+                        <td>{{ form_row(villeForm.nom) }}</td>
+                        <td>{{ form_row(villeForm.codePostal) }}</td>
+                        <td>{{ form_row(villeForm.enregistrer) }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ form_errors(villeForm.nom) }}</td>
+                        <td>{{ form_errors(villeForm.codePostal) }}</td>
+                    </tr>
+                    {{ form_end(villeForm) }}
+                    </tbody>
+                </table>
+            </section>
+        </div>
+    </div>
+
+{% endblock %}

@@ -24,10 +24,10 @@ class RegistrationFormType extends AbstractType
             ->add('prenom')
             ->add('telephone')
             ->add('mail')
-            ->add('campus',EntityType::class,
-                ['class'=>Campus::class,
-                'label'=>'Campus',
-                'choice_label'=>'nom'])
+            ->add('campus', EntityType::class,
+                ['class' => Campus::class,
+                    'label' => 'Campus',
+                    'choice_label' => 'nom'])
             ->add('plainPassword', PasswordType::class, [
                 // instead of being set onto the object directly,
                 // this is read and encoded in the controller
@@ -44,9 +44,7 @@ class RegistrationFormType extends AbstractType
                         'max' => 4096,
                     ]),
                 ],
-            ])
-
-        ;
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

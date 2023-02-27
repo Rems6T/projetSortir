@@ -6,8 +6,8 @@ use App\Entity\Participant;
 use App\Form\ProfileType;
 use App\Repository\ParticipantRepository;
 use App\Service\FileUploader;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -79,15 +79,14 @@ class ProfileController extends AbstractController
         $form = $this->createForm(ProfileType::class, $participant);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid())
-        {
+        if ($form->isSubmitted() && $form->isValid()) {
             /**
              * @var UploadedFile $brochureFile
              */
             $brochureFile = $form->get('brochure')->getData();
 
             // this condition is needed because the 'brochure' field is not required
-            // so the PDF file must be processed only when a file is uploaded
+            // so the file must be processed only when a file is uploaded
             if ($brochureFile) {
                 $originalFilename = pathinfo($brochureFile->getClientOriginalName(), PATHINFO_FILENAME);
                 // this is needed to safely include the file name as part of the URL
@@ -100,7 +99,12 @@ class ProfileController extends AbstractController
                     $newFilename
                 );
 
-                // updates the 'brochureFilename' property to store the PDF file name
+                // Delete old photo if it exists
+                if (file_exists('uploads/brochures/' . $participant->getBrochureFilename()))
+                    unlink('uploads/brochures/' . $participant->getBrochureFilename());
+
+                // updates the 'brochureFilename' property to store the file name
+
                 // instead of its contents
                 $participant->setBrochureFilename($newFilename);
             }
@@ -113,7 +117,7 @@ class ProfileController extends AbstractController
             );
             $participantRepository->add($participant, true);
 
-            return $this->redirectToRoute('app_profile_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_profile_index', ['id' => $participant->getId()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('profile/edit.html.twig', [
@@ -132,5 +136,17 @@ class ProfileController extends AbstractController
         }
 
         return $this->redirectToRoute('app_profile_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    /**
+     * @Route("/", name="app_profile_actif")
+     */
+    public function update(Request $request, Participant $participant, ParticipantRepository $participantRepository): Response
+    {
+
+
+        return $this->render('profile/index.html.twig', [
+            'participants' => $participantRepository->findAll(),
+        ]);
     }
 }
