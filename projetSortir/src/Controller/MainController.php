@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Participant;
 use App\Entity\Sortie;
 use App\Repository\CampusRepository;
+use App\Repository\EtatRepository;
 use App\Repository\ParticipantRepository;
 use App\Repository\SortieRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -19,15 +20,50 @@ class MainController extends AbstractController
        /**
         * @Route("/", name="app_main_index")
         */
-    public function index(SortieRepository $sortieRepo, CampusRepository $CampusRepository): Response
+    public function index(SortieRepository $sortieRepo, CampusRepository $CampusRepository, EtatRepository $etatRepository): Response
     {
         $sorties = $sortieRepo->findAllWithSitesAndEtats();
         $campusS = $CampusRepository->findAll();
-        return $this->render('main/index.html.twig', [
-            'sorties' => $sorties,
-            'campusS' => $campusS,
-        ]);
-    }
+
+        $aujourdhui = new \DateTime('now');
+
+        foreach ($sorties as $sortie) {
+            $date = $sortie->getDateHeureDebut();
+
+            // $dateCopie = new \DateTime();
+            $date2 = &$date;
+            $duree = $sortie->getDuree();
+
+            if ($duree == null) {
+                $duree = 1;
+            }
+
+            $interval = new \DateInterval('PT' . $duree . 'M');
+            $finInscription = $sortie->getDateLimiteInscription();
+
+
+            if ($finInscription < $aujourdhui) { //Inscription finie
+                if ($date < $aujourdhui) {
+                    $dateFin = $date2->add($interval);
+                    if ($dateFin > $aujourdhui) {
+                        $sortie->setEtat($etatRepository->findOneBy(['libelle' => "Activité en cours"])); // ENCOURS
+                        $date2->sub($interval);
+                    } else {
+                        $sortie->setEtat($etatRepository->findOneBy(['libelle' => "Passée"])); //PASSEE
+                        $date2->sub($interval);
+                    }
+                } else {
+                    $sortie->setEtat($etatRepository->findOneBy(['libelle' => "Clôturée"])); //CLOTUREE
+                }
+            }
+
+        }
+            return $this->render('main/index.html.twig', [
+                'sorties' => $sorties,
+                'campusS' => $campusS,
+            ]);
+        }
+
 
 
     /**

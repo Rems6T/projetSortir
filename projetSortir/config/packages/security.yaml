@@ -47,7 +47,9 @@ security:
          - { path: ^/sortie/desinscription, roles: ROLE_USER }
          - { path: ^/profile/, roles: ROLE_USER }
          - { path: ^/profile/edit, roles: ROLE_USER }
-         - { path: ^/, roles: ROLE_USER }
+         - { path: ^/login, roles: PUBLIC_ACCESS }
+        # - - { path: ^/, roles: PUBLIC_ACCESS }
+        # - { path: ^/, roles: ROLE_USER }
 
 when@test:
     security:
