@@ -24,6 +24,7 @@
                     {% if is_granted ('ROLE_ADMIN') %}
                 <li><a href="{{ path('app_campus') }}" title="Campus">Campus</a>
                 <li><a href="{{ path('app_villes') }}" title="Villes">Villes</a>
+                <li><a href="{{ path('app_profile_index') }}" title="Gerer Utilisateur">Gerer Utilisateur</a>
                 {% endif %}
 
                 <li><a href="{{ path('app_sortie_creer') }}" title="create">Nouvelle sortie</a>

@@ -1,4 +1,4 @@
-<section id="tableau_sorties">
+<section id="tableau_sorties" class="w-75">
     <table class="table">
         <tbody>
         <tr>
@@ -25,7 +25,9 @@
                     {% endif %}
                 </td>
                 <td>
-                    <a href="{{ path('app_profile_show', {'id': sortie.organisateur.id} ) }}">{{ sortie.organisateur.pseudo }}</a>
+
+                        <a href="{{ path('app_profile_show', {'id': sortie.organisateur.id} ) }}">{{ sortie.organisateur.pseudo }}</a>
+
                 </td>
                 <td><a href="{{ path('app_sortie',{id: sortie.id}) }}" title="Détail sortie">Afficher</a>
 
@@ -39,7 +41,7 @@
                         {% endif %}
                     {% endif %}
 
-                    {% if sortie.organisateur.id == app.user.id and sortie.etat.libelle == 'Ouverte'%}
+                    {% if sortie.organisateur.id == app.user.id and sortie.etat.libelle == 'Ouverte' %}
                         <a href="{{ path('app_sortie_modifier',{'id':sortie.id}) }}">Modifier</a>
                     {% endif %}
                 </td>
