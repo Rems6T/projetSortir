@@ -6,9 +6,11 @@ namespace App\Controller;
 use App\Entity\Lieu;
 use App\Entity\Sortie;
 use App\Form\SortieType;
+use App\Form\SortieVilleType;
 use App\Repository\EtatRepository;
 
 use App\Repository\LieuRepository;
+use App\Repository\VilleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -26,10 +28,13 @@ class SortieController extends AbstractController
     public function creer(Request $request, EtatRepository $etatRepository, EntityManagerInterface $entityManager): Response
     {
         $sortie = new Sortie();
+       // $sortieVilleForm = $this->createForm(SortieVilleType::class);
         $sortieForm = $this->createForm(SortieType::class, $sortie);
         //recupere les donnée et les injecte dans sortieForm
+
         $sortieForm->handleRequest($request);
         if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
+
             //on injecte les données manquantes
             //l'organisateur
             $sortie->setOrganisateur($this->getUser());
@@ -60,7 +65,8 @@ class SortieController extends AbstractController
 
 
         return $this->render('sortie/creer.html.twig', [
-            'sortieForm' => $sortieForm->createView()
+            'sortieForm' => $sortieForm->createView(),
+            //'sortieVilleForm' => $sortieVilleForm->createView()
         ]);
     }
 
@@ -69,7 +75,7 @@ class SortieController extends AbstractController
      */
     public function modifier(Sortie $sortie, Request $request, EtatRepository $etatRepository, EntityManagerInterface $entityManager): Response
     {
-
+        $sortieVilleForm = $this->createForm(SortieVilleType::class);
         $sortieForm = $this->createForm(SortieType::class, $sortie);
         //recupere les donnée et les injecte dans sortieForm
         $sortieForm->handleRequest($request);
@@ -98,6 +104,7 @@ class SortieController extends AbstractController
 
         return $this->render('sortie/modifier.html.twig', [
             'sortieForm' => $sortieForm->createView(),
+            'sortieVilleForm' => $sortieVilleForm->createView(),
         ]);
     }
 
@@ -150,9 +157,9 @@ class SortieController extends AbstractController
         ]);
     }
     /**
-     * @Route("/sortieLieu", name="app_sortie_getLieu" , methods={"GET"})
+     * @Route("/sortieLieu", name="app_sortie_getInfoLieu" , methods={"GET"})
      */
-    public function getLieu(Request $request,LieuRepository $lieuRepository){
+    public function getinfoLieu(Request $request,LieuRepository $lieuRepository){
         // Récupérer le lieu sélectionnée depuis la requête
 
         $lieu = $lieuRepository->find($request->get('lieu'));
@@ -163,6 +170,22 @@ class SortieController extends AbstractController
             array('latitude'=>$lieu->getLatitude()),
             array('Longitude'=>$lieu->getLongitude()),
         );
+
+
+        // Retourner les lieux en tant que réponse JSON
+        return new JsonResponse($data);
+    }
+    /**
+     * @Route("/sortieVille", name="app_sortie_getLieu" , methods={"GET"})
+     */
+    public function getLieu(Request $request,LieuRepository $lieuRepository,VilleRepository $villeRepository){
+        $ville = $villeRepository->find($request->get('ville'));
+        $lieux = $lieuRepository->findBy(["ville"=>$ville]);
+        $data=[];
+        foreach ($lieux as $lieu){
+             $data[$lieu->getId()]=$lieu->getNom();
+        }
+
 
 
         // Retourner les lieux en tant que réponse JSON
