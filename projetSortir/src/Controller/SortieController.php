@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Security;
 
 class SortieController extends AbstractController
 {
@@ -48,6 +49,7 @@ class SortieController extends AbstractController
                 $sortie->setEtat($etatRepository->findOneBy(['libelle' => 'Ouverte']));
                 //todo: Alerte message="sortie ouverte"
             }
+            $this->addFlash('success', 'Vous avez bien créé une sortie !');
             //On save en bdd
             $entityManager->persist($sortie);
             $entityManager->flush();
@@ -78,7 +80,7 @@ class SortieController extends AbstractController
 
                 //l'etat en "crée"
                 $sortie->setEtat($etatRepository->findOneBy(['libelle' => 'Créée']));
-                //todo: Alerte message="sortie crée"
+
             }
             //Si bouton publier
             if ($sortieForm->getClickedButton() === $sortieForm->get('publier')) {
@@ -86,6 +88,7 @@ class SortieController extends AbstractController
                 $sortie->setEtat($etatRepository->findOneBy(['libelle' => 'Ouverte']));
                 //todo: Alerte message="sortie ouverte"
             }
+            $this->addFlash('success', 'Vous avez bien modifié la sortie !');
             $entityManager->persist($sortie);
             $entityManager->flush();
 
@@ -112,7 +115,7 @@ class SortieController extends AbstractController
             //on save en bdd
             $entityManager->persist($sortie);
             $entityManager->flush();
-
+            $this->addFlash('success', 'Vous avez bien annulé la sortie !');
             //On redirige vers la page de la  sortie
             return $this->redirectToRoute('app_sortie', ['id' => $sortie->getId()]);
         }
