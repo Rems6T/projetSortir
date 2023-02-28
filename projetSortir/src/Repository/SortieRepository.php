@@ -2,10 +2,13 @@
 
 namespace App\Repository;
 
+use App\Entity\Participant;
 use App\Entity\Sortie;
+use App\Model\Filtre;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * @method Sortie|null find($id, $lockMode = null, $lockVersion = null)
@@ -38,48 +41,51 @@ class SortieRepository extends ServiceEntityRepository
         }
     }
 
-    public function findByRecherche(array $data)
+    public function findByRecherche(Filtre $filtre, Security $security)
     {
 
+            $queryBuilder = $this->createQueryBuilder('s')
 
-         $queryBuilder = $this->createQueryBuilder('s')
-            //jonction avec participant
-            ->join('s.participantsInscrits', 'si')
-            //where pour la recherche
-            ->andWhere('s.nom LIKE :nom')
-            ->setParameter('nom', '%' . $data['search'] . '%');
+
+               //jonction avec participant
+         ->join('s.participantsInscrits', 'si');
+        if ($filtre->getSearch()!= null) {
+                //where pour la recherche
+            $queryBuilder->andWhere('s.nom LIKE :nom')
+                ->setParameter('nom', '%' . $filtre->getSearch() . '%');
+        }
         //where pour le campus si non nulle
-        if ($data['campus'] != null) {
+        if ($filtre->getCampus() != null) {
             $queryBuilder->andWhere('s.siteOrganisateur = :campus')
-                ->setParameter('campus', $data['campus']);
+                ->setParameter('campus', $filtre->getCampus());
         }
         //where date Heure debut < date min si remplie
-        if (!empty($data['dateMin']) ) {
-            $queryBuilder->andWhere('s.dateHeureDebut < :dateMin')
-                ->setParameter('dateMin', $data['dateMin']);
+        if ($filtre->getDateDebut() != null ) {
+            $queryBuilder->andWhere('s.dateHeureDebut < :dateDebut')
+                ->setParameter('dateDebut', $filtre->getDateDebut());
         }
         //where date limite inscription > date max si rempli
-        if (!empty($data['dateMax'])) {
-            $queryBuilder->andWhere('s.dateLimiteInscription > :dateMax')
-                ->setParameter('dateMax', $data['dateMax']);
+        if ($filtre->getDateLimite() != null) {
+            $queryBuilder->andWhere('s.dateLimiteInscription > :dateLimite')
+                ->setParameter('dateLimite', $filtre->getDateLimite());
         }
         //where organisateur egale au user si est_organisateur non null
-        if($data['est_organisateur']!=null){
+        if($filtre->getEstOrganisateur()!=null){
             $queryBuilder->andWhere('s.organisateur = :user')
-                ->setParameter('user', $data['user']);
+                ->setParameter('user', $security->getUser()->getId());
         }
         //where user egale aux participants de la sortie si est_inscrit non null
-        if($data['est_inscrit']!=null){
+        if($filtre->getEstInscrit()!=null){
                 $queryBuilder->andWhere('si.pseudo = :user')
-                    ->setParameter('user', $data['user']->getPseudo());
+                    ->setParameter('user',$security->getUser()->getPseudo());
         }
         //where user diferent des participants de la sortie si pas_inscrit non null
-        if($data['pas_inscrit']!=null){
+        if($filtre->getPasInscrit()!=null){
             $queryBuilder->andWhere('si.pseudo != :user')
-                ->setParameter('user', $data['user']->getPseudo());
+                ->setParameter('user', $security->getUser()->getPseudo());
         }
         //where etat de la sortie = fermée si sortie_termine non null
-        if($data['sortie_termine']!=null){
+        if($filtre->getEstPassees()!=null){
             $queryBuilder->andWhere('s.etat != :etat')
                 ->setParameter('etat', 'fermée');
         }
@@ -91,7 +97,7 @@ class SortieRepository extends ServiceEntityRepository
         return $paginator;
 
     }
-
+/*
     public function findAllWithSitesAndEtats()
     {
         return $this->createQueryBuilder('s')
@@ -194,7 +200,7 @@ class SortieRepository extends ServiceEntityRepository
             ->setParameter('campus', $idCampus)
             ->getQuery()
             ->getResult();
-    }
+    }*/
 //    /**
 //     * @return Sortie[] Returns an array of Sortie objects
 //     */

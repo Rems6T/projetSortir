@@ -3,12 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Participant;
-use App\Entity\Sortie;
 use App\Form\FiltreType;
 use App\Model\Filtre;
 use App\Repository\CampusRepository;
 use App\Repository\EtatRepository;
-use App\Repository\ParticipantRepository;
 use App\Repository\SortieRepository;
 use DateInterval;
 use Doctrine\ORM\EntityManagerInterface;
@@ -65,18 +63,28 @@ class MainController extends AbstractController
                     $sortie->setEtat($etatRepository->findOneBy(['libelle' => "Clôturée"])); //CLOTUREE
                 }
             }
-
         }
-        $filtre = new Filtre();
-        
-        $filtreForm = $this->createForm(FiltreType::class, $filtre);
 
+        $filtre = new Filtre();
+        $filtreForm = $this->createForm(FiltreType::class, $filtre);
+        if ($filtreForm->isSubmitted() && $filtreForm->isValid()) {
+            $sorties=$sortieRepo->findByRecherche($filtre);
             return $this->render('main/index.html.twig', [
                 'sorties' => $sorties,
                 'campusS' => $campusS,
                 'filtreForm' => $filtreForm->createView(),
             ]);
         }
+
+        $sorties = $sortieRepo->findAll();
+        $campusS = $CampusRepository->findAll();
+        return $this->render('main/index.html.twig', [
+         'sorties' => $sorties,
+         'campusS' => $campusS,
+         'filtreForm' => $filtreForm->createView(),
+        ]);
+
+    }
 
 
 
