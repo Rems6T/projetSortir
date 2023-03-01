@@ -49,23 +49,23 @@ class SortieRepository extends ServiceEntityRepository
      * @param UserInterface $user
      * @return Paginator
      */
-    public function findByRecherche(Filtre $filtre, UserInterface $user, $sorties)
+    public function findByRecherche(Filtre $filtre, UserInterface $user)
     {
 
         $queryBuilder = $this->createQueryBuilder('s')
                //jonction avec participant
-         ->join('s.participantsInscrits', 'si')
-        ->join('s.etat', 'e');
+         ->join('s.participantsInscrits', 'si');
+        //->join('s.etat', 'e');
 
-        if ($sorties!= null) {
-            $queryBuilder
-                ->select('e.libelle')
-                ->where('e.libelle' != 'Archivée');
+     ///   if ($sorties!= null) {
+       //     $queryBuilder
+       //         ->select('e.libelle')
+        //        ->where('e.libelle' != 'Archivée');
            //     ->select('e.libelle')
             //    $queryBuilder->andWhere('s.etat != :etat')
               //      ->setParameter('etat', 'Archivée');
           //  ->where('e.libelle' != 'Archivée');
-        }
+      //  }
 
             if ($filtre->getSearch() != null) {
                 //where pour la recherche
