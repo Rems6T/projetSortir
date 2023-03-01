@@ -52,22 +52,8 @@ header img {
     height: 90px;
 }
 
-@media screen and (min-width: 1200px) {
 
-
-    header {
-        font-size: large;
-        padding: 20px;
-    }
-
-    #tableau_sorties {
-        width: 80%;
-    }
-
-
-}
-
-@media screen and (min-width: 700px) {
+@media screen and (min-width: 600px) {
 
     #toggle:checked + .main_pages {
         display: flex;
@@ -116,14 +102,39 @@ header img {
         overflow: hidden;
     }
 
-    #affichage_smartphone {
-        visibility: hidden;
-    }
 
     #btn_new {
         visibility: visible;
     }
 
+    #filtreAccueil input {
+        margin-left: 5px;
+    }
+
+    #filtreAccueil label {
+        margin-bottom: 5px;
+    }
+
+
+    #cache-small {
+        display: none;
+    }
+
+
+    .affichage_smartphone {
+        margin: 15px;
+        width: 100%;
+        display: block;
+    }
+
+
+    .affichage_grand {
+        display: none;
+    }
+
+    #tablette{
+        display: none;
+    }
 }
 
 @media screen and (max-width: 600px) {
@@ -183,13 +194,42 @@ header img {
     #btn_new, #toggle, #smartphone, #filtreAccueil {
         display: none;
 
-
     }
 
-    #affichage_smartphone {
+    .affichage_grand {
+        visibility: hidden;
+    }
+
+    .affichage_smartphone {
         margin: 5px;
         width: 100%;
+        display: block;
     }
-
 }
 
+@media screen and (min-width: 1200px) {
+
+
+    header {
+        font-size: large;
+        padding: 20px;
+    }
+
+    #tableau_sorties {
+        width: 80%;
+    }
+
+    .affichage_smartphone {
+        display: none;
+    }
+
+    .affichage_grand {
+        margin: 5px;
+        width: 100%;
+        display: block;
+    }
+
+    #tablette{
+        display: revert;
+    }
+}

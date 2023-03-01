@@ -3,19 +3,20 @@
 {% block title %}Profils{% endblock %}
 
 {% block body %}
+    <div class="container">
     <h1>Participant index</h1>
 
     <table class="table">
         <thead>
         <tr>
-            <th>Id</th>
+            <th id="tablette">Id</th>
             <th>Pseudo</th>
             <th>Roles</th>
             <th>Nom</th>
             <th>Prénom</th>
-            <th>Telephone</th>
-            <th>Mail</th>
-            <th>Actif</th>
+            <th id="tablette">Telephone</th>
+            <th id="tablette">Mail</th>
+            <th id="tablette">Actif</th>
             <th>Actions</th>
         </tr>
         </thead>
@@ -23,14 +24,14 @@
         <tbody>
         {% for participant in participants %}
             <tr>
-                <td>{{ participant.id }}</td>
+                <td id="tablette">{{ participant.id }}</td>
                 <td>{{ participant.pseudo }}</td>
                 <td>{{ participant.roles ? participant.roles|json_encode : '' }}</td>
                 <td>{{ participant.nom }}</td>
                 <td>{{ participant.prenom }}</td>
-                <td>{{ participant.telephone }}</td>
-                <td>{{ participant.mail }}</td>
-                <td>
+                <td id="tablette">{{ participant.telephone }}</td>
+                <td id="tablette">{{ participant.mail }}</td>
+                <td id="tablette">
                     {{ participant.actif ? 'Yes' : 'No' }}
                     <br>
 
@@ -49,7 +50,7 @@
             </tr>
         {% endfor %}
         </tbody>
-    </table>
-
-    <a href="{{ path('app_profile_new') }}">Create new</a>
+    </table></div>
+<div class="row justify-content-center">
+    <a class="btn btn-outline-info " style="width: 100px" href="{{ path('app_profile_new') }}">Create new</a> </div>
 {% endblock %}

@@ -4,8 +4,9 @@
 
 {% block body %}
     <h1>Create new Participant</h1>
-
+<div class="container">
     {{ include('profile/_form.html.twig') }}
 
-    <a href="{{ path('app_profile_index') }}">back to list</a>
+    <a class="btn " href="{{ path('app_profile_index') }}">back to list</a>
+</div>
 {% endblock %}

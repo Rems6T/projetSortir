@@ -32,14 +32,16 @@
     </tr>
     </tbody>
 </table>
-
+<div class="row justify-content-center">
+    <div class="col">
 {% if is_granted ('ROLE_ADMIN') %}
-    <a href="{{ path('app_profile_index') }}">Retour à la liste</a>
-{% endif %}
+    <a class="btn btn-outline-info"  href="{{ path('app_profile_index') }}">Retour à la liste</a>
+{% endif %}</div>
 
+        <div class="col">
     {% if app.user.id == participant.id %}
-        <a href="{{ path('app_profile_edit', {'id': participant.id}) }}">Modifier</a>
+        <a class="btn btn-outline-info" href="{{ path('app_profile_edit', {'id': participant.id}) }}">Modifier</a>
     {% elseif is_granted('ROLE_ADMIN') %}
-        <a href="{{ path('app_profile_edit', {'id': participant.id}) }}">Modifier</a>
-    {% endif %}
+        <a class="btn btn-outline-info" href="{{ path('app_profile_edit', {'id': participant.id}) }}">Modifier</a>
+    {% endif %} </div></div>
 {% endblock %}

@@ -41,31 +41,31 @@ class SortieType extends AbstractType
         $builder
             ->add('nom',
             TextType::class,
-            ['label'=>'Nom de la sortie'])
+            ['label'=>'Nom de la sortie : '])
             ->add('dateHeureDebut',
             DateTimeType::class,
-            ['label'=>'Date et heure de la sortie',
+            ['label'=>'Date et heure de la sortie : ',
                 'widget' => 'single_text',
                 ])
             ->add('dateLimiteInscription',
             DateTimeType::class, [
-                'label'=>'Date Limite d\'inscription',
+                'label'=>'Date Limite d\'inscription : ',
                     'widget' => 'single_text',
 
                 ])
             ->add('nbInscriptionsMax',
             NumberType::class,
-                ['label'=>''])
+                ['label'=>'Nombre d\'inscriptions max : '])
             ->add('duree',
                 NumberType::class,
-                ['label'=>'Durée'])
+                ['label'=>'Durée : '])
             ->add('infosSortie',
             TextareaType::class,
-                ['label'=>'Description et infos'])
+                ['label'=>'Description et infos : '])
             ->add('siteOrganisateur',
             EntityType::class,
             ['class'=>Campus::class,
-                'label'=>'Campus',
+                'label'=>'Campus : ',
                 'choice_label'=>'nom'
             ])
             ->add('ville', ChoiceType::class,[
@@ -90,7 +90,7 @@ class SortieType extends AbstractType
                 $form->add('lieu',
                     ChoiceType::class,
                     [
-                        'label'=>'Lieu',
+                        'label'=>'Lieu : ',
                         'choices'=>$this->getCampus(),
                         'required'=>true,
                         'constraints' => [

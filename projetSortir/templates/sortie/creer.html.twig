@@ -4,8 +4,8 @@
         <div class="row justify-content-center ">
             <h2>Ajouter une sortie</h2>
             {{ form_start(sortieForm,{'id': 'form'}) }}
-            <div class="row">
-                <div class="col">
+            <div class="row justify-content-center">
+                <div class="col-4">
                     {{ form_row(sortieForm.nom) }}
                     {{ form_row(sortieForm.dateHeureDebut) }}
                     {{ form_row(sortieForm.dateLimiteInscription) }}
@@ -13,11 +13,12 @@
                     {{ form_row(sortieForm.duree) }}
                     {{ form_row(sortieForm.infosSortie) }}
                 </div>
-                <div class="col">
+                <div class="col-4">
 
                     {{ form_row(sortieForm.siteOrganisateur) }}
                     {{ form_row(sortieForm.ville, {'id': 'ville'}) }}
-                    <div class="row">
+
+                    <div class="row ">
                     <div class="col">
                     {{ form_row(sortieForm.lieu, {'id': 'lieu'}) }}
                     </div>
@@ -36,13 +37,15 @@
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col">{{ form_row(sortieForm.publier) }}</div>
-                <div class="col">{{ form_row(sortieForm.enregistrer) }}</div>
-                <div class="col">{{ form_end(sortieForm) }}
-                    <a href="{{ path('app_main_index') }}">
+            <div class="row justify-content-center">
+                <div class="col-1">{{ form_row(sortieForm.publier) }}</div>
+                <div class="col-1">{{ form_row(sortieForm.enregistrer) }} <br></div>
+                {{ form_end(sortieForm) }}
+
+                <div class="row justify-content-center">
+                    <div class="col-1"> <a href="{{ path('app_main_index') }}">
                         <button type="button">Annuler</button>
-                    </a></div>
+                        </a></div></div>
             </div>
 
         </div>

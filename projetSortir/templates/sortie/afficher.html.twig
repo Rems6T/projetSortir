@@ -4,7 +4,33 @@
 
 {% block body %}
     <h2>Afficher  sortie</h2>
-    <div id="smartphone">
+
+    <div class="affichage_smartphone affichage_tablette">
+
+        <p>
+            Nom :    {{ sortie.nom }} <br>
+            Date :    {{ sortie.dateHeureDebut  |date('Y-m-d H:i:s') }} <br>
+            Limite d'inscription :  {{ sortie.dateLimiteInscription |date('Y-m-d H:i:s') }} <br>
+            Nombre de participants :   {{ sortie.participantsInscrits|length }} / {{ sortie.nbInscriptionsMax }} <br>
+            Durée :   {{ sortie.duree }} min <br>
+            Infos :   {{ sortie.infosSortie }} <br>
+            Campus :   {{ sortie.siteOrganisateur.nom }} <br>
+            Lieu :   {{ sortie.lieu.nom }} <br>
+            {{ sortie.lieu.rue }} <br>
+            {{ sortie.lieu.ville.codePostal }} <br><br>
+            Participants : <br>
+            {% for participant in participants %}
+                {{ participant.pseudo }} ({{ participant.nom }}) <br>
+            {% endfor %}
+            <a id="smartphone" href="{{ path('app_sortie_modifier',{'id':sortie.id}) }}">Modifier</a>
+
+        </p>
+    </div>
+
+
+
+
+    <div class="affichage_grand">
     <section id="tableau_details">
         <table class="table">
             <tbody>
@@ -63,23 +89,6 @@
 
 
 
-    <div id="affichage_smartphone">
-        <p>
-     Nom :    {{ sortie.nom }} <br>
-     Date :    {{ sortie.dateHeureDebut  |date('Y-m-d H:i:s') }} <br>
-     Limite d'inscription :  {{ sortie.dateLimiteInscription |date('Y-m-d H:i:s') }} <br>
-     Nombre de participants :   {{ sortie.participantsInscrits|length }} / {{ sortie.nbInscriptionsMax }} <br>
-     Durée :   {{ sortie.duree }} min <br>
-     Infos :   {{ sortie.infosSortie }} <br>
-     Campus :   {{ sortie.siteOrganisateur.nom }} <br>
-     Lieu :   {{ sortie.lieu.nom }} <br>
-        {{ sortie.lieu.rue }} <br>
-        {{ sortie.lieu.ville.codePostal }} <br><br>
-            Participants : <br>
-            {% for participant in participants %}
-              {{ participant.pseudo }} ({{ participant.nom }}) <br>
-            {% endfor %}
-        </p>
-    </div>
+
 
 {% endblock %}
