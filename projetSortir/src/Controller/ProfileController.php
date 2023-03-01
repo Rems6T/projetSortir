@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\NameConverter\CamelCaseToSnakeCaseNameConverter;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
@@ -44,13 +45,33 @@ class ProfileController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $inscriptionFile = $form->get('inscriptionFile')->getData();
+
             if ($inscriptionFile) {
-                $normalizers = [new ObjectNormalizer()];
-                $serializer = new Serializer($normalizers, []);
+                $encoders = array(new JsonEncoder());
+                $normalizers = array(new ObjectNormalizer());
 
-                var_dump($serializer);
-                echo('yes');
+                $serializer = new Serializer($normalizers, $encoders);
 
+                $participantSerialized = $serializer->deserialize($inscriptionFile, Participant::class, 'json');
+
+                foreach ($participantSerialized as $inscription) {
+//                    Pseudo;Role;Password;Nom;Prenom;Telephone;Mail;Actif;Campus_id;brochure_filename
+                    $participant = new Participant();
+                    $participant
+                        ->setPseudo($participantSerialized[0])
+                        ->setRoles($participantSerialized[1])
+                        ->setPassword($participantSerialized[2])
+                        ->setNom($participantSerialized[3])
+                        ->setPrenom($participantSerialized[4])
+                        ->setTelephone($participantSerialized[5])
+                        ->setMail($participantSerialized[6])
+                        ->setActif($participantSerialized[7])
+                        ->setCampus($participantSerialized[8])
+                        ->setBrochureFilename($participantSerialized[9]);
+
+                    $participantRepository->add($participant, true);
+                }
+                return $this->redirectToRoute('app_profile_index', [], Response::HTTP_SEE_OTHER);
 
             } else {
                 $brochureFile = $form->get('brochure')->getData();

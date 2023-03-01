@@ -48,22 +48,23 @@ class ProfileType extends AbstractType
                         'mimeTypesMessage' => 'Merci de mettre une image.'
                     ])
                 ]
-            ])
-            ->add('inscriptionFile', FileType::class, [
-                'label' => 'Fichier csv pour l\'inscription de plusieurs utilisateurs.',
-                'mapped' => false,
-                'required' => false,
-                'constraints' => [
-                    new File([
-                        'maxSize' => '8k',
-                        'mimeTypes' => [
-                            'application/csv'
-                        ],
-                        'mimeTypesMessage' => 'Merci de mettre un fichier ".csv".'
-                    ])
-                ]
-            ])
-        ;
+            ]);
+
+//        $builder->add('inscriptionFile', FileType::class, [
+//            'label' => 'Fichier csv pour l\'inscription de plusieurs utilisateurs.',
+//            'mapped' => false,
+//            'required' => false,
+//            'constraints' => [
+//                new File([
+//                    'maxSize' => '8k',
+//                    'mimeTypes' => [
+//                        'application/csv'
+//                    ],
+//                    'mimeTypesMessage' => 'Merci de mettre un fichier ".csv".'
+//                ])
+//            ]
+//        ])
+//        ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
