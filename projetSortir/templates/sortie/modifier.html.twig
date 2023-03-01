@@ -20,7 +20,14 @@
 
                     {{ form_row(sortieForm.siteOrganisateur) }}
                     {{ form_row(sortieForm.ville, {'id': 'ville'}) }}
-                    {{ form_row(sortieForm.lieu, {'id': 'lieu'}) }}
+                    <div class="row">
+                        <div class="col">
+                            {{ form_row(sortieForm.lieu, {'id': 'lieu'}) }}
+                        </div>
+                        <div class="col">
+                            <button type="button" id="btnCreer">Nouveau Lieu</button>
+                        </div>
+                    </div>
                     <div id="lieu_info">
                         <p>Rue : {{ sortie.lieu.rue }}</p>
                         <p>Ville : {{ sortie.lieu.ville.nom }}</p>
@@ -50,9 +57,9 @@
     </div>
 
     <script>
+
         // Récupérer le formulaire
         var form = document.getElementById("form");
-
         // Attacher un gestionnaire d'événement à la sélection de Lieu
         var lieuSelect = document.getElementById("lieu");
         lieuSelect.addEventListener("change", function () {
@@ -82,7 +89,15 @@
                     var lieux = JSON.parse(this.responseText);
                     console.log(lieux);
                     var lieuSelect = document.getElementById("lieu");
+                    // lieuSelect.removeAttribute('disabled');
                     lieuSelect.innerHTML = ""; // Effacer la liste précédente des lieux
+                    var lieuList = document.getElementById("lieu_info");
+                    lieuList.innerHTML = ""; // Effacer la liste précédente des lieux
+                    lieuList.innerHTML='<p>Rue :</p>'+
+                        '<p>Ville :</p>'+
+                        '<p>Code Postal: </p>'+
+                        '<p>latitude:</p>'+
+                        '<p>Longitude: </p>'
                     var lieuItem = document.createElement("option")
                     lieuItem.innerHTML = "";
                     lieuSelect.appendChild(lieuItem);
@@ -128,6 +143,30 @@
             xhttp.open("GET", "{{ path('app_sortie_getInfoLieu') }}" + "/?lieu=" + lieu, true); // URL de l'API pour récupérer les lieux
             xhttp.send();
         }
+        //Gestionnaire d'evenement lorsque l'on appuie sur le bouton creer lieu
+        var btnCreer = document.getElementById("btnCreer");
+        btnCreer.addEventListener("click", function () {
+            var lieuSelect = document.getElementById("lieu");
+            lieuSelect.innerHTML = ""; // Effacer
+            // lieuSelect.setAttribute('disabled',true);
+            var lieuItem = document.createElement("option");
+            lieuItem.setAttribute("value", 0);
+            lieuItem.innerHTML = 'Nouveau Lieu';
+            lieuSelect.appendChild(lieuItem);
+            var lieuList = document.getElementById("lieu_info");
+            lieuList.innerHTML = ""; // Effacer la liste précédente des lieux
+            lieuList.innerHTML='<p>Creer un nouveau Lieu<p>'+
+                '<label for="sortie[nomLieu]">Nom du lieu :</label>'+
+                '<input type="text" name="sortie[nomLieu]">'+'<br>'+
+                '<label for="sortie[rueLieu]">Rue :</label>'+
+                '<input type="text" name="sortie[rueLieu]">'+'<br>'+
+                '<label for="sortie[latitudeLieu]">Latitude</label>'+
+                '<input type="text" name="sortie[latitudeLieu]">'+'<br>'+
+                '<label for="sortie[longitudeLieu]">Longitude</label>'+
+                '<input type="text" name="sortie[longitudeLieu]">'
+            ;
+
+        });
 
     </script>
 

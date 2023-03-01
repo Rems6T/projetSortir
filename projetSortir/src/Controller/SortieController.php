@@ -6,7 +6,7 @@ namespace App\Controller;
 use App\Entity\Lieu;
 use App\Entity\Sortie;
 use App\Form\SortieType;
-use App\Form\SortieVilleType;
+
 use App\Repository\EtatRepository;
 
 use App\Repository\LieuRepository;
@@ -25,7 +25,7 @@ class SortieController extends AbstractController
     /**
      * @Route("/sortie/creer", name="app_sortie_creer")
      */
-    public function creer(Request $request, EtatRepository $etatRepository, LieuRepository $lieuRepository, EntityManagerInterface $entityManager): Response
+    public function creer(Request $request, EtatRepository $etatRepository, LieuRepository $lieuRepository,VilleRepository $villeRepository,EntityManagerInterface $entityManager): Response
     {
         $sortie = new Sortie();
         //on injecte le campus pour que le select soit sur le campus du User
@@ -38,8 +38,35 @@ class SortieController extends AbstractController
         if ($sortieForm->isSubmitted() && $sortieForm->get('lieu')->getViewData() != null) {
 
 
-            //on recupere l'id du lieu pour l'injecter manuellement avec $sortieForm->get('lieu')->getViewData()
-            $lieu = $lieuRepository->find($sortieForm->get('lieu')->getViewData());
+            //si $sortieForm->get('lieu')->getViewData() = 0 alors c'est un nouveau lieu
+            if ($sortieForm->get('lieu')->getViewData()==0){
+                //on recupere les données grace a un tableau
+                $dataExtra=$sortieForm->getExtraData();
+
+                //On crée un nouveau Lieu
+                $lieu = new Lieu();
+                //On ajoute la ville
+                $ville = $villeRepository->find($sortieForm->get('ville')->getViewData());
+                $lieu->setVille($ville);
+                //On ajoute le nom
+                $lieu->setNom($dataExtra['nomLieu']);
+                //On ajoute la rue
+                $lieu->setRue($dataExtra['rueLieu']);
+                //On ajoute la latitude
+                $lieu->setLatitude($dataExtra['latitudeLieu']);
+                //On ajoute la longitude
+                $lieu->setLongitude($dataExtra['longitudeLieu']);
+                //On save le lieu en bdd
+                $entityManager->persist($lieu);
+                $entityManager->flush();
+
+
+            }else{
+                //on recupere l'id du lieu pour l'injecter manuellement avec $sortieForm->get('lieu')->getViewData()
+                $lieu = $lieuRepository->find($sortieForm->get('lieu')->getViewData());
+            }
+
+            //on ajoute le lieu a la sortie
             $sortie->setLieu($lieu);
             //on injecte les données manquantes
             //l'organisateur
@@ -79,7 +106,7 @@ class SortieController extends AbstractController
     /**
      * @Route("/sortie/modifier/{id}", name="app_sortie_modifier")
      */
-    public function modifier(Sortie $sortie, Request $request, EtatRepository $etatRepository, LieuRepository $lieuRepository, EntityManagerInterface $entityManager): Response
+    public function modifier(Sortie $sortie, Request $request, EtatRepository $etatRepository, LieuRepository $lieuRepository,VilleRepository $villeRepository,EntityManagerInterface $entityManager): Response
     {
 
         $sortieForm = $this->createForm(SortieType::class, $sortie);
@@ -87,8 +114,34 @@ class SortieController extends AbstractController
         $sortieForm->handleRequest($request);
         if ($sortieForm->isSubmitted()) {
 
-            //on recupere l'id du lieu pour l'injecter manuellement avec $sortieForm->get('lieu')->getViewData()
-            $lieu = $lieuRepository->find($sortieForm->get('lieu')->getViewData());
+            //si $sortieForm->get('lieu')->getViewData() = 0 alors c'est un nouveau lieu
+            if ($sortieForm->get('lieu')->getViewData()==0){
+                //on recupere les données grace a un tableau
+                $dataExtra=$sortieForm->getExtraData();
+
+                //On crée un nouveau Lieu
+                $lieu = new Lieu();
+                //On ajoute la ville
+                $ville = $villeRepository->find($sortieForm->get('ville')->getViewData());
+                $lieu->setVille($ville);
+                //On ajoute le nom
+                $lieu->setNom($dataExtra['nomLieu']);
+                //On ajoute la rue
+                $lieu->setRue($dataExtra['rueLieu']);
+                //On ajoute la latitude
+                $lieu->setLatitude($dataExtra['latitudeLieu']);
+                //On ajoute la longitude
+                $lieu->setLongitude($dataExtra['longitudeLieu']);
+                //On save le lieu en bdd
+                $entityManager->persist($lieu);
+                $entityManager->flush();
+
+
+            }else{
+                //on recupere l'id du lieu pour l'injecter manuellement avec $sortieForm->get('lieu')->getViewData()
+                $lieu = $lieuRepository->find($sortieForm->get('lieu')->getViewData());
+            }
+
             $sortie->setLieu($lieu);
             //Si bouton enregistrer
             if ($sortieForm->getClickedButton() === $sortieForm->get('enregistrer')) {
