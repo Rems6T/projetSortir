@@ -3,12 +3,20 @@
 {% block title %}Modifier Profile{% endblock %}
 
 {% block body %}
-    <h1>Modifier {{ participant.pseudo }}</h1>
-    <img src="{{ asset('uploads/brochures/'~participant.brochureFilename) }}"
-         alt="Photo de profil de {{ participant.brochureFilename }}" width="150">
-    {{ include('profile/_form.html.twig', {'button_label': 'Update'}) }}
+    <div class="container">
+        <h1>Modifier {{ participant.pseudo }}</h1>
+        <div class="row">
+            <div class="col-2">
+                <img src="{{ asset('uploads/brochures/'~participant.brochureFilename) }}"
+                     alt="Photo de profil de {{ participant.brochureFilename }}" width="150"></div>
+            <div class="col">
+                {{ include('profile/_form.html.twig', {'button_label': 'Update'}) }}
 
-    <a href="{{ path('app_profile_index') }}">back to list</a>
+            </div>
+        </div>
 
-    {{ include('profile/_delete_form.html.twig') }}
+        <a href="{{ path('app_profile_index') }}">back to list</a>
+
+        {{ include('profile/_delete_form.html.twig') }}
+    </div>
 {% endblock %}
