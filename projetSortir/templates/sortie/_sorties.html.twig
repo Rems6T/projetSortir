@@ -3,28 +3,28 @@
         <tbody>
         <tr>
             <th>Nom de la sortie</th>
-            <th>Date de la sortie</th>
-            <th>Clotûre</th>
-            <th>Nb d'inscrits</th>
+            <th id="smartphone">Date de la sortie</th>
+            <th id="smartphone">Clotûre</th>
+            <th id="smartphone">Nb d'inscrits</th>
             <th>Etat</th>
-            <th>Inscrit</th>
-            <th>Organisateur</th>
+            <th id="smartphone">Inscrit</th>
+            <th id="smartphone">Organisateur</th>
             <th>Actions</th>
         </tr>
 
         {% for sortie in sorties %}
             <tr>
                 <td> {{ sortie.nom }}</td>
-                <td> {{ sortie.dateHeureDebut  |date('d-m-Y  H-i-s') }}</td>
-                <td> {{ sortie.dateLimiteInscription |date('d-m-Y H-i-s') }}</td>
-                <td> {{ sortie.participantsInscrits|length }} / {{ sortie.nbInscriptionsMax }}</td>
+                <td id="smartphone"> {{ sortie.dateHeureDebut  |date('d-m-Y  H-i-s') }}</td>
+                <td id="smartphone"> {{ sortie.dateLimiteInscription |date('d-m-Y H-i-s') }}</td>
+                <td id="smartphone"> {{ sortie.participantsInscrits|length }} / {{ sortie.nbInscriptionsMax }}</td>
                 <td> {{ sortie.etat.libelle }}</td>
-                <td>
+                <td id="smartphone">
                     {% if sortie.participantsInscrits == true %}
                         <i class="fas fa-check-circle"></i>
                     {% endif %}
                 </td>
-                <td>
+                <td id="smartphone">
 
                         <a href="{{ path('app_profile_show', {'id': sortie.organisateur.id} ) }}">{{ sortie.organisateur.pseudo }}</a>
 

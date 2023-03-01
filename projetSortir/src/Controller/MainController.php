@@ -14,6 +14,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class MainController extends AbstractController
 {
@@ -23,8 +25,17 @@ class MainController extends AbstractController
         */
     public function index(SortieRepository $sortieRepo, CampusRepository $CampusRepository, EtatRepository $etatRepository, Request $request): Response
     {
-        $sorties = $sortieRepo->findAll();
+        // $id=[61, 62, 63, 64, 65, 66];
+        $user = $this->getUser();
+     //   $sorties = $sortieRepo->archive();
+      // $etats = ['Créée', 'Ouverte', 'Activité en cours','Passée', 'Clôturée', 'Annulée'];
+      //  $sorties = $sortieRepo->findBy(array('etat' => $etats));
+       //   $sorties = $sortieRepo->findBy(array(61, 62, 63, 64, 65, 66));
+      //  $sorties = $sortieRepo->findBy(array('id' => $id));
+     //   $sorties = $sortieRepo->findBy(array('etat' => 'Créée', 'Ouverte', 'Activité en cours','Passée', 'Clôturée', 'Annulée'), ) ;
         $campusS = $CampusRepository->findAll();
+        $sorties = $sortieRepo->findAll();
+
 
         $aujourdhui = new \DateTime('now');
 
@@ -56,7 +67,7 @@ class MainController extends AbstractController
                         $sortie->setEtat($etatRepository->findOneBy(['libelle' => "Passée"])); //PASSEE
                         $date2->sub($interval);
                     }
-                    if ($dateArchive<$aujourdhui){
+                    if ($dateArchive < $aujourdhui) {
                         $sortie->setEtat($etatRepository->findOneBy(['libelle' => "Archivée"])); //ARCHIVEE
                     }
                 } else {
@@ -67,17 +78,21 @@ class MainController extends AbstractController
 
         $filtre = new Filtre();
         $filtreForm = $this->createForm(FiltreType::class, $filtre);
+        $filtreForm->handleRequest($request);
+
         if ($filtreForm->isSubmitted() && $filtreForm->isValid()) {
-            $sorties=$sortieRepo->findByRecherche($filtre);
+            $sorties=$sortieRepo->findByRecherche($filtre, $user);
             return $this->render('main/index.html.twig', [
                 'sorties' => $sorties,
                 'campusS' => $campusS,
                 'filtreForm' => $filtreForm->createView(),
             ]);
         }
-
-        $sorties = $sortieRepo->findAll();
-        $campusS = $CampusRepository->findAll();
+      //  $sorties = $sortieRepo->findBy(array(61, 62, 63, 64, 65, 66));
+      //  $sorties = $sortieRepo->findBy(array('id' => $id));
+      //  $sorties = $sortieRepo->findBy(array('etat' => $etats));
+      // $sorties = $sortieRepo->find(array('etat' => 'Créée', 'Ouverte', 'Activité en cours','Passée', 'Clôturée', 'Annulée')) ;
+      //  $sorties = $sortieRepo->archive();
         return $this->render('main/index.html.twig', [
          'sorties' => $sorties,
          'campusS' => $campusS,

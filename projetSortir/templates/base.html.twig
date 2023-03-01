@@ -17,25 +17,28 @@
     <div class="container">
         <h1>Projet Sortir <img src="{{ asset('img/Exit-Logo-PNG-Clipart-Background.png') }}" alt="logo"></h1>
         <nav>
-            <ul class="nav justify-content-end">
-                <li><a href="{{ path('app_main_index') }}" title="Go Home">Accueil</a>
+            <label id="menu_label" for="toggle">☰</label>
+            <input type="checkbox" id="toggle">
+            <div class="main_pages">
+
+                <a href="{{ path('app_main_index') }}" title="Go Home">Accueil</a>
                     {% if app.user %}
 
                     {% if is_granted ('ROLE_ADMIN') %}
-                <li><a href="{{ path('app_campus') }}" title="Campus">Campus</a>
-                <li><a href="{{ path('app_villes') }}" title="Villes">Villes</a>
-                <li><a href="{{ path('app_profile_index') }}" title="Gerer Utilisateur">Gerer Utilisateur</a>
+                <a id="smartphone" href="{{ path('app_campus') }}" title="Campus">Campus</a>
+                <a id="smartphone" href="{{ path('app_villes') }}" title="Villes">Villes</a>
+                <a id="smartphone" href="{{ path('app_profile_index') }}" title="Gerer Utilisateur">Gerer Utilisateur</a>
                 {% endif %}
 
-                <li><a href="{{ path('app_sortie_creer') }}" title="create">Nouvelle sortie</a>
-                <li><a href="{{ path('app_profile_edit', {'id': app.user.id} ) }}" title="Modifier">Profil</a>
-                <li><a href="{{ path('app_logout') }}" title="Logout">Déconnexion </a></li>
+                <a id="smartphone" href="{{ path('app_sortie_creer') }}" title="create">Nouvelle sortie</a>
+                <a id="smartphone"href="{{ path('app_profile_edit', {'id': app.user.id} ) }}" title="Modifier">Profil</a>
+               <a href="{{ path('app_logout') }}" title="Logout">Déconnexion </a>
                 {% else %}
-                    <li><a href="{{ path('app_login') }}" title="Login">Connexion</a></li>
-                    <li><a href="{{ path('app_register') }}" title="Create account">S'inscrire</a></li>
+                    <a href="{{ path('app_login') }}" title="Login">Connexion</a>
+                    <a href="{{ path('app_register') }}" title="Create account">S'inscrire</a>
                 {% endif %}
 
-            </ul>
+            </div>
         </nav>
 
 
@@ -52,7 +55,7 @@
     {% endfor %}
 </div>
 
-<body>
+<body id="hauteur">
 {% block body %}{% endblock %}
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"

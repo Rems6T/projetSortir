@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Etat;
 use App\Entity\Participant;
 use App\Entity\Sortie;
 use App\Model\Filtre;
@@ -9,6 +10,8 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Core\User\UserInterface;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\expr;
 
 /**
  * @method Sortie|null find($id, $lockMode = null, $lockVersion = null)
@@ -41,62 +44,96 @@ class SortieRepository extends ServiceEntityRepository
         }
     }
 
-    public function findByRecherche(Filtre $filtre, Security $security)
+    /**
+     * @param Filtre $filtre
+     * @param UserInterface $user
+     * @return Paginator
+     */
+    public function findByRecherche(Filtre $filtre, UserInterface $user, $sorties)
     {
 
-            $queryBuilder = $this->createQueryBuilder('s')
-
-
+        $queryBuilder = $this->createQueryBuilder('s')
                //jonction avec participant
-         ->join('s.participantsInscrits', 'si');
-        if ($filtre->getSearch()!= null) {
+         ->join('s.participantsInscrits', 'si')
+        ->join('s.etat', 'e');
+
+        if ($sorties!= null) {
+            $queryBuilder
+                ->select('e.libelle')
+                ->where('e.libelle' != 'Archivée');
+           //     ->select('e.libelle')
+            //    $queryBuilder->andWhere('s.etat != :etat')
+              //      ->setParameter('etat', 'Archivée');
+          //  ->where('e.libelle' != 'Archivée');
+        }
+
+            if ($filtre->getSearch() != null) {
                 //where pour la recherche
-            $queryBuilder->andWhere('s.nom LIKE :nom')
-                ->setParameter('nom', '%' . $filtre->getSearch() . '%');
-        }
-        //where pour le campus si non nulle
-        if ($filtre->getCampus() != null) {
-            $queryBuilder->andWhere('s.siteOrganisateur = :campus')
-                ->setParameter('campus', $filtre->getCampus());
-        }
-        //where date Heure debut < date min si remplie
-        if ($filtre->getDateDebut() != null ) {
-            $queryBuilder->andWhere('s.dateHeureDebut < :dateDebut')
-                ->setParameter('dateDebut', $filtre->getDateDebut());
-        }
-        //where date limite inscription > date max si rempli
-        if ($filtre->getDateLimite() != null) {
-            $queryBuilder->andWhere('s.dateLimiteInscription > :dateLimite')
-                ->setParameter('dateLimite', $filtre->getDateLimite());
-        }
-        //where organisateur egale au user si est_organisateur non null
-        if($filtre->getEstOrganisateur()!=null){
-            $queryBuilder->andWhere('s.organisateur = :user')
-                ->setParameter('user', $security->getUser()->getId());
-        }
-        //where user egale aux participants de la sortie si est_inscrit non null
-        if($filtre->getEstInscrit()!=null){
+                $queryBuilder->andWhere('s.nom LIKE :nom')
+                    ->setParameter('nom', '%' . $filtre->getSearch() . '%');
+            }
+            //where pour le campus si non nulle
+            if ($filtre->getCampus() != null) {
+                $queryBuilder->andWhere('s.siteOrganisateur = :campus')
+                    ->setParameter('campus', $filtre->getCampus());
+            }
+            //where date Heure debut < date min si remplie
+            if (!empty($filtre->getDateDebut())) {
+                $queryBuilder->andWhere('s.dateHeureDebut > :dateDebut')
+                    ->setParameter('dateDebut', $filtre->getDateDebut());
+            }
+            //where date limite inscription > date max si rempli
+            if (!empty($filtre->getDateLimite())) {
+                $queryBuilder->andWhere('s.dateLimiteInscription < :dateLimite')
+                    ->setParameter('dateLimite', $filtre->getDateLimite());
+            }
+            //where organisateur egale au user si est_organisateur non null
+            if ($filtre->getEstOrganisateur() != null) {
+                $queryBuilder->andWhere('s.organisateur = :user')
+                    ->setParameter('user', $user);
+            }
+            //where user egale aux participants de la sortie si est_inscrit non null
+            if ($filtre->getEstInscrit() != null) {
                 $queryBuilder->andWhere('si.pseudo = :user')
-                    ->setParameter('user',$security->getUser()->getPseudo());
+                    ->setParameter('user', $user->getUserIdentifier());
+            }
+            //where user diferent des participants de la sortie si pas_inscrit non null
+            if ($filtre->getPasInscrit() != null) {
+                $queryBuilder->andWhere('si.pseudo != :user')
+                    ->setParameter('user', $user->getUserIdentifier());
+            }
+            //where etat de la sortie = fermée si sortie_termine non null
+            if ($filtre->getEstPassees() != null) {
+                $queryBuilder->andWhere('s.etat != :etat')
+                    ->setParameter('etat', 'fermée');
+            }
+            //On execute la requete
+            $query = $queryBuilder->getQuery();
+            $query->setMaxResults(50);
+            $paginator = new Paginator($query);
+
+            return $paginator;
         }
-        //where user diferent des participants de la sortie si pas_inscrit non null
-        if($filtre->getPasInscrit()!=null){
-            $queryBuilder->andWhere('si.pseudo != :user')
-                ->setParameter('user', $security->getUser()->getPseudo());
-        }
-        //where etat de la sortie = fermée si sortie_termine non null
-        if($filtre->getEstPassees()!=null){
-            $queryBuilder->andWhere('s.etat != :etat')
-                ->setParameter('etat', 'fermée');
-        }
-        //On execute la requete
+
+
+    public function archive() {{
+        $queryBuilder = $this->createQueryBuilder('s')
+            ->select('s.etat', 's')
+        ->where('s.libelle', 'Créée')
+        ->orWhere('s.libelle', 'Ouverte')
+        ->orWhere('s.libelle', 'Activité en cours')
+            ->orWhere('s.libelle', 'Passée')
+            ->orWhere('s.libelle', 'Annulee')
+        ->orWhere('s.libelle', 'Clôturée');
+
         $query = $queryBuilder->getQuery();
-        $query->setMaxResults(50);
-        $paginator = new Paginator($query);
+        return $query;
 
-        return $paginator;
+    }}
 
-    }
+
+
+
 /*
     public function findAllWithSitesAndEtats()
     {
