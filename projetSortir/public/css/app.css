@@ -33,6 +33,11 @@ h2 {
     text-align: center;
 }
 
+h4 {
+    font-size: x-large;
+    color: var(--couleur-clair);
+}
+
 p, section, label {
     color: black;
 }

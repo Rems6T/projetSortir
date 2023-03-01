@@ -3,29 +3,44 @@
 {% block title %}Sorties{% endblock %}
 
 {% block body %}
-    <h2>Afficher  sortie</h2>
+    <h2>Afficher sortie</h2>
 
     <div class="affichage_smartphone affichage_tablette">
-
+<div class="row justify-content-center">
+    <div class="col" style="text-align: right">
         <p>
-            Nom :    {{ sortie.nom }} <br>
-            Date :    {{ sortie.dateHeureDebut  |date('Y-m-d H:i:s') }} <br>
-            Limite d'inscription :  {{ sortie.dateLimiteInscription |date('Y-m-d H:i:s') }} <br>
-            Nombre de participants :   {{ sortie.participantsInscrits|length }} / {{ sortie.nbInscriptionsMax }} <br>
-            Durée :   {{ sortie.duree }} min <br>
-            Infos :   {{ sortie.infosSortie }} <br>
-            Campus :   {{ sortie.siteOrganisateur.nom }} <br>
-            Lieu :   {{ sortie.lieu.nom }} <br>
-            {{ sortie.lieu.rue }} <br>
-            {{ sortie.lieu.ville.codePostal }} <br><br>
-            Participants : <br>
-            {% for participant in participants %}
-                {{ participant.pseudo }} ({{ participant.nom }}) <br>
-            {% endfor %}
-            <a id="smartphone" href="{{ path('app_sortie_modifier',{'id':sortie.id}) }}">Modifier</a>
-
+        Nom : <br>
+        Date : <br>
+        Limite d'inscription : <br>
+        Nombre de participants : <br>
+        Durée : <br>
+        Infos : <br>
+        Campus : <br>
+        Lieu : <br>
         </p>
     </div>
+
+    <div class="col">
+    <p>
+        {{ sortie.nom }} <br>
+        {{ sortie.dateHeureDebut  |date('Y-m-d H:i:s') }} <br>
+        {{ sortie.dateLimiteInscription |date('Y-m-d H:i:s') }} <br>
+        {{ sortie.participantsInscrits|length }} / {{ sortie.nbInscriptionsMax }} <br>
+        {{ sortie.duree }} min <br>
+        {{ sortie.infosSortie }} <br>
+        {{ sortie.siteOrganisateur.nom }} <br>
+        {{ sortie.lieu.nom }} <br>
+    </p>
+</div></div>
+    <div class="row justify-content-center">
+        <h4>Participants</h4>
+            {% for participant in participants %}
+            <p>  {{ participant.pseudo }} ({{ participant.nom }}) </p>  <br>
+            {% endfor %}
+            <a id="smartphone" href="{{ path('app_sortie_modifier',{'id':sortie.id}) }}">Modifier</a>
+        </p>
+
+    </div></div>
 
 
 
