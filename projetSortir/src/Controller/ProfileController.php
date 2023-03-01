@@ -13,6 +13,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\NameConverter\CamelCaseToSnakeCaseNameConverter;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
 /**
@@ -40,15 +43,25 @@ class ProfileController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $inscriptionFile = $form->get('inscriptionFile')->getData();
+            if ($inscriptionFile) {
+                $normalizers = [new ObjectNormalizer()];
+                $serializer = new Serializer($normalizers, []);
 
-            $brochureFile = $form->get('brochure')->getData();
-            if ($brochureFile) {
-                $brochureFileName = $fileUploader->upload($brochureFile);
-                $participant->setBrochureFilename($brochureFileName);
+                var_dump($serializer);
+                echo('yes');
+
+
+            } else {
+                $brochureFile = $form->get('brochure')->getData();
+                if ($brochureFile) {
+                    $brochureFileName = $fileUploader->upload($brochureFile);
+                    $participant->setBrochureFilename($brochureFileName);
+                }
+
+                $participantRepository->add($participant, true);
+                return $this->redirectToRoute('app_profile_index', [], Response::HTTP_SEE_OTHER);
             }
-
-            $participantRepository->add($participant, true);
-            return $this->redirectToRoute('app_profile_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('profile/new.html.twig', [

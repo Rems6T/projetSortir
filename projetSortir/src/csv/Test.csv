@@ -1,0 +1,3 @@
+﻿Pseudo;Role;Password;Nom;Prenom;Telephone;Mail;Actif;Campus_id;brochure_filename
+Test;"[""ROLE_USER"", ""ROLE_ADMIN""]";tester;Test;Succes;0675910828;test.succes@eni.fr;1;86;
+Rems;"[""ROLE_USER""]";rems;Tidda;Rémi;0452153258;remi.tidda@eni.fr;0;87;

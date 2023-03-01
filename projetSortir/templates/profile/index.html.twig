@@ -30,18 +30,18 @@
                 <td>{{ participant.prenom }}</td>
                 <td>{{ participant.telephone }}</td>
                 <td>{{ participant.mail }}</td>
-                <td>{{ participant.actif ? 'Yes' : 'No' }}</td>
                 <td>
                     {{ participant.actif ? 'Oui' : 'Non' }}
-                    <br>
+
                     {#                    Ajouter la modification de l'activité #}
+
                 </td>
                 <td>
+                    <a href="{{ path('app_profile_show', {'id': participant.id}) }}">Voir</a>
+                    <br>
                     <a href="{{ path('app_profile_edit', {'id' : participant.id}) }}">Editer</a>
                     <br>
                     <a href="{{ path('app_profile_delete', {'id': participant.id}) }}">Supprimer</a>
-                    <br>
-                    <a href="{{ path('app_profile_show', {'id': participant.id}) }}">Voir</a>
 
                 </td>
             </tr>
