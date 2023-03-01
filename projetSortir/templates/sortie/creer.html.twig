@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 {% block body %}
     <div class="container-fluid pt-3">
-        <div class="row justify-content-center">
+        <div class="row justify-content-center ">
             <h2>Ajouter une sortie</h2>
             {{ form_start(sortieForm,{'id': 'form'}) }}
             <div class="row">
@@ -14,6 +14,7 @@
                     {{ form_row(sortieForm.infosSortie) }}
                 </div>
                 <div class="col">
+
                     {{ form_row(sortieForm.siteOrganisateur) }}
                     {{ form_row(sortieForm.ville, {'id': 'ville'}) }}
                     {{ form_row(sortieForm.lieu, {'id': 'lieu'}) }}
@@ -27,95 +28,97 @@
                     </div>
                 </div>
             </div>
-            <script>
-                // Récupérer le formulaire
-                var form = document.getElementById("form");
 
-                // Attacher un gestionnaire d'événement à la sélection de Lieu
-                var lieuSelect = document.getElementById("lieu");
-                lieuSelect.addEventListener("change", function () {
-                    // Mettre à jour les info des lieux pour le lieux sélectionnée
-                    updateInfoLieu();
-
-                });
-
-
-                // Attacher un gestionnaire d'événement à la sélection de ville
-                var villeSelect = document.getElementById("ville");
-                villeSelect.addEventListener("change", function () {
-                    // Mettre à jour la liste des lieux pour le lieux sélectionnée
-                    updateLieu();
-
-                });
-
-                // Fonction pour actualiser la liste des lieux pour la ville sélectionnée
-                function updateLieu() {
-                    var ville = document.getElementById("ville").value; // Récupérer le lieu sélectionnée
-
-                    // Effectuer une requête AJAX pour les lieux
-                    var xhttp = new XMLHttpRequest();
-                    xhttp.onreadystatechange = function () {
-                        if (this.readyState === 4 && this.status === 200) {
-                            // Traiter les données renvoyées par le serveur
-                            var lieux = JSON.parse(this.responseText);
-                            console.log(lieux);
-                            var lieuSelect = document.getElementById("lieu");
-                            lieuSelect.innerHTML = ""; // Effacer la liste précédente des lieux
-                            var lieuItem = document.createElement("option")
-                            lieuItem.innerHTML = "";
-                            lieuSelect.appendChild(lieuItem);
-                            for (const [key, value] of Object.entries(lieux)) {
-                                var lieuItem = document.createElement("option");
-                                lieuItem.setAttribute("value", `${key}`)
-                                lieuItem.innerHTML = `${value}`;
-                                lieuSelect.appendChild(lieuItem);
-                            }
-
-
-                        }
-                    };
-                    xhttp.open("GET", "{{ path('app_sortie_getLieu') }}" + "/?ville=" + ville, true); // URL de l'API pour récupérer les lieux
-                    xhttp.send();
-                }
-
-                // Fonction pour actualiser les info des lieux pour la ville sélectionnée
-                function updateInfoLieu() {
-                    var lieu = document.getElementById("lieu").value; // Récupérer le lieu sélectionnée
-
-                    // Effectuer une requête AJAX pour les info des lieux
-                    var xhttp = new XMLHttpRequest();
-                    xhttp.onreadystatechange = function () {
-                        if (this.readyState === 4 && this.status === 200) {
-                            // Traiter les données renvoyées par le serveur
-                            var infoLieu = JSON.parse(this.responseText);
-                            console.log(infoLieu);
-                            var lieuList = document.getElementById("lieu_info");
-                            lieuList.innerHTML = ""; // Effacer la liste précédente des lieux
-                            for (var i = 0; i < infoLieu.length; i++) {
-                                var info = infoLieu[i];
-                                var lieuItem = document.createElement("p");
-                                for (const [key, value] of Object.entries(info)) {
-                                    lieuItem.innerHTML = `${key}: ${value}`;
-                                }
-
-
-                                lieuList.appendChild(lieuItem);
-                            }
-                        }
-                    };
-                    xhttp.open("GET", "{{ path('app_sortie_getInfoLieu') }}" + "/?lieu=" + lieu, true); // URL de l'API pour récupérer les lieux
-                    xhttp.send();
-                }
-
-            </script>
             <div class="row">
                 <div class="col">{{ form_row(sortieForm.publier) }}</div>
                 <div class="col">{{ form_row(sortieForm.enregistrer) }}</div>
+                <div class="col">{{ form_end(sortieForm) }}
+                    <a href="{{ path('app_main_index') }}">
+                        <button type="button">Annuler</button>
+                    </a></div>
             </div>
-            {{ form_end(sortieForm) }}
-            <a href="{{ path('app_main_index') }}">
-                <button>Annuler</button>
-            </a>
+
         </div>
     </div>
+    <script>
+    // Récupérer le formulaire
+    var form = document.getElementById("form");
+
+    // Attacher un gestionnaire d'événement à la sélection de Lieu
+    var lieuSelect = document.getElementById("lieu");
+    lieuSelect.addEventListener("change", function () {
+        // Mettre à jour les info des lieux pour le lieux sélectionnée
+        updateInfoLieu();
+
+    });
+
+
+    // Attacher un gestionnaire d'événement à la sélection de ville
+    var villeSelect = document.getElementById("ville");
+    villeSelect.addEventListener("change", function () {
+        // Mettre à jour la liste des lieux pour le lieux sélectionnée
+        updateLieu();
+
+    });
+
+    // Fonction pour actualiser la liste des lieux pour la ville sélectionnée
+    function updateLieu() {
+        var ville = document.getElementById("ville").value; // Récupérer le lieu sélectionnée
+
+        // Effectuer une requête AJAX pour les lieux
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState === 4 && this.status === 200) {
+                // Traiter les données renvoyées par le serveur
+                var lieux = JSON.parse(this.responseText);
+                console.log(lieux);
+                var lieuSelect = document.getElementById("lieu");
+                lieuSelect.innerHTML = ""; // Effacer la liste précédente des lieux
+                var lieuItem = document.createElement("option")
+                lieuItem.innerHTML = "";
+                lieuSelect.appendChild(lieuItem);
+                for (const [key, value] of Object.entries(lieux)) {
+                    var lieuItem = document.createElement("option");
+                    lieuItem.setAttribute("value", `${key}`)
+                    lieuItem.innerHTML = `${value}`;
+                    lieuSelect.appendChild(lieuItem);
+                }
+
+
+            }
+        };
+        xhttp.open("GET", "{{ path('app_sortie_getLieu') }}" + "/?ville=" + ville, true); // URL de l'API pour récupérer les lieux
+        xhttp.send();
+    }
+
+    // Fonction pour actualiser les info des lieux pour la ville sélectionnée
+    function updateInfoLieu() {
+        var lieu = document.getElementById("lieu").value; // Récupérer le lieu sélectionnée
+
+        // Effectuer une requête AJAX pour les info des lieux
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState === 4 && this.status === 200) {
+                // Traiter les données renvoyées par le serveur
+                var infoLieu = JSON.parse(this.responseText);
+                console.log(infoLieu);
+                var lieuList = document.getElementById("lieu_info");
+                lieuList.innerHTML = ""; // Effacer la liste précédente des lieux
+                for (var i = 0; i < infoLieu.length; i++) {
+                    var info = infoLieu[i];
+                    var lieuItem = document.createElement("p");
+                    for (const [key, value] of Object.entries(info)) {
+                        lieuItem.innerHTML = `${key}: ${value}`;
+                    }
+
+
+                    lieuList.appendChild(lieuItem);
+                }
+            }
+        };
+        xhttp.open("GET", "{{ path('app_sortie_getInfoLieu') }}" + "/?lieu=" + lieu, true); // URL de l'API pour récupérer les lieux
+        xhttp.send();
+    }
+
+</script>
 {% endblock %}

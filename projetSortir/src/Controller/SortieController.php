@@ -25,16 +25,22 @@ class SortieController extends AbstractController
     /**
      * @Route("/sortie/creer", name="app_sortie_creer")
      */
-    public function creer(Request $request, EtatRepository $etatRepository, EntityManagerInterface $entityManager): Response
+    public function creer(Request $request, EtatRepository $etatRepository, LieuRepository $lieuRepository, EntityManagerInterface $entityManager): Response
     {
         $sortie = new Sortie();
-       // $sortieVilleForm = $this->createForm(SortieVilleType::class);
+        //on injecte le campus pour que le select soit sur le campus du User
+        $sortie->setSiteOrganisateur($this->getUser()->getCampus());
+
         $sortieForm = $this->createForm(SortieType::class, $sortie);
         //recupere les donnée et les injecte dans sortieForm
 
         $sortieForm->handleRequest($request);
-        if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
+        if ($sortieForm->isSubmitted() && $sortieForm->get('lieu')->getViewData() != null) {
 
+
+            //on recupere l'id du lieu pour l'injecter manuellement avec $sortieForm->get('lieu')->getViewData()
+            $lieu = $lieuRepository->find($sortieForm->get('lieu')->getViewData());
+            $sortie->setLieu($lieu);
             //on injecte les données manquantes
             //l'organisateur
             $sortie->setOrganisateur($this->getUser());
@@ -44,16 +50,16 @@ class SortieController extends AbstractController
                 //l'etat en "crée"
                 $sortie->setEtat($etatRepository->findOneBy(['libelle' => 'Créée']));
 
-                //todo: Alerte message="sortie crée"
 
             }
             //Si bouton publier
-            if (($sortieForm->getClickedButton() === $sortieForm->get('publier')) && $sortieForm->isValid()) {
+            if (($sortieForm->getClickedButton() === $sortieForm->get('publier'))) {
 
                 //l'etat en "ouvert"
                 $sortie->setEtat($etatRepository->findOneBy(['libelle' => 'Ouverte']));
-                //todo: Alerte message="sortie ouverte"
+
             }
+
             $this->addFlash('success', 'Vous avez bien créé une sortie !');
             //On save en bdd
             $entityManager->persist($sortie);
@@ -66,21 +72,24 @@ class SortieController extends AbstractController
 
         return $this->render('sortie/creer.html.twig', [
             'sortieForm' => $sortieForm->createView(),
-            //'sortieVilleForm' => $sortieVilleForm->createView()
+
         ]);
     }
 
     /**
      * @Route("/sortie/modifier/{id}", name="app_sortie_modifier")
      */
-    public function modifier(Sortie $sortie, Request $request, EtatRepository $etatRepository, EntityManagerInterface $entityManager): Response
+    public function modifier(Sortie $sortie, Request $request, EtatRepository $etatRepository, LieuRepository $lieuRepository, EntityManagerInterface $entityManager): Response
     {
-        $sortieVilleForm = $this->createForm(SortieVilleType::class);
+
         $sortieForm = $this->createForm(SortieType::class, $sortie);
         //recupere les donnée et les injecte dans sortieForm
         $sortieForm->handleRequest($request);
-        if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
+        if ($sortieForm->isSubmitted()) {
 
+            //on recupere l'id du lieu pour l'injecter manuellement avec $sortieForm->get('lieu')->getViewData()
+            $lieu = $lieuRepository->find($sortieForm->get('lieu')->getViewData());
+            $sortie->setLieu($lieu);
             //Si bouton enregistrer
             if ($sortieForm->getClickedButton() === $sortieForm->get('enregistrer')) {
 
@@ -92,7 +101,7 @@ class SortieController extends AbstractController
             if ($sortieForm->getClickedButton() === $sortieForm->get('publier')) {
                 //l'etat en "ouvert"
                 $sortie->setEtat($etatRepository->findOneBy(['libelle' => 'Ouverte']));
-                //todo: Alerte message="sortie ouverte"
+
             }
             $this->addFlash('success', 'Vous avez bien modifié la sortie !');
             $entityManager->persist($sortie);
@@ -104,7 +113,7 @@ class SortieController extends AbstractController
 
         return $this->render('sortie/modifier.html.twig', [
             'sortieForm' => $sortieForm->createView(),
-            'sortieVilleForm' => $sortieVilleForm->createView(),
+            'sortie' => $sortie
         ]);
     }
 
@@ -122,7 +131,7 @@ class SortieController extends AbstractController
             //on save en bdd
             $entityManager->persist($sortie);
             $entityManager->flush();
-            $this->addFlash('success', 'Vous avez bien annulé la sortie !');
+            $this->addFlash('warning', 'Vous avez bien annulé la sortie !');
             //On redirige vers la page de la  sortie
             return $this->redirectToRoute('app_sortie', ['id' => $sortie->getId()]);
         }
@@ -156,36 +165,39 @@ class SortieController extends AbstractController
             'participants' => $participants,
         ]);
     }
+
     /**
      * @Route("/sortieLieu", name="app_sortie_getInfoLieu" , methods={"GET"})
      */
-    public function getinfoLieu(Request $request,LieuRepository $lieuRepository){
+    public function getinfoLieu(Request $request, LieuRepository $lieuRepository)
+    {
         // Récupérer le lieu sélectionnée depuis la requête
 
         $lieu = $lieuRepository->find($request->get('lieu'));
         $data = array(
             array('Rue' => $lieu->getRue()),
-            array('Ville'=>$lieu->getVille()->getNom()),
-            array('Code Postal'=>$lieu->getVille()->getCodePostal()),
-            array('latitude'=>$lieu->getLatitude()),
-            array('Longitude'=>$lieu->getLongitude()),
+            array('Ville' => $lieu->getVille()->getNom()),
+            array('Code Postal' => $lieu->getVille()->getCodePostal()),
+            array('latitude' => $lieu->getLatitude()),
+            array('Longitude' => $lieu->getLongitude()),
         );
 
 
         // Retourner les lieux en tant que réponse JSON
         return new JsonResponse($data);
     }
+
     /**
      * @Route("/sortieVille", name="app_sortie_getLieu" , methods={"GET"})
      */
-    public function getLieu(Request $request,LieuRepository $lieuRepository,VilleRepository $villeRepository){
+    public function getLieu(Request $request, LieuRepository $lieuRepository, VilleRepository $villeRepository)
+    {
         $ville = $villeRepository->find($request->get('ville'));
-        $lieux = $lieuRepository->findBy(["ville"=>$ville]);
-        $data=[];
-        foreach ($lieux as $lieu){
-             $data[$lieu->getId()]=$lieu->getNom();
+        $lieux = $lieuRepository->findBy(["ville" => $ville]);
+        $data = [];
+        foreach ($lieux as $lieu) {
+            $data[$lieu->getId()] = $lieu->getNom();
         }
-
 
 
         // Retourner les lieux en tant que réponse JSON

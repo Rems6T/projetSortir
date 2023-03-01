@@ -41,7 +41,7 @@
                         {% endif %}
                     {% endif %}
 
-                    {% if sortie.organisateur.id == app.user.id and sortie.etat.libelle == 'Ouverte' %}
+                    {% if sortie.organisateur.id == app.user.id and sortie.etat.libelle == 'Ouverte' or sortie.etat.libelle == 'Créée' %}
                         <a href="{{ path('app_sortie_modifier',{'id':sortie.id}) }}">Modifier</a>
                     {% endif %}
                 </td>
