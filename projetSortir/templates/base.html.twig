@@ -22,17 +22,18 @@
             <div class="main_pages">
 
                 <a href="{{ path('app_main_index') }}" title="Go Home">Accueil</a>
-                    {% if app.user %}
+                {% if app.user %}
 
                     {% if is_granted ('ROLE_ADMIN') %}
-                <a id="smartphone" href="{{ path('app_campus') }}" title="Campus">Campus</a>
-                <a id="smartphone" href="{{ path('app_villes') }}" title="Villes">Villes</a>
-                <a id="smartphone" href="{{ path('app_profile_index') }}" title="Gerer Utilisateur">Gerer Utilisateur</a>
-                {% endif %}
+                        <a id="smartphone" href="{{ path('app_campus') }}" title="Campus">Campus</a>
+                        <a id="smartphone" href="{{ path('app_villes') }}" title="Villes">Villes</a>
+                        <a id="smartphone" href="{{ path('app_profile_index') }}" title="Gerer Utilisateur">Gerer
+                            Utilisateur</a>
+                    {% endif %}
 
-                <a id="smartphone" href="{{ path('app_sortie_creer') }}" title="create">Nouvelle sortie</a>
-                <a id="smartphone"href="{{ path('app_profile_edit', {'id': app.user.id} ) }}" title="Modifier">Profil</a>
-               <a href="{{ path('app_logout') }}" title="Logout">Déconnexion </a>
+                    <a id="smartphone" href="{{ path('app_sortie_creer') }}" title="create">Nouvelle sortie</a>
+                    <a id="smartphone" href="{{ path('app_profile_show', {'id': app.user.id} ) }}" title="Modifier">Profil</a>
+                    <a href="{{ path('app_logout') }}" title="Logout">Déconnexion </a>
                 {% else %}
                     <a href="{{ path('app_login') }}" title="Login">Connexion</a>
                     <a href="{{ path('app_register') }}" title="Create account">S'inscrire</a>
@@ -41,10 +42,9 @@
             </div>
         </nav>
 
-
     </div>
 </header>
-<div class="text-center" >
+<div class="text-center">
 
     {% for label, messages in app.flashes %}
         {% for message in messages %}
