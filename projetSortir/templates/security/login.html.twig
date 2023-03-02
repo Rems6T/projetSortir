@@ -3,6 +3,7 @@
 {% block title %}Connexion{% endblock %}
 
 {% block body %}
+    <div class="container">
 <form method="post">
     {% if error %}
         <div class="alert alert-danger">Identifiant ou mot de passe invalide.</div>
@@ -39,4 +40,5 @@
         Se connecter
     </button>
 </form>
+    </div>
 {% endblock %}
