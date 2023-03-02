@@ -102,8 +102,8 @@ class ProfileController extends AbstractController
 
                 // updates the 'brochureFilename' property to store the PDF file name
                 // instead of its contents
-                if (file_exists('uploads/brochures/'.$participant->getBrochureFilename()))
-                    unlink('uploads/brochures/'.$participant->getBrochureFilename());
+                if (file_exists('uploads/brochures/' . $participant->getBrochureFilename()))
+                    unlink('uploads/brochures/' . $participant->getBrochureFilename());
 
                 $participant->setBrochureFilename($newFilename);
             }
@@ -126,13 +126,11 @@ class ProfileController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="app_profile_delete")
+     * @Route("/management/{id}", name="app_profile_delete")
      */
     public function delete(Request $request, Participant $participant, ParticipantRepository $participantRepository): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $participant->getId(), $request->request->get('_token'))) {
-            $participantRepository->remove($participant, true);
-        }
+        $participantRepository->remove($participant, true);
 
         return $this->redirectToRoute('app_profile_index', [], Response::HTTP_SEE_OTHER);
     }

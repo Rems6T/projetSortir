@@ -3,6 +3,7 @@
 {% block title %}Modifier Profile{% endblock %}
 
 {% block body %}
+    {% if app.user.id == participant.id or is_granted('ROLE_ADMIN') %}
     <div class="container">
         <h1>Modifier {{ participant.pseudo }}</h1>
         <div class="row justify-content-center">
@@ -18,4 +19,7 @@
         <a href="{{ path('app_profile_index') }}">back to list</a>
     {% endif %}
     </div>
+    {% else %}
+    <h2>Vous n'avez rien à faire ici !</h2>
+    {% endif %}
 {% endblock %}

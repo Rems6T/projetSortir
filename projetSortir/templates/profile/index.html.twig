@@ -41,7 +41,7 @@
                     <br>
                     <a href="{{ path('app_profile_edit', {'id' : participant.id}) }}">Editer</a>
                     <br>
-                    <a href="{{ path('app_profile_delete', {'id': participant.id}) }}">Supprimer</a>
+                    <a href="{{ path('app_profile_delete', {'id': participant.id}) }}" onclick="return confirm('Voulez vous supprimer le compte ?')">Supprimer</a>
                 </td>
             </tr>
         {% else %}
