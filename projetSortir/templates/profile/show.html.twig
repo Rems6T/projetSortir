@@ -3,45 +3,46 @@
 {% block title %}Profile de {{ participant.pseudo }}{% endblock %}
 
 {% block body %}
-<h1>{{ participant.pseudo }}</h1>
+    <h1>{{ participant.pseudo }}</h1>
 
-<table class="table">
-    <tbody>
-    <tr>
-        <th>Nom</th>
-        <td>{{ participant.nom }}</td>
-    </tr>
-    <tr>
-        <th>Prenom</th>
-        <td>{{ participant.prenom }}</td>
-    </tr>
-    <tr>
-        <th>Telephone</th>
-        <td>{{ participant.telephone }}</td>
-    </tr>
-    <tr>
-        <th>Mail</th>
-        <td>{{ participant.mail }}</td>
-    </tr>
-    <tr>
-        <th>Photo de profil</th>
-        <td>
-            <img src="{{ asset('uploads/brochures/'~participant.brochureFilename) }}"
-                 alt="Photo de profil de {{ participant.brochureFilename }}" width="150">
-        </td>
-    </tr>
-    </tbody>
-</table>
-<div class="row justify-content-center">
-    <div class="col">
-{% if is_granted ('ROLE_ADMIN') %}
-    <a class="btn btn-outline-info"  href="{{ path('app_profile_index') }}">Retour à la liste</a>
-{% endif %}</div>
+    <table class="table">
+        <tbody>
+        <tr>
+            <th>Nom</th>
+            <td>{{ participant.nom }}</td>
+        </tr>
+        <tr>
+            <th>Prenom</th>
+            <td>{{ participant.prenom }}</td>
+        </tr>
+        <tr>
+            <th>Telephone</th>
+            <td>{{ participant.telephone }}</td>
+        </tr>
+        <tr>
+            <th>Mail</th>
+            <td>{{ participant.mail }}</td>
+        </tr>
+        <tr>
+            <th>Photo de profil</th>
+            <td>
+                <img src="{{ asset('uploads/brochures/'~participant.brochureFilename) }}"
+                     alt="Photo de profil de {{ participant.brochureFilename }}" width="150">
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="row justify-content-center">
+        <div class="col">
+            {% if is_granted ('ROLE_ADMIN') %}
+                <a class="btn btn-outline-info" href="{{ path('app_profile_index') }}">Retour à la liste</a>
+            {% endif %}</div>
 
         <div class="col">
-    {% if app.user.id == participant.id %}
-        <a class="btn btn-outline-info" href="{{ path('app_profile_edit', {'id': participant.id}) }}">Modifier</a>
-    {% elseif is_granted('ROLE_ADMIN') %}
-        <a class="btn btn-outline-info" href="{{ path('app_profile_edit', {'id': participant.id}) }}">Modifier</a>
-    {% endif %} </div></div>
+            {% if app.user.id == participant.id or is_granted('ROLE_ADMIN') %}
+                <a class="btn btn-outline-info"
+                   href="{{ path('app_profile_edit', {'id': participant.id}) }}">Modifier</a>
+            {% endif %}
+        </div>
+    </div>
 {% endblock %}

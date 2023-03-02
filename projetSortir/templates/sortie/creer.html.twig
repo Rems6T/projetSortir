@@ -32,23 +32,21 @@
                         <p>Code Postal: </p>
                         <p>latitude:</p>
                         <p>Longitude: </p>
-
                     </div>
                 </div>
             </div>
 
             <div class="row justify-content-center">
                 <div class="col-1">{{ form_row(sortieForm.publier,{ 'attr': {'class': 'btn btn-outline-info'}}) }}</div>
-                <div class="col-1">{{ form_row(sortieForm.enregistrer,{ 'attr': {'class': 'btn btn-outline-info'}}) }} <br></div>
+                <div class="col-1">{{ form_row(sortieForm.enregistrer,{ 'attr': {'class': 'btn btn-outline-info'}}) }} </div>
+                <br>
                 {{ form_end(sortieForm) }}
-
-
-                    <div class="col-1"><a href="{{ path('app_main_index') }}">
+                    <div class="col-1">
+                        <a href="{{ path('app_main_index') }}">
                             <button type="button" class="btn btn-outline-info">Annuler</button>
-                        </a></div>
-
+                        </a>
+                    </div>
             </div>
-
         </div>
     </div>
     {{ include('sortie/sortieJs.html.twig') }}

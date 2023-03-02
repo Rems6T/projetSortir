@@ -28,11 +28,12 @@
                         <a id="smartphone" href="{{ path('app_campus') }}" title="Campus">Campus</a>
                         <a id="smartphone" href="{{ path('app_villes') }}" title="Villes">Villes</a>
                         <a id="smartphone" href="{{ path('app_profile_index') }}" title="Gerer Utilisateur">Gerer
-                            Utilisateur</a>
+                            Utilisateurs</a>
                     {% endif %}
 
                     <a id="smartphone" href="{{ path('app_sortie_creer') }}" title="create">Nouvelle sortie</a>
-                    <a id="smartphone" href="{{ path('app_profile_show', {'id': app.user.id} ) }}" title="Modifier">Profil</a>
+                    <a id="smartphone" href="{{ path('app_profile_show', {'id': app.user.id} ) }}" title="Modifier">Mon
+                        profil</a>
                     <a href="{{ path('app_logout') }}" title="Logout">Déconnexion </a>
                 {% else %}
                     <a href="{{ path('app_login') }}" title="Login">Connexion</a>
@@ -43,10 +44,12 @@
         </nav>
 
     </div>
-       {% if app.user %}
-    <div id ="smartphone" style="text-align: right">
-        <p id="date">Participant : {{ app.user.prenom}} {{ app.user.nom }}<br>
-            Date du jour :  {{ "now"|date("d/m/Y") }} </p> </div> {% endif %}
+    {% if app.user %}
+        <div id="smartphone" style="text-align: right">
+            <p id="date">Participant : {{ app.user.prenom }} {{ app.user.nom }}<br>
+                Date du jour : {{ "now"|date("d/m/Y") }} </p>
+        </div>
+    {% endif %}
 
 </header>
 <div class="text-center">

@@ -9,7 +9,9 @@
                 <h2>Les CAMPUS</h2>
                 <p>Filtrer les sites</p>
                 <form action="{{ path('app_campus') }}" method="post">
-                    <label>Le nom du campus contient : <input type="search" name="search"> </label><br>
+                    <label for="search">Le nom du campus contient :
+                        <input type="search" name="search" id="search">
+                    </label><br>
                     <div class="btn-container">
                         <button>Rechercher</button>
                     </div>
