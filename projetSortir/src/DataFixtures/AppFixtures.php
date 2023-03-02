@@ -171,6 +171,18 @@ class AppFixtures extends Fixture
             ->setCodePostal('44800');
         $manager->persist($ville2);
 
+        $ville3 = new Ville();
+        $ville3
+            ->setNom("Lorient")
+            ->setCodePostal('56100');
+        $manager->persist($ville3);
+
+        $ville4 = new Ville();
+        $ville4
+            ->setNom("Brest")
+            ->setCodePostal('29200');
+        $manager->persist($ville4);
+
 
         // LIEUX
         $lieu = new Lieu();
@@ -193,16 +205,17 @@ class AppFixtures extends Fixture
         $manager->persist($lieu2);
 
         //SORTIE
+        $dateDebut =new \DateTime();
         $dateLimite = new \DateTime();
         $sortie = new Sortie();
         $sortie
             ->setNom('Bowling')
-            ->setDateHeureDebut(new \DateTime())
+            ->setDateHeureDebut($dateDebut->setDate(2023,01,23))
             ->setDuree(120)
-            ->setDateLimiteInscription($dateLimite->setDate(2023,05,23))
-            ->setNbInscriptionsMax(10)
+            ->setDateLimiteInscription($dateLimite->setDate(2023,01,18))
+            ->setNbInscriptionsMax(7)
             ->setInfosSortie('Deux parties de Bowling')
-            ->setEtat($etat1)
+            ->setEtat($etat7)
             ->setSiteOrganisateur($campus2)
             ->setOrganisateur($participant4)
             ->setLieu($lieu2)
@@ -211,21 +224,59 @@ class AppFixtures extends Fixture
         $manager->persist($sortie);
 
         $dateDebut =new \DateTime();
+        $dateLimite = new \DateTime();
         $sortie2 = new Sortie();
         $sortie2
             ->setNom('Resto')
-            ->setDateHeureDebut($dateDebut->setDate(2023,02,23))
+            ->setDateHeureDebut($dateDebut->setDate(2023,03,23))
             ->setDuree(120)
-            ->setDateLimiteInscription($dateLimite->setDate(2023,02,15))
+            ->setDateLimiteInscription($dateLimite->setDate(2023,03,02))
             ->setNbInscriptionsMax(10)
-            ->setInfosSortie('Deux parties de Bowling')
-            ->setEtat($etat1)
+            ->setInfosSortie('Pizzéria')
+            ->setEtat($etat2)
             ->setSiteOrganisateur($campus3)
             ->setOrganisateur($participant2)
             ->setLieu($lieu)
             ->addParticipantsInscrits($participant2)
             ->addParticipantsInscrits($participant5);
         $manager->persist($sortie2);
+
+        $dateDebut =new \DateTime();
+        $dateLimite = new \DateTime();
+        $sortie3 = new Sortie();
+        $sortie3
+            ->setNom('Tricot')
+            ->setDateHeureDebut($dateDebut->setDate(2023,04,15))
+            ->setDuree(120)
+            ->setDateLimiteInscription($dateLimite->setDate(2023,04,10))
+            ->setNbInscriptionsMax(5)
+            ->setInfosSortie('Cours de tricot')
+            ->setEtat($etat2)
+            ->setSiteOrganisateur($campus1)
+            ->setOrganisateur($participant3)
+            ->setLieu($lieu)
+            ->addParticipantsInscrits($participant1)
+            ->addParticipantsInscrits($participant2);
+        $manager->persist($sortie3);
+
+        $dateDebut =new \DateTime();
+        $dateLimite = new \DateTime();
+        $sortie4 = new Sortie();
+        $sortie4
+            ->setNom('Badminton')
+            ->setDateHeureDebut($dateDebut->setDate(2023,05,05))
+            ->setDuree(120)
+            ->setDateLimiteInscription($dateLimite->setDate(2023,05,1))
+            ->setNbInscriptionsMax(3)
+            ->setInfosSortie('Match en double')
+            ->setEtat($etat2)
+            ->setSiteOrganisateur($campus4)
+            ->setOrganisateur($participant1)
+            ->setLieu($lieu)
+            ->addParticipantsInscrits($participant5)
+            ->addParticipantsInscrits($participant4);
+        $manager->persist($sortie4);
+
 
         $manager->flush();
     }
