@@ -43,6 +43,11 @@
         </nav>
 
     </div>
+       {% if app.user %}
+    <div id ="smartphone" style="text-align: right">
+        <p id="date">Participant : {{ app.user.prenom}} {{ app.user.nom }}<br>
+            Date du jour :  {{ "now"|date("d/m/Y") }} </p> </div> {% endif %}
+
 </header>
 <div class="text-center">
 

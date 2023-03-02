@@ -8,61 +8,14 @@
 
     <h2>Bienvenue !</h2>
     {% if app.user %}
-<div id ="smartphone" style="text-align: right">
-    <p>Participant : {{ app.user.prenom}} {{ app.user.nom }}<br>
-      Date du jour :  {{ "now"|date("d/m/Y") }}
 
-    </p>
 </div>
-
-
-        {#                   {% if app.user %}
-  {#                  <form action="{{ path('app_search', {'id': app.user.id}) }}" method="post">
-   {#                     {% else %}
-    {#                    <form action="{{ path('app_search', {'id': 0}) }}" method="post">
-     {#                       {% endif %}
-     {#                       <div class="row">
-{#            <div class="col">#}
-{#                <label for="campus">Campus : </label>#}
-{#                <select class="btn btn-warning" name="campus" id="campus">#}
-{#                    <option value=""></option>#}
-{#                    {% for campus in campusS %}#}
-{#                        <option id="ville" name="campus"#}
-{#                                value="{{ campus.id }}">#}
-{#                            {{ campus.nom | upper }}#}
-{#                        </option>#}
-{#                    {% endfor %}#}
-{#                </select>#}
-{#                <br>#}
-
-{#                <label for="search">Le nom de la sortie contient : </label>#}
-{#                <input type="search" name="search" id="search">#}
-{#                <br>#}
-{#                <label for="dateMin">Entre : </label>#}
-{#                <input type="date" name="dateMin" id="dateMin">#}
-{#                <label for="dateMax"> et </label>#}
-{#                <input type="date" name="dateMax" id="dateMax">#}
-{#                <br>#}
-{#            </div>#}
-
-{#            <div class="col">#}
-{#                <label><input type="checkbox" name="est_organisateur">Sorties dont je suis l'organisateur</label><br>#}
-{#                <label> <input type="checkbox" name="est_inscrit"> Sorties auquelles je suis inscrit </label><br>#}
-{#                <label><input type="checkbox" name="pas_inscrit">Sorties auquelles je ne suis pas inscrit </label><br>#}
-{#                <label> <input type="checkbox" name="sortie_termine"> Sorties passées </label><br>#}
-{#                <input type="hidden" name="user" value="{{ app.user.id }}">#}
-{#                <div class="btn-container">#}
-{#                    <button>Rechercher</button>#}
-{#                </div>#}
-{#            </div>#}
 
 <div id="filtreAccueil">
             {{ form_start(filtreForm) }}
 
-
-
-        <div class="row justify-content-center">
-            <div class="col">
+        <div class="row justify-content-around  ">
+            <div class="col-4">
                 {{ form_label(filtreForm.campus) }}
                 {{ form_widget(filtreForm.campus) }}
                 <br>
@@ -75,7 +28,7 @@
                 {{ form_widget(filtreForm.dateLimite) }}
                 </p>
             </div>
-            <div class="col">
+            <div class="col-4">
 
                 {{ form_widget(filtreForm.estOrganisateur) }}
                 {{ form_label(filtreForm.estOrganisateur) }}
@@ -90,7 +43,7 @@
                 {{ form_label(filtreForm.estPassees) }}
             </div>
             <div class="row">
-                <div class="btn">{{ form_widget(filtreForm.rechercher) }}</div>
+                <div class="btn">{{ form_widget(filtreForm.rechercher,{ 'attr': {'class': 'btn btn-outline-info'}}) }}</div>
             </div>
             {{ form_end(filtreForm) }}
         </div>
@@ -104,7 +57,7 @@
         {% endif %}
         </div>
         </div>
-        <a class="btn btn-warning position-absolute  start-50 translate-middle mt-3" id="btn_new" href="{{ path('app_sortie_creer') }}" role="button">Nouvelle sortie</a>
+        <a class="btn btn-outline-info position-absolute  start-50 translate-middle mt-3" id="btn_new" href="{{ path('app_sortie_creer') }}" role="button">Nouvelle sortie</a>
 
     {% else %}
         <p>Veuillez vous connecter pour voir la liste des sorties !</p>

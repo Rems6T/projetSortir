@@ -59,6 +59,13 @@ header img {
     height: 90px;
 }
 
+#date{
+    font-size: small;
+    color: white;
+    margin: 0;
+    padding: 0;
+}
+
 
 @media screen and (min-width: 600px) {
 
