@@ -64,7 +64,7 @@ class SortieRepository extends ServiceEntityRepository
 
         $queryBuilder = $this->createQueryBuilder('s')
                //jonction avec participant
-
+        ->join('s.participantsInscrits','si')
        ->join('s.etat', 'e')
         ->andWhere('e.libelle !=  :etat')
         ->setParameter('etat', 'Archivée')
@@ -98,12 +98,12 @@ class SortieRepository extends ServiceEntityRepository
             }
             //where user egale aux participants de la sortie si est_inscrit non null
             if ($filtre->getEstInscrit() != null) {
-                $queryBuilder->andWhere('s.pseudo = :user')
+                $queryBuilder->andWhere('si.pseudo = :user')
                     ->setParameter('user', $user->getPseudo());
             }
             //where user diferent des participants de la sortie si pas_inscrit non null
             if ($filtre->getPasInscrit() != null) {
-                $queryBuilder->andWhere('s.pseudo != :user')
+                $queryBuilder->andWhere('si.pseudo != :user')
                     ->setParameter('user', $user->getPseudo());
             }
             //where etat de la sortie = fermée si sortie_termine non null
