@@ -134,4 +134,17 @@ class ProfileController extends AbstractController
 
         return $this->redirectToRoute('app_profile_index', [], Response::HTTP_SEE_OTHER);
     }
+
+    /**
+     * @Route("/managementActif/{id}", name="app_profile_actif")
+     */
+    public function actif(Request $request, Participant $participant, ParticipantRepository $participantRepository): Response
+    {
+        if ($participant->isActif(true)) {
+            $participantRepository->add($participant->setActif(false), true);
+        } else {
+            $participantRepository->add($participant->setActif(true), true);
+        }
+        return $this->redirectToRoute('app_profile_index', [], Response::HTTP_SEE_OTHER);
+    }
 }

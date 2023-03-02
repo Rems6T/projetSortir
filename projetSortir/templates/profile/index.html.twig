@@ -4,53 +4,55 @@
 
 {% block body %}
     <div class="container">
-    <h1>Participant index</h1>
+        <h1>Participant index</h1>
 
-    <table class="table">
-        <thead>
-        <tr>
-            <th id="tablette">Id</th>
-            <th>Pseudo</th>
-            <th>Roles</th>
-            <th>Nom</th>
-            <th>Prénom</th>
-            <th id="tablette">Telephone</th>
-            <th id="tablette">Mail</th>
-            <th id="tablette">Actif</th>
-            <th>Actions</th>
-        </tr>
-        </thead>
-
-        <tbody>
-        {% for participant in participants %}
+        <table class="table">
+            <thead>
             <tr>
-                <td id="tablette">{{ participant.id }}</td>
-                <td>{{ participant.pseudo }}</td>
-                <td>{{ participant.roles ? participant.roles|json_encode : '' }}</td>
-                <td>{{ participant.nom }}</td>
-                <td>{{ participant.prenom }}</td>
-                <td id="tablette">{{ participant.telephone }}</td>
-                <td id="tablette">{{ participant.mail }}</td>
-                <td id="tablette">
-                    {{ participant.actif ? 'Yes' : 'No' }}
-                    <br>
+                <th id="tablette">Id</th>
+                <th>Pseudo</th>
+                <th>Roles</th>
+                <th>Nom</th>
+                <th>Prénom</th>
+                <th id="tablette">Telephone</th>
+                <th id="tablette">Mail</th>
+                <th id="tablette">Actif</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
 
-                </td>
-                <td>
-                    <a href="{{ path('app_profile_show', {'id': participant.id}) }}">Voir</a>
-                    <br>
-                    <a href="{{ path('app_profile_edit', {'id' : participant.id}) }}">Editer</a>
-                    <br>
-                    <a href="{{ path('app_profile_delete', {'id': participant.id}) }}" onclick="return confirm('Voulez vous supprimer le compte ?')">Supprimer</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="10">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table></div>
-<div class="row justify-content-center">
-    <a class="btn btn-outline-info " style="width: 100px" href="{{ path('app_profile_new') }}">Create new</a> </div>
+            <tbody>
+            {% for participant in participants %}
+                <tr>
+                    <td id="tablette">{{ participant.id }}</td>
+                    <td>{{ participant.pseudo }}</td>
+                    <td>{{ participant.roles ? participant.roles|json_encode : '' }}</td>
+                    <td>{{ participant.nom }}</td>
+                    <td>{{ participant.prenom }}</td>
+                    <td id="tablette">{{ participant.telephone }}</td>
+                    <td id="tablette">{{ participant.mail }}</td>
+                    <td id="tablette">
+                        {{ participant.actif ? 'Yes' : 'No' }}
+                        <br>
+                        <a href="{{ path('app_profile_actif', {'id': participant.id}) }}">Changer</a>
+                    </td>
+                    <td>
+                        <a href="{{ path('app_profile_show', {'id': participant.id}) }}">Voir</a>
+                        <br>
+                        <a href="{{ path('app_profile_edit', {'id' : participant.id}) }}">Editer</a>
+                        <br>
+                        <a href="{{ path('app_profile_delete', {'id': participant.id}) }}"
+                           onclick="return confirm('Voulez vous supprimer le compte ?')">Supprimer</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="10">no records found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="row justify-content-center">
+        <a class="btn btn-outline-info " style="width: 100px" href="{{ path('app_profile_new') }}">Create new</a></div>
 {% endblock %}
