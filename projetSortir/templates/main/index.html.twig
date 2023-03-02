@@ -8,7 +8,12 @@
 
     <h2>Bienvenue !</h2>
     {% if app.user %}
+<div id ="smartphone" style="text-align: right">
+    <p>Participant : {{ app.user.prenom}} {{ app.user.nom }}<br>
+      Date du jour :  {{ "now"|date("d/m/Y") }}
 
+    </p>
+</div>
 
 
         {#                   {% if app.user %}

@@ -24,11 +24,13 @@ header {
 }
 
 h1 {
+
     font-variant-caps: small-caps;
     text-align: center;
 }
 
 h2 {
+    padding: 10px;
     color: var(--couleur-fonce);
     text-align: center;
 }
