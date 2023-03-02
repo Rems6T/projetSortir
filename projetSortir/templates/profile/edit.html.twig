@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Modifier Profile{% endblock %}
+{% block title %}Modifier profil{% endblock %}
 
 {% block body %}
     {% if app.user.id == participant.id or is_granted('ROLE_ADMIN') %}
@@ -9,10 +9,9 @@
         <div class="row justify-content-center">
             <div class="col">
                 <img src="{{ asset('uploads/brochures/'~participant.brochureFilename) }}"
-                     alt="Photo de profil de {{ participant.brochureFilename }}" width="150"></div>
+                     alt="Photo de profil de {{ participant.pseudo }}" width="150"></div>
             <div class="col">
                 {{ include('profile/_form.html.twig', {'button_label': 'Update'}) }}
-
             </div>
         </div>
     {% if is_granted('ROLE_ADMIN') %}

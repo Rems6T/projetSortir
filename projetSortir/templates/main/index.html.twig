@@ -47,7 +47,6 @@
             </div>
             {{ form_end(filtreForm) }}
         </div>
-</div>
 
         {% if sorties | length == 0 %}
             <h3 class="text-center mt-5">
@@ -57,7 +56,9 @@
         {% endif %}
         </div>
         </div>
-        <a class="btn btn-outline-info position-absolute  start-50 translate-middle mt-3" id="btn_new" href="{{ path('app_sortie_creer') }}" role="button">Nouvelle sortie</a>
+
+        <a class="btn btn-warning position-absolute  start-50 translate-middle mt-3" id="btn_new"
+           href="{{ path('app_sortie_creer') }}" role="button">Nouvelle sortie</a>
 
     {% else %}
         <p>Veuillez vous connecter pour voir la liste des sorties !</p>

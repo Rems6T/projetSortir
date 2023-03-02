@@ -42,11 +42,11 @@ class FiltreType extends \Symfony\Component\Form\AbstractType
                 'required' => false,
             ])
             ->add('estInscrit', CheckboxType::class,[
-                'label'    => 'Sorties auxquelles je suis inscrite',
+                'label'    => 'Sorties auxquelles je suis inscrit(e)',
                 'required' => false,
             ])
             ->add('pasInscrit', CheckboxType::class,[
-                'label'    => 'Sorties auxquelles je ne suis pas inscrite',
+                'label'    => 'Sorties auxquelles je ne suis pas inscrit(e)',
                 'required' => false,
             ])
             ->add('estPassees', CheckboxType::class,[

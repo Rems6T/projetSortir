@@ -32,146 +32,23 @@
                         <p>Code Postal: </p>
                         <p>latitude:</p>
                         <p>Longitude: </p>
-
                     </div>
                 </div>
             </div>
 
             <div class="row justify-content-center">
                 <div class="col-1">{{ form_row(sortieForm.publier,{ 'attr': {'class': 'btn btn-outline-info'}}) }}</div>
-                <div class="col-1">{{ form_row(sortieForm.enregistrer,{ 'attr': {'class': 'btn btn-outline-info'}}) }} <br></div>
+                <div class="col-1">{{ form_row(sortieForm.enregistrer,{ 'attr': {'class': 'btn btn-outline-info'}}) }} </div>
+                <br>
                 {{ form_end(sortieForm) }}
-
-
-                    <div class="col-1"><a href="{{ path('app_main_index') }}">
+                    <div class="col-1">
+                        <a href="{{ path('app_main_index') }}">
                             <button type="button" class="btn btn-outline-info">Annuler</button>
-                        </a></div>
-
+                        </a>
+                    </div>
             </div>
-
         </div>
     </div>
-    <script>
+    {{ include('sortie/sortieJs.html.twig') }}
 
-        // Récupérer le formulaire
-        var form = document.getElementById("form");
-        // Attacher un gestionnaire d'événement à la sélection de Lieu
-        var lieuSelect = document.getElementById("lieu");
-        lieuSelect.addEventListener("change", function () {
-            // Mettre à jour les info des lieux pour le lieux sélectionnée
-            updateInfoLieu();
-
-        });
-
-
-        // Attacher un gestionnaire d'événement à la sélection de ville
-        var villeSelect = document.getElementById("ville");
-        villeSelect.addEventListener("change", function () {
-            // Mettre à jour la liste des lieux pour la ville sélectionnée
-            updateLieu();
-
-        });
-
-        // Fonction pour actualiser la liste des lieux pour la ville sélectionnée
-        function updateLieu() {
-
-            // Récupérer le lieu sélectionnée
-            var ville = document.getElementById("ville").value;
-
-            // Effectuer une requête AJAX pour obtenir les lieux
-            var xhttp = new XMLHttpRequest();
-            xhttp.onreadystatechange = function () {
-                if (this.readyState === 4 && this.status === 200) {
-                    // Traiter les données renvoyées par le serveur
-                    var lieux = JSON.parse(this.responseText);
-                    //Recupere le select id="lieu"
-                    var lieuSelect = document.getElementById("lieu");
-                    lieuSelect.innerHTML = ""; // Effacer la liste précédente des lieux
-                    //Recupere la div id="lieu_info"
-                    var lieuList = document.getElementById("lieu_info");
-                    lieuList.innerHTML = ""; // Effacer la liste précédente des lieux
-                    //Remet l'affichage comme a l'arrivée sur la page
-                    lieuList.innerHTML =
-                        '<p>Rue :</p>' +
-                        '<p>Ville :</p>' +
-                        '<p>Code Postal: </p>' +
-                        '<p>latitude:</p>' +
-                        '<p>Longitude: </p>'
-                    //Place une option vide dans le select lieu
-                    var lieuItem = document.createElement("option")
-                    lieuItem.innerHTML = "";
-                    lieuSelect.appendChild(lieuItem);
-                    //Recupere chaque cle valeur des lieux recup dans la requete ajax
-                    for (const [key, value] of Object.entries(lieux)) {
-                        //Place une option avec le nom du lieu et value = id
-                        var lieuItem = document.createElement("option");
-                        lieuItem.setAttribute("value", `${key}`)
-                        lieuItem.innerHTML = `${value}`;
-                        lieuSelect.appendChild(lieuItem);
-                    }
-
-
-                }
-            };
-            // URL de l'API pour récupérer les lieux
-            xhttp.open("GET", "{{ path('app_sortie_getLieu') }}" + "/?ville=" + ville, true);
-            xhttp.send();
-        }
-
-// Fonction pour actualiser les info des lieux pour la ville sélectionnée
-        function updateInfoLieu() {
-
-            // Récupérer le lieu sélectionnée
-            var lieu = document.getElementById("lieu").value;
-
-            // Effectuer une requête AJAX pour les info des lieux
-            var xhttp = new XMLHttpRequest();
-            xhttp.onreadystatechange = function () {
-                if (this.readyState === 4 && this.status === 200) {
-                    // Traiter les données renvoyées par le serveur
-                    var infoLieu = JSON.parse(this.responseText);
-                    var lieuList = document.getElementById("lieu_info");
-                    lieuList.innerHTML = ""; // Effacer la liste précédente des lieux
-                    //ecris les info des lieu
-                    for (var i = 0; i < infoLieu.length; i++) {
-                        var info = infoLieu[i];
-                        var lieuItem = document.createElement("p");
-                        for (const [key, value] of Object.entries(info)) {
-                            lieuItem.innerHTML = `${key}: ${value}`;
-                        }
-                        lieuList.appendChild(lieuItem);
-                    }
-                }
-            };
-            xhttp.open("GET", "{{ path('app_sortie_getInfoLieu') }}" + "/?lieu=" + lieu, true); // URL de l'API pour récupérer les lieux
-            xhttp.send();
-        }
-
-        //Gestionnaire d'evenement lorsque l'on appuie sur le bouton creer lieu
-        var btnCreer = document.getElementById("btnCreer");
-        btnCreer.addEventListener("click", function () {
-            var lieuSelect = document.getElementById("lieu");
-            lieuSelect.innerHTML = ""; // Effacer
-            //Creer une option avec le nom "Nouveau lieu" de value 0
-            var lieuItem = document.createElement("option");
-            lieuItem.setAttribute("value", 0);
-            lieuItem.innerHTML = 'Nouveau Lieu';
-            lieuSelect.appendChild(lieuItem);
-            //Creer dans la div  des input pour creer un nouveau lieu
-            var lieuList = document.getElementById("lieu_info");
-            lieuList.innerHTML = ""; // Effacer la liste précédente des lieux
-            lieuList.innerHTML = '<p>Creer un nouveau Lieu<p>' +
-                '<label for="sortie[nomLieu]">Nom du lieu :</label>' +
-                '<input type="text" name="sortie[nomLieu]">' + '<br>' +
-                '<label for="sortie[rueLieu]">Rue :</label>' +
-                '<input type="text" name="sortie[rueLieu]">' + '<br>' +
-                '<label for="sortie[latitudeLieu]">Latitude</label>' +
-                '<input type="number" value="0" name="sortie[latitudeLieu]">' + '<br>' +
-                '<label for="sortie[longitudeLieu]">Longitude</label>' +
-                '<input type="number" value="0" name="sortie[longitudeLieu]">'
-            ;
-
-        });
-
-    </script>
 {% endblock %}

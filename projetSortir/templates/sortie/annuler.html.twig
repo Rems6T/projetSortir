@@ -9,9 +9,7 @@
             <p>Nom de la sortie: {{ sortie.nom }}</p>
             <p>Date et heure de la sortie : {{ sortie.dateHeureDebut  |date('Y-m-d H:i:s') }}</p>
             <p>Campus : {{ sortie.siteOrganisateur.nom }}</p>
-
-            <p>
-                Lieu: {{ sortie.lieu.nom }} {{ sortie.lieu.rue }} {{ sortie.lieu.ville.codePostal }} {{ sortie.lieu.ville.nom }}</p>
+            <p>Lieu: {{ sortie.lieu.nom }} {{ sortie.lieu.rue }} {{ sortie.lieu.ville.codePostal }} {{ sortie.lieu.ville.nom }}</p>
             <form action="" method="post">
                 <label for="motif">Motif :</label>
                 <input type="textArea" name="motif" id="motif">
