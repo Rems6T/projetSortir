@@ -23,7 +23,7 @@
                             {{ form_row(sortieForm.lieu, {'id': 'lieu'}) }}
                         </div>
                         <div class="col">
-                            <button type="button" id="btnCreer">Nouveau Lieu</button>
+                            <button type="button" class="btn btn-outline-info" id="btnCreer">Nouveau Lieu</button>
                         </div>
                     </div>
                     <div id="lieu_info">
@@ -38,13 +38,13 @@
             </div>
 
             <div class="row justify-content-center">
-                <div class="col-1">{{ form_row(sortieForm.publier) }}</div>
-                <div class="col-1">{{ form_row(sortieForm.enregistrer) }} <br></div>
+                <div class="col-1">{{ form_row(sortieForm.publier,{ 'attr': {'class': 'btn btn-outline-info'}}) }}</div>
+                <div class="col-1">{{ form_row(sortieForm.enregistrer,{ 'attr': {'class': 'btn btn-outline-info'}}) }} <br></div>
                 {{ form_end(sortieForm) }}
 
 
                     <div class="col-1"><a href="{{ path('app_main_index') }}">
-                            <button type="button">Annuler</button>
+                            <button type="button" class="btn btn-outline-info">Annuler</button>
                         </a></div>
 
             </div>

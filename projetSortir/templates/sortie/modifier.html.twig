@@ -25,7 +25,7 @@
                             {{ form_row(sortieForm.lieu, {'id': 'lieu'}) }}
                         </div>
                         <div class="col">
-                            <button type="button" id="btnCreer">Nouveau Lieu</button>
+                            <button type="button"  class="btn btn-outline-info" id="btnCreer">Nouveau Lieu</button>
                         </div>
                     </div>
                     <div id="lieu_info">
@@ -40,16 +40,16 @@
             </div>
 
             <div class="row">
-                <div class="col">{{ form_row(sortieForm.publier) }}</div>
-                <div class="col">{{ form_row(sortieForm.enregistrer) }}</div>
+                <div class="col">{{ form_row(sortieForm.publier,{ 'attr': {'class': 'btn btn-outline-info'}}) }}</div>
+                <div class="col">{{ form_row(sortieForm.enregistrer,{ 'attr': {'class': 'btn btn-outline-info'}}) }}</div>
                 {{ form_end(sortieForm) }}
 
-                <div class="col"><a href="{{ path('app_sortie_annuler',{id:sortie.id}) }}">
-                        <button type="button">Supprimer la sortie</button>
+                <div class="col"><a  href="{{ path('app_sortie_annuler',{id:sortie.id}) }}">
+                        <button type="button" class="btn btn-outline-info">Supprimer la sortie</button>
                     </a></div>
                 <div class="col">
-                    <a href="{{ path('app_main_index') }}">
-                        <button type="button">Annuler</button>
+                    <a  href="{{ path('app_main_index') }}">
+                        <button type="button" class="btn btn-outline-info">Annuler</button>
                     </a></div>
             </div>
 
