@@ -14,8 +14,8 @@
 <div id="filtreAccueil">
             {{ form_start(filtreForm) }}
 
-        <div class="row justify-content-center">
-            <div class="col">
+        <div class="row justify-content-around  ">
+            <div class="col-4">
                 {{ form_label(filtreForm.campus) }}
                 {{ form_widget(filtreForm.campus) }}
                 <br>
@@ -28,7 +28,7 @@
                 {{ form_widget(filtreForm.dateLimite) }}
                 </p>
             </div>
-            <div class="col">
+            <div class="col-4">
 
                 {{ form_widget(filtreForm.estOrganisateur) }}
                 {{ form_label(filtreForm.estOrganisateur) }}
