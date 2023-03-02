@@ -20,117 +20,103 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class MainController extends AbstractController
 {
 
-       /**
-        * @Route("/", name="app_main_index")
-        */
-    public function index(SortieRepository $sortieRepo, CampusRepository $CampusRepository, EtatRepository $etatRepository, Request $request): Response
+    /**
+     * @Route("/", name="app_main_index")
+     */
+    public function index(SortieRepository $sortieRepo, EtatRepository $etatRepository,EntityManagerInterface $entityManager, Request $request): Response
     {
-        // $id=[61, 62, 63, 64, 65, 66];
-        $user = $this->getUser();
-     //   $sorties = $sortieRepo->archive();
-      // $etats = ['Créée', 'Ouverte', 'Activité en cours','Passée', 'Clôturée', 'Annulée'];
-      //  $sorties = $sortieRepo->findBy(array('etat' => $etats));
-       //   $sorties = $sortieRepo->findBy(array(61, 62, 63, 64, 65, 66));
-      //  $sorties = $sortieRepo->findBy(array('id' => $id));
-     //   $sorties = $sortieRepo->findBy(array('etat' => 'Créée', 'Ouverte', 'Activité en cours','Passée', 'Clôturée', 'Annulée'), ) ;
-        $campusS = $CampusRepository->findAll();
-        $sorties = $sortieRepo->findAll();
 
+        $user = $this->getUser();
+
+//Methode pour changer les etats des sorties
+
+
+//Recupere toutes les sorties sauf les archiver
+        $sorties = $sortieRepo->findAllExceptArchive();
 
         $aujourdhui = new \DateTime('now');
+          //On charge tous les etats d'avance
+        $enCours = $etatRepository->findOneBy(['libelle' => "Activité en cours"]);
+        $passee = $etatRepository->findOneBy(['libelle' => "Passée"]);
+        $archivee = $etatRepository->findOneBy(['libelle' => "Archivée"]);
+        $cloturee = $etatRepository->findOneBy(['libelle' => "Clôturée"]);
+
 
         foreach ($sorties as $sortie) {
+
+            //On recupere l'heure de la sortie
             $date = $sortie->getDateHeureDebut();
 
-            // $dateCopie = new \DateTime();
-            $date2 = &$date;
-            $duree = $sortie->getDuree();
 
+            $date2 = &$date;
+
+            //on ajoute la duree
+            $duree = $sortie->getDuree();
             if ($duree == null) {
                 $duree = 1;
             }
-
             $interval = new \DateInterval('PT' . $duree . 'M');
-            $finInscription = $sortie->getDateLimiteInscription();
-            $one_month = new DateInterval('P1M');
 
+            $finInscription = $sortie->getDateLimiteInscription();
+
+            //on ajoute un mois pour avoir la date d'archivage
+            $one_month = new DateInterval('P1M');
             $dateArchive = $date->add($one_month);
 
             if ($finInscription < $aujourdhui) { //Inscription finie
 
                 if ($date < $aujourdhui) {
                     $dateFin = $date2->add($interval);
-                    if ($dateFin > $aujourdhui) {
-                        $sortie->setEtat($etatRepository->findOneBy(['libelle' => "Activité en cours"])); // ENCOURS
-                        $date2->sub($interval);
-                    } else {
-                        $sortie->setEtat($etatRepository->findOneBy(['libelle' => "Passée"])); //PASSEE
+                    if ($dateFin > $aujourdhui && $sortie->getEtat()->getLibelle() != 'Activité en cours') {
+                        $sortie->setEtat($enCours); // ENCOURS
                         $date2->sub($interval);
                     }
-                    if ($dateArchive < $aujourdhui) {
-                        $sortie->setEtat($etatRepository->findOneBy(['libelle' => "Archivée"])); //ARCHIVEE
+                    if ($dateFin < $aujourdhui && $sortie->getEtat()->getLibelle() != 'Passée') {
+                        $sortie->setEtat($passee); //PASSEE
+                        $date2->sub($interval);
                     }
-                } else {
-                    $sortie->setEtat($etatRepository->findOneBy(['libelle' => "Clôturée"])); //CLOTUREE
+                    if ($dateArchive < $aujourdhui && $sortie->getEtat()->getLibelle() != 'Archivée') {
+                        $sortie->setEtat($archivee); //ARCHIVEE
+                    }
+                }
+                if ($date > $aujourdhui && $sortie->getEtat()->getLibelle() != 'Clôturée') {
+                    $sortie->setEtat($cloturee); //CLOTUREE
                 }
             }
+            //on save la modif en bdd
+            $entityManager->persist($sortie);
+            $entityManager->flush();
         }
+//Fin Methode
 
+
+//Creation du formulaire pour la barre de recherche
         $filtre = new Filtre();
         $filtreForm = $this->createForm(FiltreType::class, $filtre);
-        $filtreForm->handleRequest($request);
 
+
+
+//Soumission du formulaire
+        $filtreForm->handleRequest($request);
         if ($filtreForm->isSubmitted() && $filtreForm->isValid()) {
-            $sorties=$sortieRepo->findByRecherche($filtre, $user);
+            $sorties = $sortieRepo->findByRecherche($filtre, $user);
             return $this->render('main/index.html.twig', [
                 'sorties' => $sorties,
-                'campusS' => $campusS,
+
                 'filtreForm' => $filtreForm->createView(),
             ]);
         }
-      //  $sorties = $sortieRepo->findBy(array(61, 62, 63, 64, 65, 66));
-      //  $sorties = $sortieRepo->findBy(array('id' => $id));
-      //  $sorties = $sortieRepo->findBy(array('etat' => $etats));
-      // $sorties = $sortieRepo->find(array('etat' => 'Créée', 'Ouverte', 'Activité en cours','Passée', 'Clôturée', 'Annulée')) ;
-      //  $sorties = $sortieRepo->archive();
+
+
+
         return $this->render('main/index.html.twig', [
-         'sorties' => $sorties,
-         'campusS' => $campusS,
-         'filtreForm' => $filtreForm->createView(),
+            'sorties' => $sorties,
+
+            'filtreForm' => $filtreForm->createView(),
         ]);
 
     }
 
-
-
-//    /**
-//     *@Route("/search/{id}",name="app_search")
-//     */
-//    public function search(Request $request, SortieRepository $SortieRepository, CampusRepository $CampusRepository, ParticipantRepository $participantRepository): Response
-//
-//    {
-//
-//        $data = [];
-//        $data['search'] = $request->get('search');
-//        $data['dateMin'] = $request->get('dateMin');
-//        $data['dateMax'] = $request->get('dateMax');
-//        $data['est_organisateur'] = $request->get('est_organisateur');
-//        $data['est_inscrit'] = $request->get('est_inscrit');
-//        $data['pas_inscrit'] = $request->get('pas_inscrit');
-//        $data['sortie_termine'] = $request->get('sortie_termine');
-//        $data['user'] = $participantRepository->find($request->request->get('user'));
-//        $data['campus'] = $CampusRepository->find($request->request->get('campus'));
-//        $sorties = $SortieRepository->findByRecherche($data);
-//        $filtre = new Filtre();
-//        $filtreForm = $this->createForm(FiltreType::class, $filtre);
-//
-//        $campusS = $CampusRepository->findAll();
-//        return $this->render('main/index.html.twig', [
-//            'sorties' => $sorties,
-//           'campusS' => $campusS,
-//
-//        ]);
-//        }
 
     /**
      * @Route("/sortie/inscription/{idParticipant}/{idSortie}",name="app_sortie_inscription")
@@ -142,10 +128,10 @@ class MainController extends AbstractController
         $repoParticipant = $this->getDoctrine()->getRepository(Participant::class);
         $Participant = $repoParticipant->find($idParticipant);
 
-        if($today >= $sortie->getDateLimiteInscription()) {
+        if ($today >= $sortie->getDateLimiteInscription()) {
             $this->addFlash('error', "Impossible de s'inscrire, la date d'inscription est dépassée");
             return $this->redirectToRoute("app_main_index");
-        } elseif ( $sortie->getNbInscriptionsMax() > count($sortie->getParticipantsInscrits())) {
+        } elseif ($sortie->getNbInscriptionsMax() > count($sortie->getParticipantsInscrits())) {
             $sortie->addParticipantsInscrits($Participant);
             $em->flush();
             $this->addFlash('success', 'Vous avez était inscrit à la sortie !');
@@ -173,8 +159,6 @@ class MainController extends AbstractController
         $this->addFlash('success', 'Vous êtes désinscrit de la sortie !');
         return $this->redirectToRoute("app_main_index");
     }
-
-
 
 
 }

@@ -43,34 +43,38 @@ class SortieRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
+    public function findAllExceptArchive()
+    {
+        return $this->createQueryBuilder('s')
+            ->join('s.etat', 'e')
+            ->andWhere('e.libelle !=  :etat')
+            ->setParameter('etat', 'Archivée')
+            ->orderBy('s.dateHeureDebut','ASC')
+            ->getQuery()
+            ->getResult();
 
+    }
     /**
      * @param Filtre $filtre
      * @param UserInterface $user
      * @return Paginator
      */
-    public function findByRecherche(Filtre $filtre, UserInterface $user)
+    public function findByRecherche(Filtre $filtre, Participant $user)
     {
 
         $queryBuilder = $this->createQueryBuilder('s')
                //jonction avec participant
-         ->join('s.participantsInscrits', 'si');
-        //->join('s.etat', 'e');
 
-     ///   if ($sorties!= null) {
-       //     $queryBuilder
-       //         ->select('e.libelle')
-        //        ->where('e.libelle' != 'Archivée');
-           //     ->select('e.libelle')
-            //    $queryBuilder->andWhere('s.etat != :etat')
-              //      ->setParameter('etat', 'Archivée');
-          //  ->where('e.libelle' != 'Archivée');
-      //  }
+       ->join('s.etat', 'e')
+        ->andWhere('e.libelle !=  :etat')
+        ->setParameter('etat', 'Archivée')
+        ->orderBy('s.dateHeureDebut','ASC');
 
+            //where pour la recherche
             if ($filtre->getSearch() != null) {
-                //where pour la recherche
+
                 $queryBuilder->andWhere('s.nom LIKE :nom')
-                    ->setParameter('nom', '%' . $filtre->getSearch() . '%');
+                    ->setParameter('nom', '%'.$filtre->getSearch().'%');
             }
             //where pour le campus si non nulle
             if ($filtre->getCampus() != null) {
@@ -78,33 +82,33 @@ class SortieRepository extends ServiceEntityRepository
                     ->setParameter('campus', $filtre->getCampus());
             }
             //where date Heure debut < date min si remplie
-            if (!empty($filtre->getDateDebut())) {
+            if ($filtre->getDateDebut()!= null) {
                 $queryBuilder->andWhere('s.dateHeureDebut > :dateDebut')
                     ->setParameter('dateDebut', $filtre->getDateDebut());
             }
             //where date limite inscription > date max si rempli
-            if (!empty($filtre->getDateLimite())) {
+            if ($filtre->getDateLimite()!= null) {
                 $queryBuilder->andWhere('s.dateLimiteInscription < :dateLimite')
                     ->setParameter('dateLimite', $filtre->getDateLimite());
             }
             //where organisateur egale au user si est_organisateur non null
             if ($filtre->getEstOrganisateur() != null) {
                 $queryBuilder->andWhere('s.organisateur = :user')
-                    ->setParameter('user', $user);
+                    ->setParameter('user', $user->getId());
             }
             //where user egale aux participants de la sortie si est_inscrit non null
             if ($filtre->getEstInscrit() != null) {
-                $queryBuilder->andWhere('si.pseudo = :user')
-                    ->setParameter('user', $user->getUserIdentifier());
+                $queryBuilder->andWhere('s.pseudo = :user')
+                    ->setParameter('user', $user->getPseudo());
             }
             //where user diferent des participants de la sortie si pas_inscrit non null
             if ($filtre->getPasInscrit() != null) {
-                $queryBuilder->andWhere('si.pseudo != :user')
-                    ->setParameter('user', $user->getUserIdentifier());
+                $queryBuilder->andWhere('s.pseudo != :user')
+                    ->setParameter('user', $user->getPseudo());
             }
             //where etat de la sortie = fermée si sortie_termine non null
             if ($filtre->getEstPassees() != null) {
-                $queryBuilder->andWhere('s.etat != :etat')
+                $queryBuilder->andWhere('e.libelle = :etat')
                     ->setParameter('etat', 'fermée');
             }
             //On execute la requete
