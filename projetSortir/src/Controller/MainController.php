@@ -99,9 +99,9 @@ class MainController extends AbstractController
 //Soumission du formulaire
         $filtreForm->handleRequest($request);
         if ($filtreForm->isSubmitted() && $filtreForm->isValid()) {
-            $sorties = $sortieRepo->findByRecherche($filtre, $user);
+            $sortiesRech = $sortieRepo->findByRecherche($filtre, $user);
             return $this->render('main/index.html.twig', [
-                'sorties' => $sorties,
+                'sorties' => $sortiesRech,
 
                 'filtreForm' => $filtreForm->createView(),
             ]);
