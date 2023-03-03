@@ -109,13 +109,13 @@
         lieuList.innerHTML = ""; // Effacer la liste précédente des lieux
         lieuList.innerHTML = '<p>Creer un nouveau Lieu<p>' +
             '<label for="sortie[nomLieu]">Nom du lieu :</label>' +
-            '<input type="text" name="sortie[nomLieu]">' + '<br>' +
+            '<input type="text" name="sortie[nomLieu]" required="true">' + '<br>' +
             '<label for="sortie[rueLieu]">Rue :</label>' +
-            '<input type="text" name="sortie[rueLieu]">' + '<br>' +
+            '<input type="text" name="sortie[rueLieu]" required="true">' + '<br>' +
             '<label for="sortie[latitudeLieu]">Latitude</label>' +
-            '<input type="number" value="0" name="sortie[latitudeLieu]">' + '<br>' +
+            '<input type="number" value="0" name="sortie[latitudeLieu]" required="true">' + '<br>' +
             '<label for="sortie[longitudeLieu]">Longitude</label>' +
-            '<input type="number" value="0" name="sortie[longitudeLieu]">'
+            '<input type="number" value="0" name="sortie[longitudeLieu]" required="true">'
         ;
 
     });
