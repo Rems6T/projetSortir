@@ -46,7 +46,7 @@ class ProfileController extends AbstractController
                 $brochureFileName = $fileUploader->upload($brochureFile);
                 $participant->setBrochureFilename($brochureFileName);
             }
-
+            $participantRepository->add($participant->setActif(false), true);
             $participantRepository->add($participant, true);
             return $this->redirectToRoute('app_profile_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -114,9 +114,12 @@ class ProfileController extends AbstractController
                     $form->get('password')->getData()
                 )
             );
+
             $participantRepository->add($participant, true);
 
-            return $this->redirectToRoute('app_profile_index', [], Response::HTTP_SEE_OTHER);
+            return $this->render('profile/show.html.twig', [
+                'participant' => $participant,
+            ]);
         }
 
         return $this->renderForm('profile/edit.html.twig', [

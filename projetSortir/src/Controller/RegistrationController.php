@@ -32,7 +32,6 @@ class RegistrationController extends AbstractController
         $form->handleRequest($request);
         //On rajoute les données manquante
         //actif
-        $user->setActif(true);
         $user-> setBrochureFilename('068-inconnu.png');
         //todo: Voir si ya besoin de rajouter le role ou pas
         if ($form->isSubmitted() && $form->isValid()) {
@@ -43,6 +42,7 @@ class RegistrationController extends AbstractController
                     $form->get('plainPassword')->getData()
                 )
             );
+            $user->setActif(true);
 
             $entityManager->persist($user);
             $entityManager->flush();
