@@ -41,8 +41,7 @@ security:
          - { path: ^/lieu, roles: ROLE_ADMIN }
          - { path: ^/profile/, roles: ROLE_ADMIN }
          - { path: ^/villes, roles: ROLE_ADMIN }
-         - { path: ^/campus/index.html.twig, roles: ROLE_USER }
-         - { path: ^/main/index.html.twig, roles: ROLE_USER }
+
          - { path: ^/sortie/, roles: ROLE_USER }
          - { path: ^/sortie/inscription, roles: ROLE_USER }
          - { path: ^/sortie/desinscription, roles: ROLE_USER }

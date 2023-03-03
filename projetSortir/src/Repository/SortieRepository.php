@@ -47,6 +47,7 @@ class SortieRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('s')
             ->join('s.etat', 'e')
+            ->addSelect('e')
             ->andWhere('e.libelle !=  :etat')
             ->setParameter('etat', 'Archivée')
             ->orderBy('s.dateHeureDebut','ASC')
@@ -64,8 +65,10 @@ class SortieRepository extends ServiceEntityRepository
 
         $queryBuilder = $this->createQueryBuilder('s')
                //jonction avec participant
-
+    ->join('s.organisateur', 'o')
+            ->addSelect('o')
        ->join('s.etat', 'e')
+        ->addSelect('e')
         ->andWhere('e.libelle !=  :etat')
         ->setParameter('etat', 'Archivée')
         ->orderBy('s.dateHeureDebut','ASC');
@@ -94,6 +97,7 @@ class SortieRepository extends ServiceEntityRepository
             //where organisateur egale au user si est_organisateur non null
             if ($filtre->getEstOrganisateur() != null) {
                 $queryBuilder->andWhere('s.organisateur = :user')
+
                     ->setParameter('user', $user->getId());
             }
             //where user egale aux participants de la sortie si est_inscrit non null
@@ -107,6 +111,7 @@ class SortieRepository extends ServiceEntityRepository
 
                 $queryBuilder->andWhere('si.pseudo != :user')
                     ->join('s.participantsInscrits','si')
+                    ->addSelect('si')
                     ->setParameter('user', $user->getPseudo());
             }
             //where etat de la sortie = fermée si sortie_termine non null
